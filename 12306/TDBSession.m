@@ -1,0 +1,463 @@
+//
+//  TDBSession.m
+//  12306
+//
+//  Created by macbook on 13-7-17.
+//  Copyright (c) 2013年 zwz. All rights reserved.
+//
+
+#import "TDBSession.h"
+#import "DataSerializeUtility.h"
+#import "TDBTrainInfo.h"
+#include "PassengerInfo.h"
+
+@interface TDBSession()
+
+@property (nonatomic, strong) NSHTTPCookieStorage *cookieManager;
+@property (nonatomic) BOOL isLoggedIn;
+
+@end
+
+@implementation TDBSession
+
+- (id)init
+{
+    self = [super init];
+    if (self){
+        _cookieManager = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+        _isLoggedIn = NO;
+        [self resetCookie];
+        [self getSession];
+    }
+    
+    return self;
+}
+
+- (void)restartSession
+{
+    
+}
+
+- (void)resetCookie
+{
+    NSURL *url = [NSURL URLWithString:SYSURL @"/otsweb/"];
+    NSArray *cookies = [self.cookieManager cookiesForURL:url];
+    NSEnumerator *enumerator = [cookies objectEnumerator];
+    NSHTTPCookie *cookie;
+    while (cookie = [enumerator nextObject]) {
+        //NSLog(@"Del Cookie{%@ %@}", cookie.name, cookie.value);
+        [self.cookieManager deleteCookie:cookie];
+    }
+    
+    self.isLoggedIn = NO;
+}
+
+- (void)getSession
+{
+    NSLog(@"here");
+    NSURL *url = [NSURL URLWithString:SYSURL @"/otsweb/"];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSArray *cookies = [self.cookieManager cookiesForURL:url];
+    NSEnumerator *enumerator = [cookies objectEnumerator];
+    NSHTTPCookie *cookie;
+    while (cookie = [enumerator nextObject]) {
+        NSLog(@"Cookie{%@ = %@}", cookie.name, cookie.value);
+    }
+}
+
+- (NSData *)getVerifyImage {
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeAction.do?rand=sjrand&0.%d", abs(arc4random())];
+    NSURL *url = [NSURL URLWithString:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+}
+
+- (NSData *)getRandpImage {
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeAction.do?rand=randp&%d", abs(arc4random())];
+    NSURL *url = [NSURL URLWithString:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+}
+
+- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode
+{
+    NSDictionary *extraInfo = [self loginAysnSuggest];
+    NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+    
+    [info setObject:[extraInfo objectForKey:@"loginRand"] forKey:@"loginRand"];
+    [info setObject:@"N" forKey:@"refundLogin"];
+    [info setObject:@"Y" forKey:@"refundFlag"];
+    [info setObject:name forKey:@"loginUser.user_name"];
+    [info setObject:@"" forKey:@"nameErrorFocus"];
+    [info setObject:password forKey:@"user.password"];
+    [info setObject:@"" forKey:@"passwordErrorFocus"];
+    [info setObject:verifyCode forKey:@"randCode"];
+    [info setObject:@"" forKey:@"randErrorFocus"];
+    
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/loginAction.do?method=login"];
+    NSURL *url = [NSURL URLWithString:path];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[DataSerializeUtility generatePOSTDataWithDictionary:info] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *result = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
+    NSRange range = [result rangeOfString:@"系统消息"];
+    
+    if (range.length > 0) {
+        self.isLoggedIn = YES;
+        return LOGIN_MSG_SUCCESS;
+    } else {
+        NSRange range = [result rangeOfString:@"系统维护中"];
+        if (range.length > 0) {
+            return LOGIN_MSG_OUTOFSERVICE;
+        } else
+            return LOGIN_MSG_UNEXPECTED;
+    }
+}
+
+- (NSArray *)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to
+{
+    NSLog(@"queryLeftTick");
+    [self assertLoggedIn];
+
+    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+    [arguments addValue:@"queryLeftTicket" forKey:@"method"];
+    [arguments addValue:date forKey:@"orderRequest.train_date"];
+    [arguments addValue:from forKey:@"orderRequest.from_station_telecode"];
+    [arguments addValue:to forKey:@"orderRequest.to_station_telecode"];
+    [arguments addValue:@"" forKey:@"orderRequest.train_no"];
+    [arguments addValue:@"QB" forKey:@"trainPassType"];
+    [arguments addValue:@"QB#D#Z#T#K#QT#" forKey:@"trainClass"];
+    [arguments addValue:@"00" forKey:@"includeStudent"];
+    [arguments addValue:@"" forKey:@"seatTypeAndNum"];
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
+    
+    //NSLog(@"%@", path);
+    NSURL *url = [NSURL URLWithString:path];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+    NSArray *split = [html componentsSeparatedByString:@","];
+    
+    if (![[split objectAtIndex:0] isEqual:@"0"])
+        return nil;
+    
+    NSUInteger count = [split count];
+    NSUInteger i = 1;
+    NSMutableArray *storage = [[NSMutableArray alloc] init];
+    for (; i < count; i += 16) {
+        NSString *string = [DataSerializeUtility parseOrderKey:[split objectAtIndex:(i + 15)]];
+        
+                
+        if (string != nil) {
+            NSMutableArray *leftTicket = [[NSMutableArray alloc] init];
+            [leftTicket addObject:string];
+            
+            for (NSUInteger j = 0; j < 11; j++) {
+                [leftTicket addObject:[DataSerializeUtility parseLeftTicket:[split objectAtIndex:(i + 4 + j)]]];
+            }
+            
+            [storage addObject:[[NSArray alloc] initWithArray:leftTicket]];
+        }
+    }
+    //NSLog(@"TrainCount %d %@ %@", [storage count], [storage objectAtIndex:0], [storage objectAtIndex:1]);
+    return storage;
+}
+
+- (NSData *)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date
+{
+    NSLog(@"submutOrderRequestWithTrainInfo");
+    [self assertLoggedIn];
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:[train getTrainNo] forKey:@"station_train_code"];
+    [argument addValue:date forKey:@"train_date"];
+    [argument addValue:@"" forKey:@"seatstype_num"];
+    [argument addValue:[train getDepartStationTeleCode] forKey:@"from_station_telecode"];
+    [argument addValue:[train getArriveStationTeleCode] forKey:@"to_station_telecode"];
+    [argument addValue:@"00" forKey:@"include_student"];
+    [argument addValue:[train getDapartStationName] forKey:@"from_station_telecode_name"];
+    [argument addValue:[train getArriveStationName] forKey:@"to_station_telecode_name"];
+    [argument addValue:date forKey:@"round_train_date"];
+    [argument addValue:@"00:00--00:24" forKey:@"round_start_time_str"];
+    [argument addValue:@"1" forKey:@"single_round_trip"];
+    [argument addValue:@"QB" forKey:@"train_pass_type"];
+    [argument addValue:@"QB#D#Z#T#K#QT#" forKey:@"train_class_arr"];
+    [argument addValue:@"00:00--00:24" forKey:@"start_time_str"];
+    [argument addValue:[train getDuration] forKey:@"lishi"];
+    [argument addValue:[train getDepartTime] forKey:@"train_start_time"];
+    [argument addValue:[train getTrainCode] forKey:@"trainno4"];
+    [argument addValue:[train getArriveTime] forKey:@"arrive_time"];
+    [argument addValue:[train getDapartStationName] forKey:@"from_station_name"];
+    [argument addValue:[train getArriveStationName] forKey:@"to_station_name"];
+    [argument addValue:[train getDepartStationNo] forKey:@"from_station_no"];
+    [argument addValue:[train getArriveStationNo] forKey:@"to_station_no"];
+    [argument addValue:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
+    [argument addValue:[train getMMStr] forKey:@"mmStr"];
+    [argument addValue:[train getLocationCode] forKey:@"locationCode"];
+    
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?method=submutOrderRequest"];
+    NSURL *url = [NSURL URLWithString:path];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    return result;
+}
+
+- (BOOL)confirmSingleForQueue:(TDBTrainInfo *)train passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode
+{
+    NSLog(@"confirmSingleForQueue");
+    [self assertLoggedIn];
+    
+    /*
+    if (![self checkOrderInfo:train passenger:passenger date:date leftTicketStr:leftTicketStr apacheToken:apacheToken randCode:randCode])
+        return nil;
+    sleep(1);
+    
+    if (![self getQueueCount:train passenger:passenger date:date leftTicketID:leftTicketStr])
+        return nil;
+    sleep(2);
+     */
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    
+#define ORD @"orderRequest."
+#define PAS @"passenger_1_"
+    
+    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
+    [argument addValue:leftTicketStr forKey:@"leftTicketStr"];
+    [argument addValue:@"中文或拼音首字母" forKey:@"textfield"];
+    [argument addValue:date forKey:ORD @"train_date"];
+    [argument addValue:[train getTrainCode] forKey:ORD @"train_no"];
+    [argument addValue:[train getTrainNo] forKey:ORD @"station_train_code"];
+    [argument addValue:[train getDepartStationTeleCode] forKey:ORD @"from_station_telecode"];
+    [argument addValue:[train getArriveStationTeleCode] forKey:ORD @"to_station_telecode"];
+    [argument addValue:@"" forKey:ORD @"seat_type_code"];
+    [argument addValue:@"" forKey:ORD @"ticket_type_order_num"];
+    [argument addValue:@"000000000000000000000000000000" forKey:ORD @"bed_level_order_num"];
+    [argument addValue:[train getDepartTime] forKey:ORD @"start_time"];
+    [argument addValue:[train getArriveTime] forKey:ORD @"end_time"];
+    [argument addValue:[train getDapartStationName] forKey:ORD @"from_station_name"];
+    [argument addValue:[train getArriveStationName] forKey:ORD @"to_station_name"];
+    [argument addValue:@"1" forKey:ORD @"cancle_flag"];
+    [argument addValue:@"Y" forKey:ORD @"id_mode"];
+    [argument addValue:[passenger generateTicketString] forKey:@"passengerTickets"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:passenger.seat forKey:PAS @"seat"];
+    [argument addValue:passenger.ticket forKey:PAS @"ticket"];
+    [argument addValue:passenger.name forKey:PAS @"name"];
+    [argument addValue:passenger.id_cardtype forKey:PAS @"cardtype"];
+    [argument addValue:passenger.id_cardno forKey:PAS "cardno"];
+    [argument addValue:passenger.mobileno forKey:PAS @"mobileno"];
+    
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    
+    [argument addValue:randCode forKey:@"randCode"];
+    [argument addValue:@"A" forKey:ORD @"reserve_flag"];
+    
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueue"];
+    NSURL *url = [NSURL URLWithString:path];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+    
+    NSError *jsonErr = nil;
+    NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:result options:0 error:&jsonErr];
+    
+    if (jsonErr) {
+        NSLog(@"%@", html);
+        return NO;
+    } else {
+        NSLog(@"%@", [dict objectForKey:@"errMsg"]);
+        NSString *msg = [dict objectForKey:@"errMsg"];
+        
+        if ([msg isEqualToString:@"Y"])
+            return YES;
+        else
+            return NO;
+    }
+}
+
+- (BOOL)checkOrderInfo:(TDBTrainInfo *)train  passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode
+{
+    NSLog(@"checkOrderInfo");
+    [self assertLoggedIn];
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    
+#define ORD @"orderRequest."
+#define PAS @"passenger_1_"
+    
+    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
+    [argument addValue:leftTicketStr forKey:@"leftTicketStr"];
+    
+    NSLog(@"leftTicketStr=%@", leftTicketStr);
+    [argument addValue:@"中文或拼音首字母" forKey:@"textfield"];
+    [argument addValue:date forKey:ORD @"train_date"];
+    [argument addValue:[train getTrainCode] forKey:ORD @"train_no"];
+    [argument addValue:[train getTrainNo] forKey:ORD @"station_train_code"];
+    [argument addValue:[train getDepartStationTeleCode] forKey:ORD @"from_station_telecode"];
+    [argument addValue:[train getArriveStationTeleCode] forKey:ORD @"to_station_telecode"];
+    [argument addValue:@"" forKey:ORD @"seat_type_code"];
+    [argument addValue:@"" forKey:ORD @"ticket_type_order_num"];
+    [argument addValue:@"000000000000000000000000000000" forKey:ORD @"bed_level_order_num"];
+    [argument addValue:[train getDepartTime] forKey:ORD @"start_time"];
+    [argument addValue:[train getArriveTime] forKey:ORD @"end_time"];
+    [argument addValue:[train getDapartStationName] forKey:ORD @"from_station_name"];
+    [argument addValue:[train getArriveStationName] forKey:ORD @"to_station_name"];
+    [argument addValue:@"1" forKey:ORD @"cancle_flag"];
+    [argument addValue:@"Y" forKey:ORD @"id_mode"];
+    [argument addValue:[passenger generateTicketString] forKey:@"passengerTickets"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:passenger.seat forKey:PAS @"seat"];
+    [argument addValue:passenger.ticket forKey:PAS @"ticket"];
+    [argument addValue:passenger.name forKey:PAS @"name"];
+    [argument addValue:passenger.id_cardtype forKey:PAS @"cardtype"];
+    [argument addValue:passenger.id_cardno forKey:PAS "cardno"];
+    [argument addValue:passenger.mobileno forKey:PAS @"mobileno"];
+    
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument addValue:@"" forKey:@"oldPassengers"];
+    [argument addValue:@"Y" forKey:@"checkbox9"];
+    
+    [argument addValue:randCode forKey:@"randCode"];
+    [argument addValue:@"A" forKey:ORD @"reserve_flag"];
+    [argument addValue:@"dc" forKey:@"tFlag"];
+
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/confirmPassengerAction.do?method=checkOrderInfo&rand=%@", randCode];
+    NSURL *url = [NSURL URLWithString:path];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSLog(@"%@", [argument getFinalData]);
+    
+    [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+    
+    NSError *jsonErr = nil;
+    NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:result options:0 error:&jsonErr];
+    
+    if (jsonErr) {
+        NSLog(@"%@", html);
+        return NO;
+    } else {
+        NSLog(@"%@", dict);
+        NSString *msg = [dict objectForKey:@"msg"];
+        
+        if (msg.length != 0) {
+            NSLog(@"%@", msg);
+            return NO;
+        }
+        
+        return YES;
+    }
+    
+}
+
+- (BOOL)getQueueCount:(TDBTrainInfo *)train passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketID:(NSString *)leftTicketID
+{
+    NSLog(@"getQueueCount");
+    [self assertLoggedIn];
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    
+    [argument addValue:@"getQueueCount" forKey:@"method"];
+    [argument addValue:date forKey:@"train_date"];
+    [argument addValue:[train getTrainCode] forKey:@"train_no"];
+    [argument addValue:[train getTrainNo] forKey:@"station"];
+    [argument addValue:passenger.seat forKey:@"seat"];
+    [argument addValue:[train getDepartStationTeleCode] forKey:@"from"];
+    [argument addValue:[train getArriveStationTeleCode] forKey:@"to"];
+    [argument addValue:leftTicketID forKey:@"ticket"];
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/confirmPassengerAction.do?%@", [argument getFinalData]];
+    NSURL *url = [NSURL URLWithString:path];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+    
+    NSError *jsonErr = nil;
+    NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:result options:0 error:&jsonErr];
+    
+    if (jsonErr) {
+        NSLog(@"%@", html);
+        return NO;
+    } else {
+        NSLog(@"%@", dict);
+        return YES;
+    }
+}
+
+
+- (NSDictionary *)loginAysnSuggest
+{
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/loginAction.do?method=loginAysnSuggest"];
+    NSURL *url = [NSURL URLWithString:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSError *jsonErr = nil;
+    NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:json options:0 error:&jsonErr];
+    
+    return result;
+}
+
+- (void)assertLoggedIn
+{
+    NSAssert(YES, @"Before This Operation, You must Login");
+}
+
+
+@end

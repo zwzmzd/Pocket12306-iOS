@@ -1,0 +1,83 @@
+//
+//  TDBSeatDetailViewController.m
+//  12306
+//
+//  Created by macbook on 13-7-20.
+//  Copyright (c) 2013年 zwz. All rights reserved.
+//
+
+#import "TDBSeatDetailViewController.h"
+
+@interface TDBSeatDetailViewController ()
+
+@end
+
+@implementation TDBSeatDetailViewController
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+ 
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    //NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:0];
+    //[self.tableView insertSections:indexSet withRowAnimation:nil];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Table view data source
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [self.dataController count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"EveryTicketInfo";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    UILabel *label1 = (UILabel *)[cell viewWithTag:1];
+    UILabel *label2 = (UILabel *)[cell viewWithTag:2];
+    
+    //label.text = [self.dataController objectAtIndex:indexPath.section];
+    NSArray *info = [[[[self.dataController objectAtIndex:indexPath.section] componentsSeparatedByString:@"("] objectAtIndex:1] componentsSeparatedByString:@")"];
+    label1.text = [info objectAtIndex:1];
+    label2.text = [info objectAtIndex:0];
+    
+    return cell;
+
+}
+
+-  (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *seat = [[[self.dataController objectAtIndex:section] componentsSeparatedByString:@"("] objectAtIndex:0];
+    return seat;
+}
+
+
+@end
