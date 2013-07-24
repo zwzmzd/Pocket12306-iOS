@@ -157,10 +157,9 @@
 		FA320A2B17966A0800F2E282 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FABA968B17A03A700018B20A /* MBProgressHUD */,
 				FAB56A1E179C13EF006A05BF /* KGStatusBar */,
 				FAED1B38179A47ED003DA90E /* hpple */,
-				FAED1B3417992247003DA90E /* MBProgressHUD.h */,
-				FAED1B3517992247003DA90E /* MBProgressHUD.m */,
 				FA320A2C17966A0800F2E282 /* 12306-Info.plist */,
 				FA320A2D17966A0800F2E282 /* InfoPlist.strings */,
 				FA320A3017966A0800F2E282 /* main.m */,
@@ -180,6 +179,15 @@
 			);
 			name = KGStatusBar;
 			path = ../../../../Downloads/KGStatusBar/KGStatusBar;
+			sourceTree = "<group>";
+		};
+		FABA968B17A03A700018B20A /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				FAED1B3417992247003DA90E /* MBProgressHUD.h */,
+				FAED1B3517992247003DA90E /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		FAED1B38179A47ED003DA90E /* hpple */ = {
