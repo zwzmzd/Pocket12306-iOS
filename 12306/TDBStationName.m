@@ -37,7 +37,6 @@
     NSAssert(startPos.length && endPos.length, @"TDBSessionName fetchStationNameRawTextFromNet with exception");
     
     self.raw = [result substringWithRange:NSMakeRange(startPos.location + startPos.length, endPos.location - startPos.location - startPos.length)];
-    NSLog(@"YES");
     return TRUE;
 }
 
@@ -63,8 +62,23 @@
     self.stationNameInfo = container;
     self.stationNameIndexUsingChinese = dictForChinese;
     
-    NSLog(@"%d %@", self.stationNameInfo.count, [self.stationNameIndexUsingChinese objectForKey:@"上海"]);
     return YES;
+}
+
+- (NSString *)getTelecodeUsingName:(NSString *)name
+{
+    NSArray *element = [self.stationNameIndexUsingChinese objectForKey:name];
+    if (element == nil) {
+        return nil;
+    } else {
+        return [element objectAtIndex:2];
+    }
+}
+
+- (NSArray *)suggestStationNameUsingAbbr:(NSString *)abbr
+{
+#warning need to implement
+    return nil;
 }
 
 @end

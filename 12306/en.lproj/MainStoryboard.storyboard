@@ -21,7 +21,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="购票" id="1zD-RG-Kyp">
                             <connections>
-                                <segue destination="kgZ-2o-xLq" kind="push" id="3cC-Fa-c5x"/>
+                                <segue destination="kgZ-2o-xLq" kind="push" identifier="PushToListView" id="3cC-Fa-c5x"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -768,6 +768,61 @@
             <point key="canvasLocation" x="484" y="-837"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="LoginFrameViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginFrameViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="iWantCancle:"/>
+                <relationship kind="action" name="iWantLogin:"/>
+                <relationship kind="action" name="iWantResetSession:"/>
+                <relationship kind="action" name="iWantToRetriveVerifyCode:"/>
+                <relationship kind="outlet" name="doneButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="password" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="retriveVerifyCodeButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="username" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="verifyCode" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="verifyImage" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="TDBListViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBListViewController.h"/>
+        </class>
+        <class className="TDBSeatDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBSeatDetailViewController.h"/>
+        </class>
+        <class className="TDBTicketDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBTicketDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="iWantOrder:"/>
+                <relationship kind="action" name="refreshVerifyCode:"/>
+                <relationship kind="outlet" name="detailArriveLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="detailDepartLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="detailTopLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="idCardNo" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="mobileno" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="name" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="progressView" candidateClass="UIProgressView"/>
+                <relationship kind="outlet" name="refreshVerifyCodeBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="seatTypeSelector" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="ticketTypeSelector" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="verifyCode" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="verifyCodeImage" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="TDBViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancleLogin:" candidateClass="UIStoryboard"/>
+                <relationship kind="outlet" name="buyTicket" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="UIStoryboard" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboard.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

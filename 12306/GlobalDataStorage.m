@@ -10,7 +10,7 @@
 #import "TDBSession.h"
 
 static TDBSession *_tdbss = nil;
-static NSString *_date = @"2013-07-23";
+static NSString *_date = @"2013-07-28";
 
 @implementation GlobalDataStorage
 

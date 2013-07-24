@@ -49,15 +49,15 @@
     dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 traininfo", NULL);
     dispatch_async(downloadVerifyCode, ^(void) {
         
-        NSArray *array = [[GlobalDataStorage tdbss] queryLeftTickWithDate:[GlobalDataStorage date] from:@"NJH" to:@"SHH"];
+        NSArray *array = [[GlobalDataStorage tdbss] queryLeftTickWithDate:[GlobalDataStorage date]
+                                                                     from:self.departStationTelecode
+                                                                       to:self.arriveStationTelecode];
         
         TDBTrainInfoController *controller = [[TDBTrainInfoController alloc] init];
         NSUInteger count = [array count];
         for (NSUInteger i = 0; i < count; i++) {
             [controller addTrainInfoWithDataArray:[array objectAtIndex:i]];
         }
-        
-        //[[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:[controller getTrainInfoForIndex:10] date:@"2013-07-19"];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             self.dataController = controller;

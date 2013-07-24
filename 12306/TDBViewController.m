@@ -12,6 +12,7 @@
 #import "TDBStationName.h"
 #import "TDBStationAndDateSelector.h"
 #import "TDBKeybordNotificationManager.h"
+#import "TDBListViewController.h"
 
 @interface TDBViewController ()
 
@@ -27,35 +28,41 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
-    customView.frame = CGRectMake(0.f, 100.f, self.view.bounds.size.width, 300.f);
-
-    [self.view addSubview:customView];
-    self.selectorView = customView;
+    
     
     //[self setUpForDismissKeyboard];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+#warning need to revert the logical
     static UIBarButtonItem *buyTicket = nil;
     [super viewWillAppear:animated];
     if ([GlobalDataStorage tdbss]) {
         self.navigationItem.leftBarButtonItem = nil;
         self.title = @"车票查询";
         
-        if (buyTicket)
-            self.navigationItem.rightBarButtonItem = buyTicket;\
-        
-        [self initStationNameControllerUsingGCD];
+        //if (buyTicket)
+            //self.navigationItem.rightBarButtonItem = buyTicket;
     } else {
-        if (self.navigationItem.rightBarButtonItem)
-            buyTicket = self.navigationItem.rightBarButtonItem;
-        self.navigationItem.rightBarButtonItem = nil;
+        //if (self.navigationItem.rightBarButtonItem)
+            //buyTicket = self.navigationItem.rightBarButtonItem;
+        //self.navigationItem.rightBarButtonItem = nil;
+    }
+    
+    if (self.selectorView == nil) {
+        TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
+        customView.frame = CGRectMake(0.f, 100.f, self.view.bounds.size.width, 300.f);
+        
+        [self.view addSubview:customView];
+        self.selectorView = customView;
     }
     
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
     [manager addNotificationHandler:self];
+    
+    [self initStationNameControllerUsingGCD];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -87,16 +94,21 @@
     }
 }
 
-- (void)setUpForDismissKeyboard
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    
-    [nc addObserverForName:UIKeyboardDidShowNotification object:nil queue:mainQueue
-                usingBlock:^(NSNotification *note){
-                    NSLog(@"disappear");
-                }];
+    if ([segue.identifier isEqualToString:@"PushToListView"]) {
+        TDBListViewController *lv = [segue destinationViewController];
+        lv.departStationTelecode = [self.stationNameController
+                                    getTelecodeUsingName:self.selectorView.departStationField.text];
+        lv.arriveStationTelecode = [self.stationNameController
+                                    getTelecodeUsingName:self.selectorView.arriveStationField.text];
+        
+        NSLog(@"%@ %@", lv.departStationTelecode, lv.arriveStationTelecode);
+    }
 }
+
+
 
 - (void)viewDidLayoutSubviews
 {
@@ -115,7 +127,7 @@
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
+    [textField selectAll:self];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {

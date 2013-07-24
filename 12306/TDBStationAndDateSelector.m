@@ -14,8 +14,13 @@
 {
     if (_departStationField == nil) {
         _departStationField = [[UITextField alloc] init];
-        _departStationField.placeholder = @"nihao";
-        _arriveStationField.returnKeyType = UIReturnKeyDone;
+        _departStationField.returnKeyType = UIReturnKeyDone;
+        _departStationField.autocorrectionType = UITextAutocorrectionTypeNo;
+        _departStationField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        _departStationField.borderStyle = UITextBorderStyleBezel;
+        _departStationField.font = [UIFont boldSystemFontOfSize:22];
+        
+        _departStationField.placeholder = @"起点站";
         [self addSubview:_departStationField];
     }
     return _departStationField;
@@ -25,8 +30,13 @@
 {
     if (_arriveStationField == nil) {
         _arriveStationField = [[UITextField alloc] init];
-        _arriveStationField.placeholder = @"hello";
         _arriveStationField.returnKeyType = UIReturnKeyDone;
+        _arriveStationField.autocorrectionType = UITextAutocorrectionTypeNo;
+        _arriveStationField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        _arriveStationField.borderStyle = UITextBorderStyleBezel;
+        _arriveStationField.font = [UIFont boldSystemFontOfSize:22];
+        
+        _arriveStationField.placeholder = @"终点站";
         [self addSubview:_arriveStationField];
     }
     return _arriveStationField;
@@ -55,9 +65,9 @@
 - (void)layoutSubviews
 {
     CGSize size = self.frame.size;
-    //NSLog(@"%f, %f", size.width, size.height);
-    self.departStationField.frame = CGRectMake(0.05125f * size.width, size.height - 40, 0.25f * size.width, 30.f);
-    self.arriveStationField.frame = CGRectMake(0.375f * size.width, size.height - 40, 0.25f * size.width, 30.f);
+    
+    self.departStationField.frame = CGRectMake(0.025f * size.width, size.height - 45, 0.4f * size.width, 35.f);
+    self.arriveStationField.frame = CGRectMake(0.45f * size.width, size.height - 45, 0.4f * size.width, 35.f);
 }
 /*
 // Only override drawRect: if you perform custom drawing.

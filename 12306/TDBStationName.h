@@ -11,7 +11,7 @@
 @interface TDBStationName : NSObject
 
 - (BOOL)fetchStationNameRawTextFromNet;
-
 - (BOOL)parseRawText;
-
+- (NSString *)getTelecodeUsingName:(NSString *)name;
+- (NSArray *)suggestStationNameUsingAbbr:(NSString *)abbr;
 @end
