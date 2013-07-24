@@ -53,18 +53,7 @@ static TDBKeybordNotificationManager *_manager = nil;
     
     [nc addObserver:self selector:@selector(keyboardWillShowHandle:) name:UIKeyboardWillShowNotification object:nil];
     [nc addObserver:self selector:@selector(keyboardWillHideHandle:) name:UIKeyboardWillHideNotification object:nil];
-
-    /*
-    [nc addObserverForName:UIKeyboardWillShowNotification object:nil queue:mainQueue
-                usingBlock:^(NSNotification *note){
-                    [self keyboardWillShowHandle:note];
-                }];
-    
-    [nc addObserverForName:UIKeyboardWillHideNotification object:nil queue:mainQueue
-                usingBlock:^(NSNotification *note){
-                    [self keyboardWillHideHandle:note];
-                }];
-     */
+    //[nc addObserver:self selector:@selector(keyboardDidChangeFrame:) name:UIKeyboardDidChangeFrameNotification object:nil];
 }
 
 #pragma mark - add or remove a delegate for event handler
@@ -85,7 +74,7 @@ static TDBKeybordNotificationManager *_manager = nil;
 
 - (void)keyboardWillShowHandle:(NSNotification *)note
 {
-    //NSLog(@"keyboard appear or size changed");
+    /* 在键盘开启的状态下，如果屏幕旋转了，这个方法也会被调用。包括横向屏幕上的180度旋转 */
     self.keyboardVisible = YES;
     
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_3_2
@@ -95,7 +84,11 @@ static TDBKeybordNotificationManager *_manager = nil;
 #endif
     CGRect keyboardBounds;
     [keyboardBoundsValue getValue:&keyboardBounds];
-    self.keyboardHeight = keyboardBounds.size.height;
+    
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    BOOL isLandscape = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
+    
+    self.keyboardHeight = isLandscape ? keyboardBounds.size.width : keyboardBounds.size.height;
     
     for (id<KeyboardNotificationDelegate> handler in self.eventHandlerList) {
         [handler keyboardEvent:YES];
@@ -104,7 +97,6 @@ static TDBKeybordNotificationManager *_manager = nil;
 
 - (void)keyboardWillHideHandle:(NSNotification *)note
 {
-    //NSLog(@"disappear");
     self.keyboardVisible = NO;
     self.keyboardHeight = 0;
     
@@ -112,5 +104,24 @@ static TDBKeybordNotificationManager *_manager = nil;
         [handler keyboardEvent:NO];
     }
 }
+
+/*
+- (void)keyboardDidChangeFrame:(NSNotification *)note
+{
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_3_2
+    NSValue *keyboardBoundsValue = [[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
+#else
+    NSValue *keyboardBoundsValue = [[note userInfo] objectForKey:UIKeyboardBoundsUserInfoKey];
+#endif
+    CGRect keyboardBounds;
+    [keyboardBoundsValue getValue:&keyboardBounds];
+    
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    BOOL isLandscape = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
+    //float keyboardHeight = isLandscaped ? keyboardBounds.size.width : keyboardBounds.size.height;
+    
+    NSLog(@"Landscape %d, DidChangeFrame %f %f", isLandscape, keyboardBounds.size.width, keyboardBounds.size.height);
+}
+ */
 
 @end

@@ -68,7 +68,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
-    [manager addNotificationHandler:self];
+    [manager removeNotificationHandler:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -114,6 +114,14 @@
 {
     [super viewDidLayoutSubviews];
     
+    /**
+     这个方法在self.view.frame变化的时候会被调用，作用相当于[self.view layoutSubviews]
+     
+     在键盘没有开启的状态下，self.view.frame会被自动设置成为可用窗口的大小。
+     但键盘的开启会遮挡部分试图，输入控件可能会位于键盘下方，所以要在别的地方侦听
+     键盘开启关闭消息，并设置正确的self.view.frame
+     **/
+    
     CGSize size = self.view.bounds.size;
     self.selectorView.frame = CGRectMake(0, 0, size.width, size.height);
 }
@@ -143,12 +151,17 @@
 
 - (void)keyboardEvent:(BOOL)visible
 {
-    if (visible) {
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    BOOL isLandscape = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
+    
+        
+    if (isLandscape) {
         CGSize size = [[UIScreen mainScreen] bounds].size;
-        self.view.frame = CGRectMake(0,0, size.width , size.height -  self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
+        self.view.frame = CGRectMake(0,0, size.height ,
+                                     size.width - self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
     } else {
         CGSize size = [[UIScreen mainScreen] bounds].size;
-        self.view.frame = CGRectMake(0,0, size.width, size.height - self.navigationController.navigationBar.frame.size.height - 20);
+        self.view.frame = CGRectMake(0,0, size.width , size.height - self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
     }
 }
 
