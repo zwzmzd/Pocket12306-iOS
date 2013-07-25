@@ -13,6 +13,7 @@
 @property (nonatomic) UIScrollView *autocompleteList;
 @property (nonatomic) UITextField *departStationField;
 @property (nonatomic) UITextField *arriveStationField;
+@property (nonatomic) UIButton *dateShower;
 
 - (id)initWithDelegate:(id<UITextFieldDelegate>)delegate;
 

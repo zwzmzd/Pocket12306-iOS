@@ -18,7 +18,9 @@
         _departStationField.autocorrectionType = UITextAutocorrectionTypeNo;
         _departStationField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _departStationField.borderStyle = UITextBorderStyleBezel;
-        _departStationField.font = [UIFont boldSystemFontOfSize:22];
+        _departStationField.font = [UIFont boldSystemFontOfSize:18];
+        _departStationField.adjustsFontSizeToFitWidth = YES;
+        _departStationField.minimumFontSize = 6;
         
         _departStationField.placeholder = @"起点站";
         [self addSubview:_departStationField];
@@ -34,12 +36,31 @@
         _arriveStationField.autocorrectionType = UITextAutocorrectionTypeNo;
         _arriveStationField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _arriveStationField.borderStyle = UITextBorderStyleBezel;
-        _arriveStationField.font = [UIFont boldSystemFontOfSize:22];
+        _arriveStationField.font = [UIFont boldSystemFontOfSize:18];
+        _arriveStationField.adjustsFontSizeToFitWidth = YES;
+        _arriveStationField.minimumFontSize = 6;
         
         _arriveStationField.placeholder = @"终点站";
         [self addSubview:_arriveStationField];
     }
     return _arriveStationField;
+}
+
+- (UIButton *)dateShower
+{
+    if (_dateShower == nil) {
+        _dateShower = [[UIButton alloc] init];
+        [_dateShower addTarget:self action:@selector(showDatepicker:) forControlEvents:UIControlEventAllTouchEvents];
+        [_dateShower setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
+        
+        NSDate *today = [NSDate date];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yy-MM-dd"];
+        [_dateShower setTitle:[formatter stringFromDate:today] forState:UIControlStateNormal];
+        
+        [self addSubview:_dateShower];
+    }
+    return _dateShower;
 }
 
 - (id)initWithDelegate:(id<UITextFieldDelegate>)delegate
@@ -66,16 +87,18 @@
 {
     CGSize size = self.frame.size;
     
-    self.departStationField.frame = CGRectMake(0.025f * size.width, size.height - 45, 0.4f * size.width, 35.f);
-    self.arriveStationField.frame = CGRectMake(0.45f * size.width, size.height - 45, 0.4f * size.width, 35.f);
+    self.departStationField.frame = CGRectMake(0.025f * size.width, size.height - 35, 0.3f * size.width, 30.f);
+    self.arriveStationField.frame = CGRectMake(0.35f * size.width, size.height - 35, 0.3f * size.width, 30.f);
+    self.dateShower.frame = CGRectMake(0.675f * size.width, size.height - 35, 0.3f * size.width, 30.f);
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+
+- (IBAction)showDatepicker:(id)sender
 {
-    // Drawing code
+    [self.departStationField resignFirstResponder];
+    [self.arriveStationField resignFirstResponder];
+    
+    
 }
-*/
+
 
 @end
