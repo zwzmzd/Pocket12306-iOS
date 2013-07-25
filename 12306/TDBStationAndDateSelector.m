@@ -96,8 +96,6 @@
 {
     [self.departStationField resignFirstResponder];
     [self.arriveStationField resignFirstResponder];
-    
-    
 }
 
 
