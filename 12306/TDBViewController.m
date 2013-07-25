@@ -59,9 +59,6 @@
          */
     }
     
-    TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
-    [manager addNotificationHandler:self];
-    
     [self initStationNameControllerUsingGCD];
     
 }
@@ -69,6 +66,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
+    [manager addNotificationHandler:self];
     [self resizeMainView];
 }
 
