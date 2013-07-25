@@ -28,9 +28,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    
-    
-    //[self setUpForDismissKeyboard];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -52,21 +49,34 @@
     
     if (self.selectorView == nil) {
         TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
-        customView.frame = CGRectMake(0.f, 100.f, self.view.bounds.size.width, 300.f);
         
         [self.view addSubview:customView];
         self.selectorView = customView;
+        
+        /* 
+            这个方法结束后，self.view会被设置，所以只要好好实现viewDidLayoutSubviews，这里不需要
+            设置customView.fram
+         */
     }
     
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
     [manager addNotificationHandler:self];
     
     [self initStationNameControllerUsingGCD];
-
+    
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self resizeMainView];
+}
+
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
     [manager removeNotificationHandler:self];
 }
@@ -113,7 +123,6 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
     /**
      这个方法在self.view.frame变化的时候会被调用，作用相当于[self.view layoutSubviews]
      
@@ -123,7 +132,26 @@
      **/
     
     CGSize size = self.view.bounds.size;
+    NSLog(@"viewDidLayoutSubviews,Height is:%f", size.height);
+
     self.selectorView.frame = CGRectMake(0, 0, size.width, size.height);
+}
+
+- (void)resizeMainView
+{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    BOOL isLandscape = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
+    
+    if (isLandscape) {
+        CGSize size = [[UIScreen mainScreen] bounds].size;
+        self.view.frame = CGRectMake(0,0, size.height ,
+                                     size.width - self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
+    } else {
+        CGSize size = [[UIScreen mainScreen] bounds].size;
+        self.view.frame = CGRectMake(0,0, size.width , size.height - self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
+        
+        size = self.view.bounds.size;
+    }
 }
 
 - (IBAction)cancleLogin:(UIStoryboard *)segue
@@ -151,18 +179,7 @@
 
 - (void)keyboardEvent:(BOOL)visible
 {
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    BOOL isLandscape = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
-    
-        
-    if (isLandscape) {
-        CGSize size = [[UIScreen mainScreen] bounds].size;
-        self.view.frame = CGRectMake(0,0, size.height ,
-                                     size.width - self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
-    } else {
-        CGSize size = [[UIScreen mainScreen] bounds].size;
-        self.view.frame = CGRectMake(0,0, size.width , size.height - self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
-    }
+    [self resizeMainView];
 }
 
 @end
