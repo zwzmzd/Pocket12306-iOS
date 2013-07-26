@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TDBDatapickSheet : UIActionSheet
+@interface TDBDatepickSheet : UIActionSheet
 
-@property (nonatomic) UIPickerView *pickView;
+@property (nonatomic) UIDatePicker *pickView;
+
+//- (void)setDatePickerDelegate:(id<UIPickerViewDelegate>)delegate;
 
 @end

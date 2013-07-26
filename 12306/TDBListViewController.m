@@ -33,7 +33,7 @@
 {
     [super viewDidLoad];
     
-    self.title = [NSString stringWithFormat:@"%@车票", [GlobalDataStorage date]];
+    self.title = [NSString stringWithFormat:@"%@车票", self.dateInString];
     [self retriveTrainInfoListUsingGCD];
 }
 
@@ -49,7 +49,7 @@
     dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 traininfo", NULL);
     dispatch_async(downloadVerifyCode, ^(void) {
         
-        NSArray *array = [[GlobalDataStorage tdbss] queryLeftTickWithDate:[GlobalDataStorage date]
+        NSArray *array = [[GlobalDataStorage tdbss] queryLeftTickWithDate:self.dateInString
                                                                      from:self.departStationTelecode
                                                                        to:self.arriveStationTelecode];
         

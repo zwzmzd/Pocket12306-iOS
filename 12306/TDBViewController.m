@@ -114,6 +114,10 @@
         lv.arriveStationTelecode = [self.stationNameController
                                     getTelecodeUsingName:self.selectorView.arriveStationField.text];
         
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        lv.dateInString = [formatter stringFromDate:self.selectorView.userSelectedDate];
+        
         NSLog(@"%@ %@", lv.departStationTelecode, lv.arriveStationTelecode);
     }
 }
@@ -132,7 +136,7 @@
      **/
     
     CGSize size = self.view.bounds.size;
-    NSLog(@"viewDidLayoutSubviews,Height is:%f", size.height);
+    //NSLog(@"viewDidLayoutSubviews,Height is:%f", size.height);
 
     self.selectorView.frame = CGRectMake(0, 0, size.width, size.height);
 }

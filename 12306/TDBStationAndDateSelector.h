@@ -14,6 +14,7 @@
 @property (nonatomic) UITextField *departStationField;
 @property (nonatomic) UITextField *arriveStationField;
 @property (nonatomic) UIButton *dateShower;
+@property (nonatomic) NSDate *userSelectedDate;
 
 - (id)initWithDelegate:(id<UITextFieldDelegate>)delegate;
 

@@ -6,19 +6,19 @@
 //  Copyright (c) 2013年 zwz. All rights reserved.
 //
 
-#import "TDBDatapickSheet.h"
+#import "TDBDatepickSheet.h"
 
-@implementation TDBDatapickSheet
+@implementation TDBDatepickSheet
 
-- (UIPickerView *)pickView
+- (UIDatePicker *)pickView
 {
     if (_pickView == nil) {
-        _pickView = [[UIPickerView alloc] init];
-        _pickView.showsSelectionIndicator = YES;
+        _pickView = [[UIDatePicker alloc] init];
+        _pickView.datePickerMode = UIDatePickerModeDate;
+        _pickView.minimumDate = [NSDate date];
         
         [self addSubview:_pickView];
     }
-    
     return _pickView;
 }
 
@@ -29,6 +29,19 @@
         // Initialization code
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    CGSize size = self.bounds.size;
+    
+    if (size.width > 340.f) {
+        /* 横屏模式下 */
+        self.pickView.frame = CGRectMake(0.f, -10.f, size.width, 100.f);
+    } else {
+        /* 竖屏模式下 */
+        self.pickView.frame = CGRectMake(0.f, 0.f, size.width, 200.f);
+    }
 }
 
 /*

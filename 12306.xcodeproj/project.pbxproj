@@ -28,7 +28,7 @@
 		FA320A6417980D7A00F2E282 /* TDBTicketDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA320A6317980D7A00F2E282 /* TDBTicketDetailViewController.m */; };
 		FAB56A21179C13EF006A05BF /* KGStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A20179C13EF006A05BF /* KGStatusBar.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
-		FABA96A017A193F80018B20A /* TDBDatapickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatapickSheet.m */; };
+		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
 		FAED1B331798CF92003DA90E /* PassengerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B321798CF92003DA90E /* PassengerInfo.m */; };
 		FAED1B3617992247003DA90E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B3517992247003DA90E /* MBProgressHUD.m */; };
 		FAED1B3F179A491B003DA90E /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B3E179A4897003DA90E /* XPathQuery.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -77,8 +77,8 @@
 		FAB56A20179C13EF006A05BF /* KGStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KGStatusBar.m; sourceTree = "<group>"; };
 		FAB56A22179C27D8006A05BF /* TDBStationName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBStationName.h; sourceTree = "<group>"; };
 		FAB56A23179C27D8006A05BF /* TDBStationName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationName.m; sourceTree = "<group>"; };
-		FABA969E17A193F80018B20A /* TDBDatapickSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDatapickSheet.h; sourceTree = "<group>"; };
-		FABA969F17A193F80018B20A /* TDBDatapickSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBDatapickSheet.m; sourceTree = "<group>"; };
+		FABA969E17A193F80018B20A /* TDBDatepickSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDatepickSheet.h; sourceTree = "<group>"; };
+		FABA969F17A193F80018B20A /* TDBDatepickSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBDatepickSheet.m; sourceTree = "<group>"; };
 		FAED1B311798CF92003DA90E /* PassengerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassengerInfo.h; sourceTree = "<group>"; };
 		FAED1B321798CF92003DA90E /* PassengerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassengerInfo.m; sourceTree = "<group>"; };
 		FAED1B3417992247003DA90E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -250,8 +250,8 @@
 			children = (
 				FAF32E14179F6FE3006C2CC9 /* TDBStationAndDateSelector.h */,
 				FAF32E15179F6FE3006C2CC9 /* TDBStationAndDateSelector.m */,
-				FABA969E17A193F80018B20A /* TDBDatapickSheet.h */,
-				FABA969F17A193F80018B20A /* TDBDatapickSheet.m */,
+				FABA969E17A193F80018B20A /* TDBDatepickSheet.h */,
+				FABA969F17A193F80018B20A /* TDBDatepickSheet.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -344,7 +344,7 @@
 				FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */,
 				FAF32E16179F6FE3006C2CC9 /* TDBStationAndDateSelector.m in Sources */,
 				FAF32E1D179FA361006C2CC9 /* TDBKeybordNotificationManager.m in Sources */,
-				FABA96A017A193F80018B20A /* TDBDatapickSheet.m in Sources */,
+				FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
