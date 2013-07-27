@@ -179,9 +179,14 @@
 
 #pragma mark - KeyboardNotificationDelegate
 
-- (void)keyboardEvent:(BOOL)visible
+- (void)keyboardEvent:(BOOL)visible withAnimationDurationTime:(NSTimeInterval)timeInterval
 {
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:timeInterval];
+    
     [self resizeMainView];
+    
+    [UIView commitAnimations];
 }
 
 @end

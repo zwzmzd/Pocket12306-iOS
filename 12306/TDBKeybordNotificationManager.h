@@ -10,7 +10,7 @@
 
 @protocol KeyboardNotificationDelegate <NSObject>
 
-- (void)keyboardEvent:(BOOL)visible;
+- (void)keyboardEvent:(BOOL)visible withAnimationDurationTime:(NSTimeInterval)timeInterval;
 
 @end
 
