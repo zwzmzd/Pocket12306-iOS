@@ -15,7 +15,4 @@
 + (TDBSession *)tdbss;
 + (void)setTdbss:(TDBSession *)tdbss;
 
-+ (NSString *)date;
-+ (void)setDate:(NSString *)date;
-
 @end
