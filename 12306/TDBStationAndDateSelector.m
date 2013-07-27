@@ -141,7 +141,6 @@
     sheet.initialDate = self.userSelectedDate;
 
     [sheet showInView:self];
-    NSLog(@"finish");
 }
 
 #pragma mark - UIActionSheetDelegate

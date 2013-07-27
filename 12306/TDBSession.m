@@ -54,19 +54,18 @@
 
 - (void)getSession
 {
-    NSLog(@"here");
     NSURL *url = [NSURL URLWithString:SYSURL @"/otsweb/"];
-    
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
     [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
+    /*
     NSArray *cookies = [self.cookieManager cookiesForURL:url];
     NSEnumerator *enumerator = [cookies objectEnumerator];
     NSHTTPCookie *cookie;
+    
     while (cookie = [enumerator nextObject]) {
         NSLog(@"Cookie{%@ = %@}", cookie.name, cookie.value);
-    }
+    }*/
 }
 
 - (NSData *)getVerifyImage {
