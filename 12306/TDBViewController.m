@@ -32,31 +32,31 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-#warning need to revert the logical
-    static UIBarButtonItem *buyTicket = nil;
     [super viewWillAppear:animated];
+    
+    static UIBarButtonItem *buyTicket = nil;
     if ([GlobalDataStorage tdbss]) {
         self.navigationItem.leftBarButtonItem = nil;
         self.title = @"车票查询";
         
-        //if (buyTicket)
-            //self.navigationItem.rightBarButtonItem = buyTicket;
+        if (buyTicket)
+            self.navigationItem.rightBarButtonItem = buyTicket;
+        
+        if (_selectorView == nil) {
+            TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
+            
+            [self.view addSubview:customView];
+            self.selectorView = customView;
+            
+            /*
+             这个方法结束后，self.view会被设置，所以只要好好实现viewDidLayoutSubviews，这里不需要
+             设置customView.fram
+             */
+        }
     } else {
-        //if (self.navigationItem.rightBarButtonItem)
-            //buyTicket = self.navigationItem.rightBarButtonItem;
-        //self.navigationItem.rightBarButtonItem = nil;
-    }
-    
-    if (self.selectorView == nil) {
-        TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
-        
-        [self.view addSubview:customView];
-        self.selectorView = customView;
-        
-        /* 
-            这个方法结束后，self.view会被设置，所以只要好好实现viewDidLayoutSubviews，这里不需要
-            设置customView.fram
-         */
+        if (self.navigationItem.rightBarButtonItem)
+            buyTicket = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.rightBarButtonItem = nil;
     }
     
     [self initStationNameControllerUsingGCD];
@@ -136,8 +136,6 @@
      **/
     
     CGSize size = self.view.bounds.size;
-    //NSLog(@"viewDidLayoutSubviews,Height is:%f", size.height);
-
     self.selectorView.frame = CGRectMake(0, 0, size.width, size.height);
 }
 
