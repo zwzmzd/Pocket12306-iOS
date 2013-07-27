@@ -31,26 +31,15 @@
     return self;
 }
 
-- (void)layoutSubviews
+- (void)setInitialDate:(NSDate *)initialDate
 {
-    CGSize size = self.bounds.size;
-    
-    if (size.width > 340.f) {
-        /* 横屏模式下 */
-        self.pickView.frame = CGRectMake(0.f, -10.f, size.width, 100.f);
-    } else {
-        /* 竖屏模式下 */
-        self.pickView.frame = CGRectMake(0.f, 0.f, size.width, 200.f);
-    }
+    _initialDate = initialDate;
+    self.pickView.date = _initialDate;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (void)layoutSubviews
 {
-    // Drawing code
+    [super layoutSubviews];
 }
-*/
 
 @end

@@ -11,7 +11,6 @@
 @interface TDBDatepickSheet : UIActionSheet
 
 @property (nonatomic) UIDatePicker *pickView;
-
-//- (void)setDatePickerDelegate:(id<UIPickerViewDelegate>)delegate;
+@property (nonatomic) NSDate *initialDate;
 
 @end
