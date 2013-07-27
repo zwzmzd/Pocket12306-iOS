@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+
+    SUBMUTORDER_MSG_ERR = 0,
+    SUBMUTORDER_MSG_SUCCESS,
+    SUBMUTORDER_MSG_UNFINISHORDER_DETECTED
+} SUBMUTORDER_MSG;
+
 @class TDBTrainInfo;
 
 @interface TDBTicketDetailViewController : UITableViewController <UITextFieldDelegate>

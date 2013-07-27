@@ -57,20 +57,20 @@
     [self.ticketTypeSelector removeAllSegments];
 }
 
-- (BOOL)parseHTMLWithData:(NSData *)htmlData
+- (SUBMUTORDER_MSG)parseHTMLWithData:(NSData *)htmlData
 {
     self.html = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
     
     NSRange range = [self.html rangeOfString:@"车票预订"];
     if (range.length == 0) {
         NSLog(@"获取订票页面出错");
-        return NO;
+        return SUBMUTORDER_MSG_ERR;
     }
     
     range = [self.html rangeOfString:@"未处理的订单"];
     if (range.length > 0) {
         NSLog(@"还有未处理订单，无法继续订票");
-        return NO;
+        return SUBMUTORDER_MSG_UNFINISHORDER_DETECTED;
     }
     
     
@@ -112,7 +112,7 @@
         self.seatTypeList = [[NSArray alloc] initWithArray:array];
     }
     if (self.seatTypeList.count == 0)
-        return NO;
+        return SUBMUTORDER_MSG_ERR;
     
     {
         NSArray *elements = [xpathParser searchWithXPathQuery:@"//select[@name='passenger_1_ticket']/option"];
@@ -130,9 +130,9 @@
     }
     
     if (self.ticketTypeList.count == 0)
-        return NO;
+        return SUBMUTORDER_MSG_ERR;
     
-    return YES;
+    return SUBMUTORDER_MSG_SUCCESS;
 }
 
 - (void)retriveEssentialInfoUsingGCD
@@ -143,11 +143,11 @@
     dispatch_async(downloadVerifyCode, ^(void) {
         
         NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate];
-        BOOL result = [self parseHTMLWithData:htmlData];
+        SUBMUTORDER_MSG result = [self parseHTMLWithData:htmlData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             
-            if (result) {
+            if (result == SUBMUTORDER_MSG_SUCCESS) {
                 
                 for (NSUInteger i = 0; i < [self.seatTypeList count]; i++) {
                     NSString *title = [[self.seatTypeList objectAtIndex:i] objectAtIndex:1];
@@ -162,8 +162,17 @@
                 self.ticketTypeSelector.selectedSegmentIndex = 0;
                 
                 self.isLoadingFinished = YES;
+            } else if (result == SUBMUTORDER_MSG_UNFINISHORDER_DETECTED) {
+                
+#warning You should set alert's delegate properly
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票"
+                                           message:@"您尚有未处理的订单，要前往查看吗"
+                                          delegate:nil
+                                 cancelButtonTitle:@"暂时不用"
+                                 otherButtonTitles:@"查看", nil];
+                [alert show];
             } else {
-                NSLog(@"pass");
+                NSLog(@"PAGE NOT LOADING PROPERLY");
             }
         });
     });
@@ -190,12 +199,6 @@
     TFHppleElement *element = [elements objectAtIndex:0];
     
     return [element.attributes objectForKey:@"value"];
-    /*
-    NSRange range = [self.html rangeOfString:@"id=\"left_ticket\""];
-    NSUInteger startpos = range.location + range.length + 10;
-    
-    range = NSMakeRange(startpos, 40);
-    return [self.html substringWithRange:range];*/
 }
 
 - (NSString *)parseApacheToken:(TFHpple *)xpathParser
@@ -205,25 +208,12 @@
     TFHppleElement *element = [elements objectAtIndex:0];
     
     return [element.attributes objectForKey:@"value"];
-    
-    /*
-    NSRange range = [self.html rangeOfString:@"TOKEN\""];
-    NSUInteger startpos = range.location + range.length + 8;
-    
-    range = NSMakeRange(startpos, 32);
-    return [self.html substringWithRange:range];
-    */
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.isLoadingFinished = NO;
     
     [self configureView];

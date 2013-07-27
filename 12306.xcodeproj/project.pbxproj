@@ -147,8 +147,7 @@
 		FA320A2A17966A0800F2E282 /* 12306 */ = {
 			isa = PBXGroup;
 			children = (
-				FAF32E1B179FA360006C2CC9 /* TDBKeybordNotificationManager.h */,
-				FAF32E1C179FA361006C2CC9 /* TDBKeybordNotificationManager.m */,
+				FA3BAC9717A3E91F00D535BC /* Utility */,
 				FAF32E13179F6F30006C2CC9 /* View */,
 				FAED1B45179A4D13003DA90E /* Model */,
 				FAED1B44179A4CCA003DA90E /* ViewController */,
@@ -175,6 +174,15 @@
 				FA320A3A17966A0800F2E282 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FA3BAC9717A3E91F00D535BC /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				FAF32E1B179FA360006C2CC9 /* TDBKeybordNotificationManager.h */,
+				FAF32E1C179FA361006C2CC9 /* TDBKeybordNotificationManager.m */,
+			);
+			name = Utility;
 			sourceTree = "<group>";
 		};
 		FAB56A1E179C13EF006A05BF /* KGStatusBar */ = {
