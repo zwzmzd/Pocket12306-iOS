@@ -15,4 +15,7 @@
 + (TDBSession *)tdbss;
 + (void)setTdbss:(TDBSession *)tdbss;
 
++ (NSArray *)seatNameAbbr;
++ (NSArray *)seatNameFull;
+
 @end

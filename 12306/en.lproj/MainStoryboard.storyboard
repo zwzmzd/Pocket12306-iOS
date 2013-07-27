@@ -52,10 +52,10 @@
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="10" contentMode="left" text="D3069" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0c6-7g-gHo">
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="30" id="b0S-vP-9L5"/>
-                                                <constraint firstAttribute="width" constant="86" id="xgo-9y-X0Y"/>
+                                                <constraint firstAttribute="width" constant="86" id="fHD-gX-76R"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.2028965462" green="0.34193215319999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="4" contentMode="left" text="9:20" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HB3-9q-m2V">
@@ -68,7 +68,7 @@
                                                 <constraint firstAttribute="width" constant="86" id="9kI-ew-MnF"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.2028965462" green="0.34193215319999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="8:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A9j-nh-JcA">
@@ -76,7 +76,7 @@
                                                 <constraint firstAttribute="height" constant="21" id="q8U-pR-AsU"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.60010762117346939" green="0.11407872482838141" blue="0.24402679812053696" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="南京南" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QgH-s4-KUr">
@@ -98,28 +98,36 @@
                                                 <constraint firstAttribute="width" constant="52" id="zVV-6h-DEG"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.76470595600000002" green="0.60000002379999995" blue="0.1764705926" alpha="1" colorSpace="deviceRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
+                                        <view tag="20" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Of0-4z-v30" customClass="TDBLeftTicketForList">
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <color key="backgroundColor" red="1" green="0.9274449861171522" blue="0.73232164986832626" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="A9j-nh-JcA" firstAttribute="top" secondItem="HB3-9q-m2V" secondAttribute="top" type="default" id="0ZV-DK-M4U"/>
+                                    <constraint firstItem="HB3-9q-m2V" firstAttribute="bottom" secondItem="Of0-4z-v30" secondAttribute="bottom" type="default" id="2os-Ez-26M"/>
                                     <constraint firstItem="gPW-E9-KCY" firstAttribute="leading" secondItem="41I-Pi-meW" secondAttribute="leading" type="default" id="3VI-jP-mha"/>
-                                    <constraint firstItem="EHE-zH-i1u" firstAttribute="trailing" secondItem="41I-Pi-meW" secondAttribute="trailing" type="default" id="7Vx-86-dRk"/>
                                     <constraint firstItem="A9j-nh-JcA" firstAttribute="leading" secondItem="yFv-LB-8RX" secondAttribute="leading" constant="20" type="default" id="F1e-tN-nTy"/>
                                     <constraint firstItem="QgH-s4-KUr" firstAttribute="top" secondItem="0c6-7g-gHo" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="FhW-MP-ndZ"/>
                                     <constraint firstItem="gPW-E9-KCY" firstAttribute="leading" secondItem="0c6-7g-gHo" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="KN7-by-muW"/>
+                                    <constraint firstItem="Of0-4z-v30" firstAttribute="leading" secondItem="HB3-9q-m2V" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Ks7-sN-KFP"/>
                                     <constraint firstItem="0c6-7g-gHo" firstAttribute="top" secondItem="yFv-LB-8RX" secondAttribute="top" constant="11" id="MKn-rq-EOj"/>
                                     <constraint firstItem="gPW-E9-KCY" firstAttribute="baseline" secondItem="0c6-7g-gHo" secondAttribute="baseline" type="default" id="Naf-TN-DAg"/>
-                                    <constraint firstItem="41I-Pi-meW" firstAttribute="trailing" secondItem="HB3-9q-m2V" secondAttribute="trailing" type="default" id="TcN-ak-SiV"/>
+                                    <constraint firstItem="0c6-7g-gHo" firstAttribute="top" secondItem="Of0-4z-v30" secondAttribute="top" type="default" id="Qc8-Ij-Wsd"/>
+                                    <constraint firstAttribute="trailing" secondItem="Of0-4z-v30" secondAttribute="trailing" constant="20" type="default" id="WVd-CU-9Pn"/>
                                     <constraint firstItem="0c6-7g-gHo" firstAttribute="leading" secondItem="yFv-LB-8RX" secondAttribute="leading" constant="20" type="default" id="aFw-CU-vh5"/>
+                                    <constraint firstItem="HB3-9q-m2V" firstAttribute="leading" secondItem="QgH-s4-KUr" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="b77-ef-bKG"/>
                                     <constraint firstItem="41I-Pi-meW" firstAttribute="leading" secondItem="A9j-nh-JcA" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="hRj-gA-fuP"/>
-                                    <constraint firstItem="HB3-9q-m2V" firstAttribute="leading" secondItem="QgH-s4-KUr" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="icx-kZ-72D"/>
                                     <constraint firstItem="EHE-zH-i1u" firstAttribute="baseline" secondItem="gPW-E9-KCY" secondAttribute="baseline" type="default" id="j16-f0-nJZ"/>
                                     <constraint firstAttribute="bottom" secondItem="A9j-nh-JcA" secondAttribute="bottom" constant="9" id="kEe-JT-hFW"/>
+                                    <constraint firstItem="Of0-4z-v30" firstAttribute="leading" secondItem="41I-Pi-meW" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="kJN-xC-LsG"/>
                                     <constraint firstItem="41I-Pi-meW" firstAttribute="leading" secondItem="QgH-s4-KUr" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="lWw-AM-kFu"/>
+                                    <constraint firstItem="Of0-4z-v30" firstAttribute="leading" secondItem="EHE-zH-i1u" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="m5A-YE-XQ8"/>
                                     <constraint firstItem="A9j-nh-JcA" firstAttribute="baseline" secondItem="HB3-9q-m2V" secondAttribute="baseline" type="default" id="uSF-HU-ADK"/>
                                     <constraint firstItem="QgH-s4-KUr" firstAttribute="leading" secondItem="yFv-LB-8RX" secondAttribute="leading" constant="20" type="default" id="ucO-VO-bGO"/>
                                     <constraint firstItem="QgH-s4-KUr" firstAttribute="baseline" secondItem="41I-Pi-meW" secondAttribute="baseline" type="default" id="yeV-5a-geq"/>
@@ -786,6 +794,9 @@
         </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="TDBLeftTicketForList" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBLeftTicketForList.h"/>
         </class>
         <class className="TDBListViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBListViewController.h"/>

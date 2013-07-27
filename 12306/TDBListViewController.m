@@ -13,6 +13,7 @@
 #import "TDBSession.h"
 #import "TDBTicketDetailViewController.h"
 #import "MBProgressHUD.h"
+#import "TDBLeftTicketForList.h"
 
 @interface TDBListViewController ()
 
@@ -101,6 +102,8 @@
     UILabel *time_from = (UILabel *)[cell viewWithTag:3];
     UILabel *time_to = (UILabel *)[cell viewWithTag:4];
     UILabel *time_duration = (UILabel *)[cell viewWithTag:5];
+    TDBLeftTicketForList *leftTicketView = (TDBLeftTicketForList *)[cell viewWithTag:20];
+    
     
     TDBTrainInfo *train = [self.dataController getTrainInfoForIndex:indexPath.row];
     
@@ -111,6 +114,12 @@
     time_to.text = [train getArriveTime];
     
     time_duration.text = [train getDuration];
+    
+    
+    NSRange range = NSMakeRange(1, train.original.count - 1);
+    NSArray *a = [train.original subarrayWithRange:range];
+    leftTicketView.dataModel = a;
+    //NSLog(@"%@",a);
     
     // Configure the cell...
     

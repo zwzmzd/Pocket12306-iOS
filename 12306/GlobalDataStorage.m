@@ -10,6 +10,8 @@
 #import "TDBSession.h"
 
 static TDBSession *_tdbss = nil;
+static NSArray *_seatNameAbbr;
+static NSArray *_seatNameFull;
 
 @implementation GlobalDataStorage
 
@@ -20,6 +22,24 @@ static TDBSession *_tdbss = nil;
 + (void)setTdbss:(TDBSession *)tdbss
 {
     _tdbss = tdbss;
+}
+
++ (NSArray *)seatNameAbbr
+{
+    if (_seatNameAbbr == nil) {
+        _seatNameAbbr = [[NSArray alloc]
+                         initWithObjects:@"商务", @"特等", @"一等", @"二等", @"高软", @"软卧", @"硬卧", @"软座", @"硬座", @"无坐", @"其它", nil];
+    }
+    return _seatNameAbbr;
+}
+
++ (NSArray *)seatNameFull
+{
+    if (_seatNameFull == nil) {
+        _seatNameFull = [[NSArray alloc]
+                         initWithObjects:@"商务座", @"特等坐", @"一等座", @"二等座", @"高级软", @"软卧", @"硬卧", @"软座", @"硬座", @"无坐", @"其它", nil];
+    }
+    return _seatNameFull;
 }
 
 

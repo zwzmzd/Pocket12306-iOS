@@ -26,6 +26,7 @@
 		FA320A5E1797DC4100F2E282 /* TDBTrainInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA320A5D1797DC4100F2E282 /* TDBTrainInfoController.m */; };
 		FA320A611797DFE000F2E282 /* GlobalDataStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA320A601797DFE000F2E282 /* GlobalDataStorage.m */; };
 		FA320A6417980D7A00F2E282 /* TDBTicketDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA320A6317980D7A00F2E282 /* TDBTicketDetailViewController.m */; };
+		FA3BAC9617A3B72B00D535BC /* TDBLeftTicketForList.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BAC9517A3B72B00D535BC /* TDBLeftTicketForList.m */; };
 		FAB56A21179C13EF006A05BF /* KGStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A20179C13EF006A05BF /* KGStatusBar.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
@@ -73,6 +74,8 @@
 		FA320A601797DFE000F2E282 /* GlobalDataStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalDataStorage.m; sourceTree = "<group>"; };
 		FA320A6217980D7A00F2E282 /* TDBTicketDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBTicketDetailViewController.h; sourceTree = "<group>"; };
 		FA320A6317980D7A00F2E282 /* TDBTicketDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBTicketDetailViewController.m; sourceTree = "<group>"; };
+		FA3BAC9417A3B72B00D535BC /* TDBLeftTicketForList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBLeftTicketForList.h; sourceTree = "<group>"; };
+		FA3BAC9517A3B72B00D535BC /* TDBLeftTicketForList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBLeftTicketForList.m; sourceTree = "<group>"; };
 		FAB56A1F179C13EF006A05BF /* KGStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KGStatusBar.h; sourceTree = "<group>"; };
 		FAB56A20179C13EF006A05BF /* KGStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KGStatusBar.m; sourceTree = "<group>"; };
 		FAB56A22179C27D8006A05BF /* TDBStationName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBStationName.h; sourceTree = "<group>"; };
@@ -248,6 +251,8 @@
 		FAF32E13179F6F30006C2CC9 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				FA3BAC9417A3B72B00D535BC /* TDBLeftTicketForList.h */,
+				FA3BAC9517A3B72B00D535BC /* TDBLeftTicketForList.m */,
 				FAF32E14179F6FE3006C2CC9 /* TDBStationAndDateSelector.h */,
 				FAF32E15179F6FE3006C2CC9 /* TDBStationAndDateSelector.m */,
 				FABA969E17A193F80018B20A /* TDBDatepickSheet.h */,
@@ -345,6 +350,7 @@
 				FAF32E16179F6FE3006C2CC9 /* TDBStationAndDateSelector.m in Sources */,
 				FAF32E1D179FA361006C2CC9 /* TDBKeybordNotificationManager.m in Sources */,
 				FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */,
+				FA3BAC9617A3B72B00D535BC /* TDBLeftTicketForList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
