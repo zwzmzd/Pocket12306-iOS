@@ -13,6 +13,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024
+                                                         diskCapacity:4 * 1024 * 1024
+                                                             diskPath:@"AppCacheDir2013"];
+    [NSURLCache setSharedURLCache:URLCache];
+    //NSLog(@"%@", NSHomeDirectory());
+    
     // Override point for customization after application launch.
     [[TDBKeybordNotificationManager getSharedManager] registerSelfToNotificationCenter];
     return YES;
