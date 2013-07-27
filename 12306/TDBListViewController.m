@@ -121,6 +121,7 @@
     if ([[segue identifier] isEqualToString:@"TicketDetail"]) {
         TDBTicketDetailViewController *detail = [segue destinationViewController];
         detail.train = [self.dataController getTrainInfoForIndex:[self.tableView indexPathForCell:sender].row];
+        detail.departDate = self.dateInString;
     }
 }
 

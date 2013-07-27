@@ -44,8 +44,7 @@
 
 - (void)configureView
 {
-    NSLog(@"called");
-    NSArray *date_split = [[GlobalDataStorage date] componentsSeparatedByString:@"-"];
+    NSArray *date_split = [self.departDate componentsSeparatedByString:@"-"];
     self.detailTopLabel.text = [NSString stringWithFormat:@"%@次列车 | %@年 %@月 %@日",
                                 [self.train getTrainNo],
                                 [date_split objectAtIndex:0],
@@ -143,7 +142,7 @@
     dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 traininfo", NULL);
     dispatch_async(downloadVerifyCode, ^(void) {
         
-        NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:[GlobalDataStorage date]];
+        NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate];
         BOOL result = [self parseHTMLWithData:htmlData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -273,7 +272,7 @@
     }
     
     TDBSession *tdbss = [GlobalDataStorage tdbss];
-    NSString *date = [GlobalDataStorage date];
+    NSString *date = self.departDate;
     PassengerInfo *passenger = [[PassengerInfo alloc] init];
     
     passenger.seat = [[self.seatTypeList objectAtIndex:self.seatTypeSelector.selectedSegmentIndex] objectAtIndex:0];
@@ -292,7 +291,8 @@
     dispatch_queue_t orderQueue = dispatch_queue_create("12306 orderTicket", DISPATCH_QUEUE_SERIAL);
     dispatch_async(orderQueue, ^(void) {
         sleep(0.5);
-        if ([tdbss checkOrderInfo:self.train passenger:passenger date:date leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
+        if ([tdbss checkOrderInfo:self.train passenger:passenger date:date
+                    leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.progressView.progress = 0.33;
@@ -313,7 +313,8 @@
     });
     dispatch_async(orderQueue, ^(void) {
         
-        if ([tdbss confirmSingleForQueue:self.train passenger:passenger date:[GlobalDataStorage date] leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
+        if ([tdbss confirmSingleForQueue:self.train passenger:passenger date:date
+                           leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.progressView.progress = 1;

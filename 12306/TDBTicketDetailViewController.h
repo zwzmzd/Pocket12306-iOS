@@ -13,6 +13,7 @@
 @interface TDBTicketDetailViewController : UITableViewController <UITextFieldDelegate>
 
 @property (nonatomic) TDBTrainInfo *train;
+@property (nonatomic) NSString *departDate;
 @property (weak, nonatomic) IBOutlet UILabel *detailTopLabel;
 @property (weak, nonatomic) IBOutlet UILabel *detailDepartLabel;
 @property (weak, nonatomic) IBOutlet UILabel *detailArriveLabel;
