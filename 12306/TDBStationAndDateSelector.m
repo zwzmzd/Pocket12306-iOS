@@ -133,9 +133,15 @@
     [self.departStationField resignFirstResponder];
     [self.arriveStationField resignFirstResponder];
     
-    TDBDatepickSheet *sheet = [[TDBDatepickSheet alloc] initWithTitle:@"\n\n\n\n\n\n\n\n\n\n" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确认乘车日期" otherButtonTitles:nil];
+    TDBDatepickSheet *sheet = [[TDBDatepickSheet alloc] initWithTitle:@"\n\n\n\n\n\n\n\n\n\n\n"
+                                                             delegate:self
+                                                    cancelButtonTitle:@"取消"
+                                               destructiveButtonTitle:@"确认乘车日期"
+                                                    otherButtonTitles:nil];
+    sheet.initialDate = self.userSelectedDate;
 
     [sheet showInView:self];
+    NSLog(@"finish");
 }
 
 #pragma mark - UIActionSheetDelegate
