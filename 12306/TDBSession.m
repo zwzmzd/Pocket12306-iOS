@@ -124,7 +124,7 @@
 
 - (NSArray *)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to
 {
-    NSLog(@"queryLeftTick");
+    NSLog(@"queryLeftTicketWithDate");
     [self assertLoggedIn];
 
     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
@@ -140,7 +140,6 @@
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
     
-    //NSLog(@"%@", path);
     NSURL *url = [NSURL URLWithString:path];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
@@ -151,7 +150,9 @@
     NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
     NSArray *split = [html componentsSeparatedByString:@","];
     
-    if (![[split objectAtIndex:0] isEqual:@"0"])
+    // 获取正常返回0
+    // 不存在符合条件的列车返回空html页面
+    if (html.length > 0 && ![[split objectAtIndex:0] isEqualToString:@"0"])
         return nil;
     
     NSUInteger count = [split count];
@@ -437,6 +438,23 @@
         NSLog(@"%@", dict);
         return YES;
     }
+}
+
+- (NSData *)queryMyOrderNotComplete
+{
+    NSLog(@"queryMyOrderNotComplete");
+    [self assertLoggedIn];
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/myOrderAction.do?method=queryMyOrderNotComplete&leftmenu=Y"];
+    NSURL *url = [NSURL URLWithString:path];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    return result;
 }
 
 
