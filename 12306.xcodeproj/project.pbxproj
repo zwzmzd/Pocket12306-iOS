@@ -31,6 +31,7 @@
 		FA3BAC9C17A4BC9400D535BC /* TDBOrderListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BAC9B17A4BC9300D535BC /* TDBOrderListViewController.m */; };
 		FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA117A4F25600D535BC /* TDBOrder.m */; };
 		FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */; };
+		FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */; };
 		FAB56A21179C13EF006A05BF /* KGStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A20179C13EF006A05BF /* KGStatusBar.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
@@ -87,6 +88,8 @@
 		FA3BACA117A4F25600D535BC /* TDBOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBOrder.m; sourceTree = "<group>"; };
 		FA3BACA317A5124200D535BC /* TDBOrderDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBOrderDetailViewController.h; sourceTree = "<group>"; };
 		FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBOrderDetailViewController.m; sourceTree = "<group>"; };
+		FA3BACA617A54FEE00D535BC /* TDBEPayEntryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBEPayEntryViewController.h; sourceTree = "<group>"; };
+		FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBEPayEntryViewController.m; sourceTree = "<group>"; };
 		FAB56A1F179C13EF006A05BF /* KGStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KGStatusBar.h; sourceTree = "<group>"; };
 		FAB56A20179C13EF006A05BF /* KGStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KGStatusBar.m; sourceTree = "<group>"; };
 		FAB56A22179C27D8006A05BF /* TDBStationName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBStationName.h; sourceTree = "<group>"; };
@@ -234,6 +237,8 @@
 		FAED1B44179A4CCA003DA90E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				FA3BACA617A54FEE00D535BC /* TDBEPayEntryViewController.h */,
+				FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */,
 				FA3BACA317A5124200D535BC /* TDBOrderDetailViewController.h */,
 				FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */,
 				FA3BAC9A17A4BC9300D535BC /* TDBOrderListViewController.h */,
@@ -381,6 +386,7 @@
 				FA3BAC9C17A4BC9400D535BC /* TDBOrderListViewController.m in Sources */,
 				FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */,
 				FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */,
+				FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -45,6 +45,10 @@ typedef enum {
 - (NSData *)queryMyOrderNotComplete;
 - (NSData *)queryMyOrderWithFromOrderDate:(NSString *)fromOrderDate endOrderDate:(NSString *)endOrderDate;
 
+- (NSData *)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo
+                             apacheToken:(NSString *)apacheToken
+                               ticketKey:(NSString *)ticketKey;
+
 - (void)restartSession;
 
 

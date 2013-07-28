@@ -256,6 +256,7 @@
                                 </constraints>
                                 <connections>
                                     <segue destination="2y6-g1-mrE" kind="push" identifier="PassengerDetailSegue" trigger="accessoryAction" id="Wy2-yt-siB"/>
+                                    <segue destination="moj-9s-2LN" kind="push" identifier="EpaySegue" id="Nsy-hQ-yvH"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -265,6 +266,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="订单查看" id="MQJ-bU-0XW">
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="6jv-8T-fgW">
+                            <connections>
+                                <action selector="iWantRefresh:" destination="ccV-o0-mT7" id="Fdl-Di-ABF"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="完成" style="done" id="kmA-nP-fIg">
                             <connections>
                                 <action selector="iWantReturn:" destination="ccV-o0-mT7" id="6Eu-Vm-19Q"/>
@@ -664,6 +670,35 @@
             </objects>
             <point key="canvasLocation" x="2308" y="123"/>
         </scene>
+        <!--Pay Entry View Controller - 在线支付-->
+        <scene sceneID="zBJ-c1-jsz">
+            <objects>
+                <viewController id="moj-9s-2LN" customClass="TDBEPayEntryViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1Ya-1t-32H">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Eo-Av-m83">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="9Eo-Av-m83" firstAttribute="bottom" secondItem="1Ya-1t-32H" secondAttribute="bottom" type="default" id="APU-RJ-qFP"/>
+                            <constraint firstItem="9Eo-Av-m83" firstAttribute="top" secondItem="1Ya-1t-32H" secondAttribute="top" type="default" id="Fm5-wc-X0T"/>
+                            <constraint firstItem="9Eo-Av-m83" firstAttribute="leading" secondItem="1Ya-1t-32H" secondAttribute="leading" type="default" id="VsJ-4V-umx"/>
+                            <constraint firstItem="9Eo-Av-m83" firstAttribute="trailing" secondItem="1Ya-1t-32H" secondAttribute="trailing" type="default" id="hl2-NM-JQ6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="在线支付" id="ax4-Jn-HMs"/>
+                    <connections>
+                        <outlet property="webView" destination="9Eo-Av-m83" id="IcL-xS-6ih"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nLL-49-XZq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2782" y="375"/>
+        </scene>
         <!--Order Detail View Controller - 乘车人信息-->
         <scene sceneID="med-mx-sFC">
             <objects>
@@ -673,7 +708,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PassengerDetailCell" id="Dmm-5C-M04">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PassengerDetailCell" id="Dmm-5C-M04">
                                 <rect key="frame" x="0.0" y="46" width="320" height="46"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">

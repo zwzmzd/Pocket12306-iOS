@@ -12,6 +12,7 @@
 #import "GlobalDataStorage.h"
 #import "TDBOrder.h"
 #import "TDBOrderDetailViewController.h"
+#import "TDBEPayEntryViewController.h"
 #import "MBProgressHUD.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -87,7 +88,6 @@
                         TFHppleElement *input = [inputNodeList objectAtIndex:0];
                         order.orderSquence_no = [[[input.attributes objectForKey:@"name"] componentsSeparatedByString:@"_"] lastObject];
                         order.ticketKey = [input.attributes objectForKey:@"value"];
-                        NSLog(@"orderSquence_no = %@, ticketKey = %@", order.orderSquence_no, order.ticketKey);
                         
                         order.unfinished = YES;
                     } else {
@@ -166,6 +166,9 @@
         htmlData = [[GlobalDataStorage tdbss] queryMyOrderWithFromOrderDate:[formatter stringFromDate:a_month_ago]
                                                                endOrderDate:[formatter stringFromDate:now]];
         result = [self parseHTMLWithData:htmlData];
+        
+//        htmlData = [[GlobalDataStorage tdbss] laterEpayWithOrderSequenceNo:@"E440314790" apacheToken:self.apacheToken ticketKey:@"E4403147901110022"];
+//        NSLog(@"%@", [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding]);
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -255,6 +258,14 @@
         TDBOrder *order = [self.orderList objectAtIndex:index];
         detailViewController.passengerList = order.passengers;
         [detailViewController.tableView reloadData];
+    } else if ([segue.identifier isEqualToString:@"EpaySegue"]) {
+        TDBEPayEntryViewController *epayViewController = segue.destinationViewController;
+        
+        NSUInteger index = [self.tableView indexPathForCell:sender].row;
+        TDBOrder *order = [self.orderList objectAtIndex:index];
+        epayViewController.apacheToken = self.apacheToken;
+        epayViewController.ticketKey = order.ticketKey;
+        epayViewController.orderSequenceNo = order.orderSquence_no;
     }
 }
 
@@ -273,5 +284,10 @@
 
 - (IBAction)iWantReturn:(id)sender {
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (IBAction)iWantRefresh:(id)sender {
+    self.orderList = nil;
+    [self retriveEssentialInfoUsingGCD];
 }
 @end
