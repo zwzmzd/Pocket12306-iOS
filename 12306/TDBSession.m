@@ -457,6 +457,40 @@
     return result;
 }
 
+- (NSData *)queryMyOrderWithFromOrderDate:(NSString *)fromOrderDate endOrderDate:(NSString *)endOrderDate
+{
+    NSLog(@"queryMyOrder");
+    [self assertLoggedIn];
+    
+#define QDO @"queryOrderDTO."
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:@"_1" forKey:QDO @"location_code"];
+    [argument addValue:@"Y" forKey:@"leftmenu"];
+    [argument addValue:@"1" forKey:@"queryDataFlag"];
+    [argument addValue:fromOrderDate forKey:QDO @"from_order_date"];
+    [argument addValue:endOrderDate forKey:QDO @"end_order_date"];
+    [argument addValue:@"" forKey:QDO @"sequence_no"];
+    [argument addValue:@"" forKey:QDO @"train_code"];
+    [argument addValue:@"" forKey:QDO @"name"];
+    
+#undef QDO
+    
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/myOrderAction.do?method=queryMyOrder"];
+    NSURL *url = [NSURL URLWithString:path];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    return result;
+}
+
 
 - (NSDictionary *)loginAysnSuggest
 {

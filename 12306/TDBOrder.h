@@ -27,6 +27,7 @@
 @property (nonatomic, copy) NSString *departStationName;
 @property (nonatomic, copy) NSString *arriveStationName;
 @property (nonatomic, copy) NSString *departTime;
+@property (nonatomic, copy) NSString *status;
 @property (nonatomic) BOOL unfinished;
 
 @property (nonatomic, copy) NSString *orderSquence_no;

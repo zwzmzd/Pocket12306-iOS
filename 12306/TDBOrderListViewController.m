@@ -17,13 +17,20 @@
 
 @interface TDBOrderListViewController ()
 
-@property (nonatomic) NSArray *orderList;
+@property (nonatomic) NSMutableArray *orderList;
 @property (nonatomic, copy) NSString *apacheToken;
 
 @end
 
 @implementation TDBOrderListViewController
 
+- (NSArray *)orderList
+{
+    if (_orderList == nil) {
+        _orderList = [[NSMutableArray alloc] init];
+    }
+    return _orderList;
+}
 
 - (ORDER_PARSER_MSG)parseHTMLWithData:(NSData *)htmlData
 {
@@ -44,18 +51,33 @@
             NSArray *tableChildren = [table children];
             NSUInteger count = tableChildren.count;
             
+            NSUInteger firstPos = 0;
+            for (NSUInteger i = 0; i < count; i++) {
+                if ([[[tableChildren objectAtIndex:i] tagName] isEqualToString:@"tr"]) {
+                    firstPos = i + 1;
+                    break;
+                }
+            }
+            
             NSMutableArray *passengerList = [NSMutableArray new];
-            for (NSUInteger i = 5; i < count - 1; i++) {
+            for (NSUInteger i = firstPos; i < count - 1; i++) {
                 //every person in order
                 NSMutableArray *textNodeList = [[NSMutableArray alloc] init];
                 NSMutableArray *inputNodeList = [[NSMutableArray alloc] init];
                 
-                [self parseDOM:[tableChildren objectAtIndex:i] textNodeOut:textNodeList inputNodeOut:inputNodeList];
+                TFHppleElement *personTR = [tableChildren objectAtIndex:i];
+                [self parseDOM:personTR textNodeOut:textNodeList inputNodeOut:inputNodeList];
                 
-                if (i == 5) { // first person
+//                NSLog(@"[hello]");
+//                for (NSString *str in textNodeList) {
+//                    NSLog(@"%@", str);
+//                }
+                
+                if (i == firstPos) { // first person
                     order.date = [textNodeList objectAtIndex:0];
                     order.trainNo = [textNodeList objectAtIndex:1];
                     order.departTime = [textNodeList objectAtIndex:3];
+                    order.status = [textNodeList objectAtIndex:10];
                     
                     NSArray *trip = [[textNodeList objectAtIndex:2] componentsSeparatedByString:@"—"];
                     order.departStationName = [trip objectAtIndex:0];
@@ -87,11 +109,10 @@
             order.passengers = [[NSArray alloc] initWithArray:passengerList];
             [array addObject:order];
         }
-        
-        self.orderList = [[NSArray alloc] initWithArray:array];
-        //NSLog(@"%d", self.orderList.count)
+
+        [self.orderList addObjectsFromArray:array];
     }
-    
+
     return ORDER_PARSER_MSG_SUCCESS;
 }
 
@@ -132,8 +153,19 @@
     dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 orderList", NULL);
     dispatch_async(downloadVerifyCode, ^(void) {
         
+        ORDER_PARSER_MSG result;
         NSData *htmlData = [[GlobalDataStorage tdbss] queryMyOrderNotComplete];
-        ORDER_PARSER_MSG result = [self parseHTMLWithData:htmlData];
+        result = [self parseHTMLWithData:htmlData];
+        
+        
+        NSDate *now = [NSDate date];
+        NSDate *a_month_ago = [NSDate dateWithTimeIntervalSinceNow: -30 * 24 * 3600];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        
+        htmlData = [[GlobalDataStorage tdbss] queryMyOrderWithFromOrderDate:[formatter stringFromDate:a_month_ago]
+                                                               endOrderDate:[formatter stringFromDate:now]];
+        result = [self parseHTMLWithData:htmlData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -192,6 +224,7 @@
     UILabel *time_from = (UILabel *)[cell viewWithTag:3];
     UILabel *date = (UILabel *)[cell viewWithTag:21];
     UILabel *unfinished = (UILabel *)[cell viewWithTag:22];
+    UILabel *firstPassengerName = (UILabel *)[cell viewWithTag:23];
     
     unfinished.layer.cornerRadius = 8.f;
     
@@ -201,7 +234,14 @@
     to.text = order.arriveStationName;
     time_from.text = order.departTime;
     date.text = order.date;
-    [unfinished setHidden:!order.unfinished];
+    firstPassengerName.text = [[order.passengers objectAtIndex:0] name];
+    
+    unfinished.text = order.status;
+    if (order.unfinished) {
+        unfinished.backgroundColor = [UIColor redColor];
+    } else {
+        unfinished.backgroundColor = [UIColor grayColor];
+    }
 
     return cell;
 }
