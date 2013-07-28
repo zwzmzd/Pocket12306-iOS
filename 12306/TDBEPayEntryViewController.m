@@ -50,16 +50,17 @@
         NSString *result = [self parseHTMLWithData:htmlData];
         
         NSUInteger length = result.length;
-        NSRange range = NSMakeRange(0, length - @"</form>".length);
-        result = [result substringWithRange:range];
         
-        
-        NSString *htmlCode = [NSString stringWithFormat:@"<html><body>%@<input type='submit' value='点此按钮进入支付页面' /></form></body></html>", result];
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
+        if (length > 0) { // 防止订单正好超时，导致result为空造成系统崩溃问题
+            NSRange range = NSMakeRange(0, length - @"</form>".length);
+            result = [result substringWithRange:range];
             
-            [self.webView loadHTMLString:htmlCode baseURL:nil];
-        });
+            NSString *htmlCode = [NSString stringWithFormat:@"<html><body>%@<input type='submit' value='点此按钮进入支付页面' /></form></body></html>", result];
+            
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [self.webView loadHTMLString:htmlCode baseURL:nil];
+            });
+        }
     });
 }
 

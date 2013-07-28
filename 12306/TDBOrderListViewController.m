@@ -39,8 +39,6 @@
     
     self.apacheToken = [self parseApacheToken:xpathParser];
     
-    NSLog(@"apacheToken = %@", self.apacheToken);
-    
     {
         NSArray *elements = [xpathParser searchWithXPathQuery:@"//table[@class='table_clist']"];
         NSMutableArray *array = [[NSMutableArray alloc] init];
@@ -229,7 +227,8 @@
     UILabel *unfinished = (UILabel *)[cell viewWithTag:22];
     UILabel *firstPassengerName = (UILabel *)[cell viewWithTag:23];
     
-    unfinished.layer.cornerRadius = 8.f;
+    // 此处暂时去除圆角效果，因为经测试设置后很影响显示性能
+    // unfinished.layer.cornerRadius = 8.f;
     
     TDBOrder *order = [self.orderList objectAtIndex:indexPath.row];
     train_no.text = order.trainNo;
@@ -247,6 +246,18 @@
     }
 
     return cell;
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if ([identifier isEqualToString:@"EpaySegue"]) {
+        NSUInteger index = [self.tableView indexPathForCell:sender].row;
+        TDBOrder *order = [self.orderList objectAtIndex:index];
+        
+        return (order.ticketKey != nil);
+    }
+    
+    return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
