@@ -53,6 +53,7 @@
         NSArray *array = [[GlobalDataStorage tdbss] queryLeftTickWithDate:self.dateInString
                                                                      from:self.departStationTelecode
                                                                        to:self.arriveStationTelecode];
+        BOOL dataIsError = (array == nil);
         
         TDBTrainInfoController *controller = [[TDBTrainInfoController alloc] init];
         NSUInteger count = [array count];
@@ -65,10 +66,17 @@
             [self.tableView reloadData];
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             
-            if ([self.dataController count] == 0) {
+            if ( dataIsError) { // 未正确获取数据
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                 hud.mode = MBProgressHUDModeText;
                 hud.labelText = @"获取车次信息失败，请重试";
+                hud.removeFromSuperViewOnHide = YES;
+                [hud hide:YES afterDelay:2];
+                
+            } else if ([self.dataController count] == 0) { // 获取的数据长度为0
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.labelText = @"没有符合条件的列车了";
                 hud.removeFromSuperViewOnHide = YES;
                 [hud hide:YES afterDelay:2];
             }
@@ -119,9 +127,6 @@
     NSRange range = NSMakeRange(1, train.original.count - 1);
     NSArray *a = [train.original subarrayWithRange:range];
     leftTicketView.dataModel = a;
-    //NSLog(@"%@",a);
-    
-    // Configure the cell...
     
     return cell;
 }
