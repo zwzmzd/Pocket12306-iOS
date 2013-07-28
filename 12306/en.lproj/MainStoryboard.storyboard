@@ -143,11 +143,127 @@
                             <outlet property="delegate" destination="kgZ-2o-xLq" id="nGa-CS-85m"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="07-19日车次" id="GT9-8s-9hv"/>
+                    <navigationItem key="navigationItem" title="07-19日车次" id="GT9-8s-9hv">
+                        <barButtonItem key="rightBarButtonItem" title="查看订单" id="Zgb-gl-fPP">
+                            <connections>
+                                <segue destination="e1n-ZS-h7S" kind="modal" id="7Fl-4N-z98"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oST-7M-vGZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1290" y="123"/>
+        </scene>
+        <!--Order List View Controller - 订单查看-->
+        <scene sceneID="KE7-Ap-Fgw">
+            <objects>
+                <tableViewController id="ccV-o0-mT7" customClass="TDBOrderListViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="95" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q99-9b-FLC">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OrderInfo" rowHeight="99" id="xTZ-TH-9Lc">
+                                <rect key="frame" x="0.0" y="22" width="320" height="99"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="98"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="10" contentMode="left" text="D3069" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R6r-2L-BOy">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="86" id="oQA-9N-gaA"/>
+                                                <constraint firstAttribute="height" constant="30" id="vsD-UG-Q2A"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                                            <color key="textColor" red="0.2028965462" green="0.34193215319999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="上海虹桥" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgf-Ha-B1m">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="86" id="ORW-4w-ZkP"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.2028965462" green="0.34193215319999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="8:00开" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Asz-as-7Fi">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="59" id="JRu-uo-9g0"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.60010762120000005" green="0.1140787248" blue="0.2440267981" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="南京南" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ELd-gf-1Wy">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="1PK-iY-m0b"/>
+                                                <constraint firstAttribute="width" constant="75" id="Y2n-tW-76U"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.0" green="0.2482989176" blue="0.76183832910000004" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="22" contentMode="left" text="待支付" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L01-sP-yT0">
+                                            <color key="backgroundColor" red="0.60010762120000005" green="0.1140787248" blue="0.2440267981" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="59" id="ajC-YI-Qjf"/>
+                                                <constraint firstAttribute="height" constant="21" id="pTY-5f-9kf"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="21" contentMode="left" text="08月10日" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4hZ-Yv-vYo">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="WrJ-Re-ZeK"/>
+                                                <constraint firstAttribute="width" constant="93" id="glf-7p-WVz"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <color key="backgroundColor" red="1" green="0.92744498610000004" blue="0.73232164990000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="ELd-gf-1Wy" firstAttribute="leading" secondItem="Asz-as-7Fi" secondAttribute="leading" type="default" id="0U1-6c-mUU"/>
+                                    <constraint firstAttribute="bottom" secondItem="L01-sP-yT0" secondAttribute="bottom" constant="21" id="9vy-LE-QEE"/>
+                                    <constraint firstItem="R6r-2L-BOy" firstAttribute="bottom" secondItem="ELd-gf-1Wy" secondAttribute="bottom" type="default" id="Chj-3j-BEu"/>
+                                    <constraint firstItem="sgf-Ha-B1m" firstAttribute="leading" secondItem="ELd-gf-1Wy" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="FA4-ny-ZeV"/>
+                                    <constraint firstAttribute="bottom" secondItem="Asz-as-7Fi" secondAttribute="bottom" constant="20" type="default" id="Hd6-gr-gc1"/>
+                                    <constraint firstItem="sgf-Ha-B1m" firstAttribute="top" secondItem="xTZ-TH-9Lc" secondAttribute="top" constant="20" type="default" id="KSq-Tx-gwb"/>
+                                    <constraint firstItem="Asz-as-7Fi" firstAttribute="top" secondItem="4hZ-Yv-vYo" secondAttribute="top" type="default" id="OvU-ay-yJp"/>
+                                    <constraint firstItem="R6r-2L-BOy" firstAttribute="leading" secondItem="xTZ-TH-9Lc" secondAttribute="leading" constant="20" type="default" id="YD6-1R-LHQ"/>
+                                    <constraint firstItem="4hZ-Yv-vYo" firstAttribute="leading" secondItem="xTZ-TH-9Lc" secondAttribute="leading" constant="20" type="default" id="csp-Em-CLH"/>
+                                    <constraint firstAttribute="bottom" secondItem="4hZ-Yv-vYo" secondAttribute="bottom" constant="20" type="default" id="dTT-st-UUi"/>
+                                    <constraint firstItem="sgf-Ha-B1m" firstAttribute="baseline" secondItem="ELd-gf-1Wy" secondAttribute="baseline" type="default" id="k4r-7o-aJX"/>
+                                    <constraint firstItem="ELd-gf-1Wy" firstAttribute="top" secondItem="xTZ-TH-9Lc" secondAttribute="top" constant="20" type="default" id="lpL-Xe-GDz"/>
+                                    <constraint firstItem="ELd-gf-1Wy" firstAttribute="leading" secondItem="R6r-2L-BOy" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="rsp-z1-myO"/>
+                                    <constraint firstAttribute="trailing" secondItem="L01-sP-yT0" secondAttribute="trailing" constant="46" id="uNc-TJ-Ss1"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="2y6-g1-mrE" kind="push" identifier="PassengerDetailSegue" trigger="accessoryAction" id="Wy2-yt-siB"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="ccV-o0-mT7" id="V9g-Au-Dqe"/>
+                            <outlet property="delegate" destination="ccV-o0-mT7" id="1xs-D8-1GB"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="订单查看" id="MQJ-bU-0XW">
+                        <barButtonItem key="rightBarButtonItem" title="完成" style="done" id="kmA-nP-fIg">
+                            <connections>
+                                <action selector="iWantReturn:" destination="ccV-o0-mT7" id="6Eu-Vm-19Q"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FWc-Vp-iWn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2211" y="1038"/>
         </scene>
         <!--Ticket Detail View Controller-->
         <scene sceneID="4fd-UM-jjr">
@@ -537,6 +653,36 @@
             </objects>
             <point key="canvasLocation" x="2308" y="123"/>
         </scene>
+        <!--Order Detail View Controller - 乘车人信息-->
+        <scene sceneID="med-mx-sFC">
+            <objects>
+                <tableViewController id="2y6-g1-mrE" customClass="TDBOrderDetailViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="JLX-8P-mV0">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PassengerDetailCell" id="Dmm-5C-M04">
+                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="2y6-g1-mrE" id="hgz-af-xfi"/>
+                            <outlet property="delegate" destination="2y6-g1-mrE" id="PQC-qM-zZf"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="乘车人信息" id="Euh-d0-UzM"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HdJ-tm-q4k" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2782" y="1038"/>
+        </scene>
         <!--Login Frame View Controller - 登录12306-->
         <scene sceneID="d5L-ws-cYz">
             <objects>
@@ -775,65 +921,25 @@
             </objects>
             <point key="canvasLocation" x="484" y="-837"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ZId-qH-rXO">
+            <objects>
+                <navigationController id="e1n-ZS-h7S" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kta-mk-Wai">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ccV-o0-mT7" kind="relationship" relationship="rootViewController" id="vIV-Yc-NDe"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ORP-7S-i5P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1629" y="1038"/>
+        </scene>
     </scenes>
-    <classes>
-        <class className="LoginFrameViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginFrameViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="iWantCancle:"/>
-                <relationship kind="action" name="iWantLogin:"/>
-                <relationship kind="action" name="iWantResetSession:"/>
-                <relationship kind="action" name="iWantToRetriveVerifyCode:"/>
-                <relationship kind="outlet" name="doneButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="password" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="retriveVerifyCodeButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="username" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="verifyCode" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="verifyImage" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="TDBLeftTicketForList" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBLeftTicketForList.h"/>
-        </class>
-        <class className="TDBListViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBListViewController.h"/>
-        </class>
-        <class className="TDBSeatDetailViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBSeatDetailViewController.h"/>
-        </class>
-        <class className="TDBTicketDetailViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBTicketDetailViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="iWantOrder:"/>
-                <relationship kind="action" name="refreshVerifyCode:"/>
-                <relationship kind="outlet" name="detailArriveLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="detailDepartLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="detailTopLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="idCardNo" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="mobileno" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="name" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="progressView" candidateClass="UIProgressView"/>
-                <relationship kind="outlet" name="refreshVerifyCodeBtn" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="seatTypeSelector" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="ticketTypeSelector" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="verifyCode" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="verifyCodeImage" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="TDBViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancleLogin:" candidateClass="UIStoryboard"/>
-                <relationship kind="outlet" name="buyTicket" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="UIStoryboard" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboard.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
