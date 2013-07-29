@@ -76,7 +76,7 @@
                     order.date = [textNodeList objectAtIndex:0];
                     order.trainNo = [textNodeList objectAtIndex:1];
                     order.departTime = [textNodeList objectAtIndex:3];
-                    order.status = [textNodeList objectAtIndex:10];
+                    order.statusDescription = [textNodeList objectAtIndex:10];
                     
                     NSArray *trip = [[textNodeList objectAtIndex:2] componentsSeparatedByString:@"—"];
                     order.departStationName = [trip objectAtIndex:0];
@@ -87,9 +87,13 @@
                         order.orderSquence_no = [[[input.attributes objectForKey:@"name"] componentsSeparatedByString:@"_"] lastObject];
                         order.ticketKey = [input.attributes objectForKey:@"value"];
                         
-                        order.unfinished = YES;
+                        if ([order.statusDescription isEqualToString:@"已支付"]) {
+                            order.status = ORDER_STATUS_PAID;
+                        } else {
+                            order.status = ORDER_STATUS_UNFINISHED;
+                        }
                     } else {
-                        order.unfinished = NO;
+                        order.status = ORDER_STATUS_OTHER;
                     }
                 }
                 
@@ -238,9 +242,12 @@
     date.text = order.date;
     firstPassengerName.text = [[order.passengers objectAtIndex:0] name];
     
-    unfinished.text = order.status;
-    if (order.unfinished) {
+    unfinished.text = order.statusDescription;
+    
+    if (order.status == ORDER_STATUS_UNFINISHED) {
         unfinished.backgroundColor = [UIColor redColor];
+    } else if (order.status == ORDER_STATUS_PAID) {
+        unfinished.backgroundColor = [UIColor brownColor];
     } else {
         unfinished.backgroundColor = [UIColor grayColor];
     }
@@ -254,7 +261,7 @@
         NSUInteger index = [self.tableView indexPathForCell:sender].row;
         TDBOrder *order = [self.orderList objectAtIndex:index];
         
-        return (order.ticketKey != nil);
+        return (order.status == ORDER_STATUS_UNFINISHED);
     }
     
     return YES;

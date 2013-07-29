@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    ORDER_STATUS_UNFINISHED = 1,
+    ORDER_STATUS_PAID,
+    ORDER_STATUS_OTHER
+} ORDER_STATUS;
+
 @interface PassengerInOrder : NSObject
 
 @property (nonatomic, copy) NSString *vehicle;
@@ -27,8 +33,8 @@
 @property (nonatomic, copy) NSString *departStationName;
 @property (nonatomic, copy) NSString *arriveStationName;
 @property (nonatomic, copy) NSString *departTime;
-@property (nonatomic, copy) NSString *status;
-@property (nonatomic) BOOL unfinished;
+@property (nonatomic, copy) NSString *statusDescription;
+@property (nonatomic) ORDER_STATUS status;
 
 @property (nonatomic, copy) NSString *orderSquence_no;
 @property (nonatomic, copy) NSString *ticketKey;
