@@ -277,6 +277,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="refreshBtn" destination="6jv-8T-fgW" id="HYV-G5-FPW"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FWc-Vp-iWn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

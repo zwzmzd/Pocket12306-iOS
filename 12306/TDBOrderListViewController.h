@@ -14,6 +14,9 @@ typedef enum {
 } ORDER_PARSER_MSG;
 
 @interface TDBOrderListViewController : UITableViewController
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshBtn;
+
 - (IBAction)iWantReturn:(id)sender;
 - (IBAction)iWantRefresh:(id)sender;
 

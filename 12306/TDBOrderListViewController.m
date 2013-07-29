@@ -58,46 +58,70 @@
                 }
             }
             
+            BOOL isFirstPerson = YES;
             NSMutableArray *passengerList = [NSMutableArray new];
             for (NSUInteger i = firstPos; i < count - 1; i++) {
+                
+                // 在一些特别的情况下，比如出票失败，页面中间会夹杂很多input标签
+                TFHppleElement *personTR = [tableChildren objectAtIndex:i];
+                if (![personTR.tagName isEqualToString:@"tr"]) {
+                    continue;
+                }
                 //every person in order
                 NSMutableArray *textNodeList = [[NSMutableArray alloc] init];
                 NSMutableArray *inputNodeList = [[NSMutableArray alloc] init];
                 
-                TFHppleElement *personTR = [tableChildren objectAtIndex:i];
                 [self parseDOM:personTR textNodeOut:textNodeList inputNodeOut:inputNodeList];
                 
 //                NSLog(@"[hello]");
 //                for (NSString *str in textNodeList) {
 //                    NSLog(@"%@", str);
 //                }
+//                NSLog(@"[finish]");
                 
-                if (i == firstPos) { // first person
+                if (isFirstPerson) { // first person
+                    isFirstPerson = NO;
+                    
                     order.date = [textNodeList objectAtIndex:0];
                     order.trainNo = [textNodeList objectAtIndex:1];
                     order.departTime = [textNodeList objectAtIndex:3];
-                    order.statusDescription = [textNodeList objectAtIndex:10];
+                    
                     
                     NSArray *trip = [[textNodeList objectAtIndex:2] componentsSeparatedByString:@"—"];
                     order.departStationName = [trip objectAtIndex:0];
                     order.arriveStationName = [trip objectAtIndex:1];
                     
-                    if (inputNodeList.count > 0) {
-                        TFHppleElement *input = [inputNodeList objectAtIndex:0];
+                    if (textNodeList.count < 11) {
+                        order.statusDescription = @"失败";
+                    } else {
+                        order.statusDescription = [textNodeList objectAtIndex:10];
+                    }
+                    
+                    TFHppleElement *input = (inputNodeList.count > 0) ? [inputNodeList objectAtIndex:0] : nil;
+                    if (input && [[input.attributes objectForKey:@"id"] isEqualToString:@"checkbox_pay"]) {
+                        
                         order.orderSquence_no = [[[input.attributes objectForKey:@"name"] componentsSeparatedByString:@"_"] lastObject];
                         order.ticketKey = [input.attributes objectForKey:@"value"];
                         
-                        if ([order.statusDescription isEqualToString:@"已支付"]) {
-                            order.status = ORDER_STATUS_PAID;
-                        } else {
-                            order.status = ORDER_STATUS_UNFINISHED;
-                        }
+                        order.status = ORDER_STATUS_UNFINISHED;
+                    } else if ([order.statusDescription isEqualToString:@"已支付"]) {
+                        order.status = ORDER_STATUS_PAID;
                     } else {
                         order.status = ORDER_STATUS_OTHER;
                     }
+                
                 }
                 
                 PassengerInOrder *pio = [[PassengerInOrder alloc] init];
+                
+                // 若出票失败，字段会不够，补齐两个字段
+                if (textNodeList.count < 11) {
+                    [textNodeList insertObject:@"未分配座位" atIndex:4];
+                    [textNodeList insertObject:@"" atIndex:5];
+                }
+                
+                NSAssert(textNodeList.count >= 11, @"must be");
+                
                 pio.vehicle = [textNodeList objectAtIndex:4];
                 pio.seatNo = [textNodeList objectAtIndex:5];
                 pio.seatType = [textNodeList objectAtIndex:6];
@@ -173,11 +197,13 @@
 //        NSLog(@"%@", [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding]);
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
 
             if (result == ORDER_PARSER_MSG_SUCCESS) {
                 [self.tableView reloadData];
             }
+            
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            self.refreshBtn.enabled = YES;
         });
     });
 }
@@ -196,6 +222,7 @@
 {
     [super viewDidLoad];
     
+    self.refreshBtn.enabled = NO;
     [self retriveEssentialInfoUsingGCD];
 }
 
@@ -305,7 +332,7 @@
 }
 
 - (IBAction)iWantRefresh:(id)sender {
-    self.orderList = nil;
+    self.refreshBtn.enabled = NO;
     [self retriveEssentialInfoUsingGCD];
 }
 @end
