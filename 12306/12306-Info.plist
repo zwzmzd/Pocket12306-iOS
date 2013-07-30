@@ -13,7 +13,9 @@
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
 			<key>CFBundleIconFiles</key>
-			<array/>
+			<array>
+				<string>dropbox-1.png</string>
+			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
 		</dict>
