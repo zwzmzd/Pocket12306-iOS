@@ -32,7 +32,6 @@
 		FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA117A4F25600D535BC /* TDBOrder.m */; };
 		FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */; };
 		FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */; };
-		FA4776E717A6D42C004F6A74 /* icon_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4776E617A6D42C004F6A74 /* icon_ios.png */; };
 		FAB56A21179C13EF006A05BF /* KGStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A20179C13EF006A05BF /* KGStatusBar.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
@@ -353,7 +352,6 @@
 				FA320A3917966A0800F2E282 /* Default@2x.png in Resources */,
 				FA320A3B17966A0800F2E282 /* Default-568h@2x.png in Resources */,
 				FA320A3E17966A0800F2E282 /* MainStoryboard.storyboard in Resources */,
-				FA4776E717A6D42C004F6A74 /* icon_ios.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
