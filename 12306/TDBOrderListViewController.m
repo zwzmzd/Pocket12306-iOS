@@ -333,6 +333,7 @@
 
 - (IBAction)iWantRefresh:(id)sender {
     self.refreshBtn.enabled = NO;
+    self.orderList = nil;
     [self retriveEssentialInfoUsingGCD];
 }
 @end

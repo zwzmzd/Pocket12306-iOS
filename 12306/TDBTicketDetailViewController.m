@@ -16,7 +16,7 @@
 #import "TDBSeatDetailViewController.h"
 #import "KGStatusBar.h"
 
-@interface TDBTicketDetailViewController ()
+@interface TDBTicketDetailViewController () <UIAlertViewDelegate>
 
 @property (nonatomic,strong) MBProgressHUD *HUD;
 
@@ -164,10 +164,9 @@
                 self.isLoadingFinished = YES;
             } else if (result == SUBMUTORDER_MSG_UNFINISHORDER_DETECTED) {
                 
-#warning You should set alert's delegate properly
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票"
                                            message:@"您尚有未处理的订单，要前往查看吗"
-                                          delegate:nil
+                                          delegate:self
                                  cancelButtonTitle:@"暂时不用"
                                  otherButtonTitles:@"查看", nil];
                 [alert show];
@@ -346,4 +345,13 @@
         [vc.tableView reloadData];
     }
 }
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+#warning You should set alert's delegate properly
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 @end
