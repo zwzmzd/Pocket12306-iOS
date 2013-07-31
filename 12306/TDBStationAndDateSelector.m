@@ -25,7 +25,7 @@
         _departStationField.returnKeyType = UIReturnKeyDone;
         _departStationField.autocorrectionType = UITextAutocorrectionTypeNo;
         _departStationField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        _departStationField.borderStyle = UITextBorderStyleBezel;
+        _departStationField.borderStyle = UITextBorderStyleNone;
         _departStationField.font = [UIFont boldSystemFontOfSize:18];
         _departStationField.adjustsFontSizeToFitWidth = YES;
         _departStationField.minimumFontSize = 6;
@@ -43,7 +43,7 @@
         _arriveStationField.returnKeyType = UIReturnKeyDone;
         _arriveStationField.autocorrectionType = UITextAutocorrectionTypeNo;
         _arriveStationField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        _arriveStationField.borderStyle = UITextBorderStyleBezel;
+        _arriveStationField.borderStyle = UITextBorderStyleNone;
         _arriveStationField.font = [UIFont boldSystemFontOfSize:18];
         _arriveStationField.adjustsFontSizeToFitWidth = YES;
         _arriveStationField.minimumFontSize = 6;
