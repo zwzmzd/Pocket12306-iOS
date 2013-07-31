@@ -27,7 +27,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -42,21 +41,23 @@
         if (buyTicket)
             self.navigationItem.rightBarButtonItem = buyTicket;
         
-        if (_selectorView == nil) {
-            TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
-            
-            [self.view addSubview:customView];
-            self.selectorView = customView;
-            
-            /*
-             这个方法结束后，self.view会被设置，所以只要好好实现viewDidLayoutSubviews，这里不需要
-             设置customView.fram
-             */
-        }
+        
     } else {
         if (self.navigationItem.rightBarButtonItem)
             buyTicket = self.navigationItem.rightBarButtonItem;
         self.navigationItem.rightBarButtonItem = nil;
+    }
+    
+    if (_selectorView == nil) {
+        TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
+        
+        [self.view addSubview:customView];
+        self.selectorView = customView;
+        
+        /*
+         这个方法结束后，self.view会被设置，所以只要好好实现viewDidLayoutSubviews，这里不需要
+         设置customView.fram
+         */
     }
     
     [self initStationNameControllerUsingGCD];
@@ -69,6 +70,12 @@
     
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
     [manager addNotificationHandler:self];
+    
+    // 用于后台唤醒程序时键盘遮挡处理
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(resizeMainViewAfterADelay)
+                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     [self resizeMainView];
 }
 
@@ -79,6 +86,8 @@
     
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
     [manager removeNotificationHandler:self];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -139,6 +148,19 @@
     self.selectorView.frame = CGRectMake(0, 0, size.width, size.height);
 }
 
+- (void)resizeMainViewAfterADelay
+{
+    // 主要用于从后台唤醒时的键盘遮挡处理
+    // 只能这么办了，此时接收不到键盘的通知。系统在发出UIApplicationDidBecomeActiveNotification后，
+    // 还会将self.view设置成不含键盘的高度，所以延迟一段时间后作调整
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        sleep(0.5);
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [self resizeMainView];
+        });
+    });
+}
 - (void)resizeMainView
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
