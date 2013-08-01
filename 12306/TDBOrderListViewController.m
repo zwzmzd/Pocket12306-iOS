@@ -15,8 +15,11 @@
 #import "TDBEPayEntryViewController.h"
 #import "MBProgressHUD.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ODRefreshControl.h"
 
 @interface TDBOrderListViewController ()
+
+@property (nonatomic, strong) ODRefreshControl *odr;
 
 @property (nonatomic) NSMutableArray *orderList;
 @property (nonatomic, copy) NSString *apacheToken;
@@ -176,8 +179,7 @@
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 orderList", NULL);
-    dispatch_async(downloadVerifyCode, ^(void) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         ORDER_PARSER_MSG result;
         NSData *htmlData = [[GlobalDataStorage tdbss] queryMyOrderNotComplete];
@@ -193,17 +195,14 @@
                                                                endOrderDate:[formatter stringFromDate:now]];
         result = [self parseHTMLWithData:htmlData];
         
-//        htmlData = [[GlobalDataStorage tdbss] laterEpayWithOrderSequenceNo:@"E440314790" apacheToken:self.apacheToken ticketKey:@"E4403147901110022"];
-//        NSLog(@"%@", [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding]);
-        
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-
             if (result == ORDER_PARSER_MSG_SUCCESS) {
                 [self.tableView reloadData];
             }
             
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             self.refreshBtn.enabled = YES;
+            [self.odr endRefreshing];
         });
     });
 }
@@ -222,6 +221,10 @@
 {
     [super viewDidLoad];
     
+    self.odr = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+    [self.odr addTarget:self action:@selector(iWantRefresh:) forControlEvents:UIControlEventValueChanged];
+    
+    // 这个属性就用来判断是否正在拉取
     self.refreshBtn.enabled = NO;
     [self retriveEssentialInfoUsingGCD];
 }
@@ -332,8 +335,12 @@
 }
 
 - (IBAction)iWantRefresh:(id)sender {
-    self.refreshBtn.enabled = NO;
-    self.orderList = nil;
-    [self retriveEssentialInfoUsingGCD];
+    if (self.refreshBtn.enabled == YES) {
+        // 由于这个方法还被ODRefreshControl调用，所以先判断一下是否正在执行
+        
+        self.refreshBtn.enabled = NO;
+        self.orderList = nil;
+        [self retriveEssentialInfoUsingGCD];
+    }
 }
 @end
