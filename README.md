@@ -35,8 +35,8 @@ Update 13-07-27:
 
 拷贝到本地
 ---------
-'''bash
+```bash
 $ git clone git@github.com:zwzmzd/Pocket12306-iOS.git
 $ cd Pocket12306-iOS/
 $ git submodule update --init --recursive
-'''
+```
