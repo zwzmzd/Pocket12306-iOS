@@ -32,3 +32,11 @@ Update 13-07-27:
 * 调整了列车信息界面上的UI，颜色更为清爽
 * 列车列表中的余票信息进行了展现，并且有横竖屏两种适配模式，查看起来更为方便
 * 平滑了键盘弹出和关闭时的动画
+
+拷贝到本地
+---------
+'''bash
+$ git clone git@github.com:zwzmzd/Pocket12306-iOS.git
+$ cd Pocket12306-iOS/
+$ git submodule update --init --recursive
+'''
