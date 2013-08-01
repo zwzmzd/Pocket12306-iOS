@@ -229,16 +229,6 @@
     NSLog(@"confirmSingleForQueue");
     [self assertLoggedIn];
     
-    /*
-    if (![self checkOrderInfo:train passenger:passenger date:date leftTicketStr:leftTicketStr apacheToken:apacheToken randCode:randCode])
-        return nil;
-    sleep(1);
-    
-    if (![self getQueueCount:train passenger:passenger date:date leftTicketID:leftTicketStr])
-        return nil;
-    sleep(2);
-     */
-    
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
     
 #define ORD @"orderRequest."
@@ -372,8 +362,6 @@
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSLog(@"%@", [argument getFinalData]);
-    
     [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
@@ -390,9 +378,10 @@
     } else {
         NSLog(@"%@", dict);
         NSString *msg = [dict objectForKey:@"msg"];
+        NSString *errMsg = [dict objectForKey:@"errMsg"];
         
-        if (msg.length != 0) {
-            NSLog(@"%@", msg);
+        if (msg.length != 0 || ![errMsg isEqualToString:@"Y"]) {
+            NSLog(@"msg: '%@'; errMsg: '%@'", msg, errMsg);
             return NO;
         }
         

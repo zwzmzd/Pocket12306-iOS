@@ -67,6 +67,12 @@
         return SUBMUTORDER_MSG_ERR;
     }
     
+    range = [self.html rangeOfString:@"现在是系统例行维护时间"];
+    if (range.length > 0) {
+        NSLog(@"现在是系统例行维护时间");
+        return SUBMUTORDER_MSG_OUT_OF_SERVICE;
+    }
+    
     range = [self.html rangeOfString:@"未处理的订单"];
     if (range.length > 0) {
         NSLog(@"还有未处理订单，无法继续订票");
@@ -119,12 +125,13 @@
         NSMutableArray *array = [[NSMutableArray alloc] init];
         
         for (TFHppleElement *element in elements) {
-            NSArray *e = [[NSArray alloc] initWithObjects:
-                          [element.attributes objectForKey:@"value"],
-                          [element.firstChild content],
-                          nil];
-            if (e)
+            NSArray *e = @[[element.attributes objectForKey:@"value"],[element.firstChild content]];
+            NSString *title = [element.firstChild content];
+            if ([title hasPrefix:@"儿童"]) {
+                // 儿童票由于不能单独购买，所以先省略
+            } else {
                 [array addObject:e];
+            }
         }
         self.ticketTypeList = [[NSArray alloc] initWithArray:array];
     }
@@ -139,8 +146,7 @@
 {
     [self retriveVerifyCodeUsingGCD];
     
-    dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 traininfo", NULL);
-    dispatch_async(downloadVerifyCode, ^(void) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate];
         SUBMUTORDER_MSG result = [self parseHTMLWithData:htmlData];
@@ -163,13 +169,22 @@
                 
                 self.isLoadingFinished = YES;
             } else if (result == SUBMUTORDER_MSG_UNFINISHORDER_DETECTED) {
-                
+
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票"
                                            message:@"您尚有未处理的订单，要前往查看吗"
                                           delegate:self
                                  cancelButtonTitle:@"暂时不用"
                                  otherButtonTitles:@"查看", nil];
+                alert.tag = SUBMUTORDER_MSG_UNFINISHORDER_DETECTED;
                 [alert show];
+                 
+            } else if (result == SUBMUTORDER_MSG_OUT_OF_SERVICE) {
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"每天23点到次日7点是系统维护时间" delegate:self
+                                                      cancelButtonTitle:@"好的" otherButtonTitles: nil];
+                alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
+                [alert show];
+                
             } else {
                 NSLog(@"PAGE NOT LOADING PROPERLY");
             }
@@ -179,15 +194,13 @@
 
 - (void)retriveVerifyCodeUsingGCD
 {
-    dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 traininfo", NULL);
-    dispatch_async(downloadVerifyCode, ^(void) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         NSData *image = [[GlobalDataStorage tdbss] getRandpImage];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            
-                self.verifyCodeImage.image = [UIImage imageWithData:image];
-                [self.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
+            self.verifyCodeImage.image = [UIImage imageWithData:image];
+            [self.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
         });
     });
 }
@@ -277,8 +290,10 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
     [KGStatusBar showWithStatus:@"正在提交请求"];
     
+    __block BOOL haveError = NO;
     dispatch_queue_t orderQueue = dispatch_queue_create("12306 orderTicket", DISPATCH_QUEUE_SERIAL);
     dispatch_async(orderQueue, ^(void) {
+        
         sleep(0.5);
         if ([tdbss checkOrderInfo:self.train passenger:passenger date:date
                     leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
@@ -287,30 +302,49 @@
                 self.progressView.progress = 0.33;
                 [KGStatusBar showWithStatus:@"订单信息验证成功"];
             });
-        }
-        sleep(1);
-    });
-    dispatch_async(orderQueue, ^(void) {
-        if ([tdbss getQueueCount:self.train passenger:passenger date:date leftTicketID:self.leftTicketID]) {
             
+        } else {
+            haveError = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.progressView.progress = 0.66;
-                [KGStatusBar showWithStatus:@"余票信息确认完毕"];
+                self.progressView.progress = 0.33;
+                [KGStatusBar showWithStatus:@"订单信息验证失败，请检查身份证号"];
             });
         }
-        sleep(2);
+        
     });
+    
     dispatch_async(orderQueue, ^(void) {
         
-        if ([tdbss confirmSingleForQueue:self.train passenger:passenger date:date
-                           leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.progressView.progress = 1;
-                [KGStatusBar showSuccessWithStatus:@"订票信息已经确认，请继续完成支付"];
-                self.navigationItem.rightBarButtonItem = nil;
-            });
+        if (!haveError) {
+            sleep(1);
+            if ([tdbss getQueueCount:self.train passenger:passenger date:date leftTicketID:self.leftTicketID]) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.progressView.progress = 0.66;
+                    [KGStatusBar showWithStatus:@"余票信息确认完毕"];
+                });
+            } else {
+                haveError = YES;
+            }
         }
+        
+    });
+    
+    dispatch_async(orderQueue, ^(void) {
+        
+        if (!haveError) {
+            sleep(2);
+            if (!haveError && [tdbss confirmSingleForQueue:self.train passenger:passenger date:date
+                               leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.progressView.progress = 1;
+                    [KGStatusBar showSuccessWithStatus:@"订票信息已经确认，请继续完成支付"];
+                    self.navigationItem.rightBarButtonItem = nil;
+                });
+            }
+        }
+        
     });
     
 }
@@ -351,7 +385,16 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 #warning You should set alert's delegate properly
-    [self.navigationController popViewControllerAnimated:YES];
+    switch (alertView.tag) {
+        case SUBMUTORDER_MSG_UNFINISHORDER_DETECTED: {
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        case SUBMUTORDER_MSG_OUT_OF_SERVICE: {
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+    }
 }
 
 @end
