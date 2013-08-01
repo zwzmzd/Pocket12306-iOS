@@ -43,6 +43,18 @@
     self.apacheToken = [self parseApacheToken:xpathParser];
     
     {
+        NSArray *elements = [xpathParser searchWithXPathQuery:@"//title"];
+        if (elements.count == 0) {
+            return ORDER_PARSER_MSG_ERR;
+        }
+        
+        TFHppleElement *e = elements.lastObject;
+        if (![[e.firstChild content] isEqualToString:@"我的订单"]) {
+            return ORDER_PARSER_MSG_ERR;
+        }
+    }
+    
+    {
         NSArray *elements = [xpathParser searchWithXPathQuery:@"//table[@class='table_clist']"];
         NSMutableArray *array = [[NSMutableArray alloc] init];
         
@@ -185,23 +197,37 @@
         NSData *htmlData = [[GlobalDataStorage tdbss] queryMyOrderNotComplete];
         result = [self parseHTMLWithData:htmlData];
         
-        
-        NSDate *now = [NSDate date];
-        NSDate *a_month_ago = [NSDate dateWithTimeIntervalSinceNow: -30 * 24 * 3600];
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd"];
-        
-        htmlData = [[GlobalDataStorage tdbss] queryMyOrderWithFromOrderDate:[formatter stringFromDate:a_month_ago]
-                                                               endOrderDate:[formatter stringFromDate:now]];
-        result = [self parseHTMLWithData:htmlData];
+        if (result == ORDER_PARSER_MSG_SUCCESS) {
+            NSDate *now = [NSDate date];
+            NSDate *a_month_ago = [NSDate dateWithTimeIntervalSinceNow: -30 * 24 * 3600];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"yyyy-MM-dd"];
+            
+            htmlData = [[GlobalDataStorage tdbss] queryMyOrderWithFromOrderDate:[formatter stringFromDate:a_month_ago]
+                                                                   endOrderDate:[formatter stringFromDate:now]];
+            result = [self parseHTMLWithData:htmlData];
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (result == ORDER_PARSER_MSG_SUCCESS) {
                 [self.tableView reloadData];
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            } else {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.labelText = @"获取列表信息失败，请重试";
+                hud.removeFromSuperViewOnHide = YES;
+                [hud hide:YES afterDelay:2];
             }
             
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            self.refreshBtn.enabled = YES;
+            // 防止刷新过速，每次刷新之后延迟两秒再启用refreshBtn
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
+                sleep(2);
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    self.refreshBtn.enabled = YES;
+                });
+            });
+            
             [self.odr endRefreshing];
         });
     });
