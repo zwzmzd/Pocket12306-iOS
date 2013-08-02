@@ -287,6 +287,7 @@
     
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [spinner startAnimating];
+    UIBarButtonItem *submitBtn = self.navigationItem.rightBarButtonItem;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
     [KGStatusBar showWithStatus:@"正在提交请求"];
     
@@ -307,7 +308,8 @@
             haveError = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.progressView.progress = 0.33;
-                [KGStatusBar showWithStatus:@"订单信息验证失败，请检查身份证号"];
+                [KGStatusBar showErrorWithStatus:@"订单信息验证失败，请检查身份证号"];
+                self.navigationItem.rightBarButtonItem = submitBtn;
             });
         }
         
