@@ -1,3 +1,6 @@
 [submodule "vendor/ORDRefreshControl"]
 	path = vendor/ORDRefreshControl
 	url = git@github.com:Sephiroth87/ODRefreshControl.git
+[submodule "vendor/SVPullToRefresh"]
+	path = vendor/SVPullToRefresh
+	url = git@github.com:samvermette/SVPullToRefresh.git
