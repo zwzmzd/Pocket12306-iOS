@@ -73,6 +73,12 @@
         return SUBMUTORDER_MSG_OUT_OF_SERVICE;
     }
     
+    range = [self.html rangeOfString:@"该车次在互联网已停止办理业务"];
+    if (range.length > 0) {
+        NSLog(@"该车次在互联网已停止办理业务");
+        return SUBMUTORDER_MSG_EXPIRED;
+    }
+    
     range = [self.html rangeOfString:@"未处理的订单"];
     if (range.length > 0) {
         NSLog(@"还有未处理订单，无法继续订票");
@@ -144,14 +150,13 @@
 
 - (void)retriveEssentialInfoUsingGCD
 {
-    [self retriveVerifyCodeUsingGCD];
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate];
         SUBMUTORDER_MSG result = [self parseHTMLWithData:htmlData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [self retriveVerifyCodeUsingGCD];
             
             if (result == SUBMUTORDER_MSG_SUCCESS) {
                 
@@ -179,12 +184,15 @@
                 [alert show];
                  
             } else if (result == SUBMUTORDER_MSG_OUT_OF_SERVICE) {
-                
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"每天23点到次日7点是系统维护时间" delegate:self
                                                       cancelButtonTitle:@"好的" otherButtonTitles: nil];
                 alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
                 [alert show];
-                
+            } else if (result == SUBMUTORDER_MSG_EXPIRED) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"该车次已停止办理互联网售票业务" delegate:self
+                                                      cancelButtonTitle:@"好的" otherButtonTitles: nil];
+                alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
+                [alert show];
             } else {
                 NSLog(@"PAGE NOT LOADING PROPERLY");
             }
@@ -195,7 +203,6 @@
 - (void)retriveVerifyCodeUsingGCD
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        
         NSData *image = [[GlobalDataStorage tdbss] getRandpImage];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -227,10 +234,7 @@
     [super viewDidLoad];
 
     self.isLoadingFinished = NO;
-    
     [self configureView];
-    [self setUpForDismissKeyboard];
-    
     [self retriveEssentialInfoUsingGCD];
 }
 
@@ -245,6 +249,36 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)ValidateIDCardNo:(NSString *)idCardNo
+{
+    static const NSUInteger weight[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+    
+    if (idCardNo.length != 18) {
+        return NO;
+    }
+    
+    NSUInteger acc = 0;
+    for (NSUInteger i = 0; i < 17; i++) {
+        unichar c = [idCardNo characterAtIndex:i];
+        if (c == 'X' || c == 'x') {
+            acc += 10 * weight[i];
+            acc %= 11;
+        } else if (c >= '0' && c <= '9') {
+            acc += (c - '0') * weight[i];
+            acc %= 11;
+        } else {
+            return NO;
+        }
+    }
+    
+    unichar lastChar = [idCardNo characterAtIndex:17];
+    if (lastChar == 'x' || lastChar == 'X') {
+        return (weight[acc] == 10);
+    } else {
+        return (weight[acc] == lastChar - '0');
+    }
+}
+
 - (BOOL)checkTextField
 {
     if (self.name.text.length == 0) {
@@ -253,6 +287,10 @@
     }
     if (self.idCardNo.text.length == 0) {
         [KGStatusBar showErrorWithStatus:@"请正确填写您的身份证号码"];
+        return NO;
+    }
+    if (![self ValidateIDCardNo:self.idCardNo.text]) {
+        [KGStatusBar showErrorWithStatus:@"身份证号码有误,请检查"];
         return NO;
     }
     if (self.verifyCode.text.length == 0) {
@@ -308,7 +346,7 @@
             haveError = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.progressView.progress = 0.33;
-                [KGStatusBar showErrorWithStatus:@"订单信息验证失败，请检查身份证号"];
+                [KGStatusBar showErrorWithStatus:@"验证码错误，请点击图片后重新输入"];
                 self.navigationItem.rightBarButtonItem = submitBtn;
             });
         }
@@ -355,16 +393,16 @@
     [self retriveVerifyCodeUsingGCD];
 }
 
-- (void)setUpForDismissKeyboard
-{
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    
-    [nc addObserverForName:UIKeyboardWillShowNotification object:nil queue:mainQueue
-                usingBlock:^(NSNotification *note){
-                    //NSLog(@"willlog");
-                }];
-}
+//- (void)setUpForDismissKeyboard
+//{
+//    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+//    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+//    
+//    [nc addObserverForName:UIKeyboardWillShowNotification object:nil queue:mainQueue
+//                usingBlock:^(NSNotification *note){
+//                    NSLog(@"willlog");
+//                }];
+//}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

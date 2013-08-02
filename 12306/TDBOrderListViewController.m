@@ -36,7 +36,7 @@
     return _orderList;
 }
 
-- (ORDER_PARSER_MSG)parseHTMLWithData:(NSData *)htmlData
+- (ORDER_PARSER_MSG)parseHTMLWithData:(NSData *)htmlData toList:(NSMutableArray *)tempList
 {
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
     
@@ -151,7 +151,7 @@
             [array addObject:order];
         }
 
-        [self.orderList addObjectsFromArray:array];
+        [tempList addObjectsFromArray:array];
     }
 
     return ORDER_PARSER_MSG_SUCCESS;
@@ -192,10 +192,11 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        
         ORDER_PARSER_MSG result;
+        NSMutableArray *tempList = [NSMutableArray new];
+        
         NSData *htmlData = [[GlobalDataStorage tdbss] queryMyOrderNotComplete];
-        result = [self parseHTMLWithData:htmlData];
+        result = [self parseHTMLWithData:htmlData toList:tempList];
         
         if (result == ORDER_PARSER_MSG_SUCCESS) {
             NSDate *now = [NSDate date];
@@ -205,12 +206,14 @@
             
             htmlData = [[GlobalDataStorage tdbss] queryMyOrderWithFromOrderDate:[formatter stringFromDate:a_month_ago]
                                                                    endOrderDate:[formatter stringFromDate:now]];
-            result = [self parseHTMLWithData:htmlData];
+            result = [self parseHTMLWithData:htmlData toList:tempList];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (result == ORDER_PARSER_MSG_SUCCESS) {
+                self.orderList = tempList;
                 [self.tableView reloadData];
+                
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
             } else {
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -220,9 +223,9 @@
                 [hud hide:YES afterDelay:2];
             }
             
-            // 防止刷新过速，每次刷新之后延迟两秒再启用refreshBtn
+            // 防止刷新过速，每次刷新之后延迟1秒再启用refreshBtn
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
-                sleep(2);
+                sleep(1);
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
                     self.refreshBtn.enabled = YES;
                 });
@@ -313,6 +316,8 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
+    // 似乎 MBProgressHUD 会浮动在 tableView 上，此时tableView可以滑动，但是无法接收事件
+    // 所以不用考虑用户在刷新状态下的点击异常
     if ([identifier isEqualToString:@"EpaySegue"]) {
         NSUInteger index = [self.tableView indexPathForCell:sender].row;
         TDBOrder *order = [self.orderList objectAtIndex:index];
@@ -364,8 +369,8 @@
     if (self.refreshBtn.enabled == YES) {
         // 由于这个方法还被ODRefreshControl调用，所以先判断一下是否正在执行
         
+        // 不要在这里就self.orderList = nil了。因为对于下拉刷新来说，还可能因为滚动的原因导致Cell复用，中途会获取数组中的内容，容易出现异常
         self.refreshBtn.enabled = NO;
-        self.orderList = nil;
         [self retriveEssentialInfoUsingGCD];
     }
 }
