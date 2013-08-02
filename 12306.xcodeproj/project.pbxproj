@@ -34,6 +34,8 @@
 		FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */; };
 		FA4776E917A76C59004F6A74 /* dropbox-1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4776E817A76C59004F6A74 /* dropbox-1.png */; };
 		FA4C1CE917AA6297003AB59A /* ODRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4C1CE817AA6297003AB59A /* ODRefreshControl.m */; };
+		FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */; };
+		FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
 		FAED1B331798CF92003DA90E /* PassengerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B321798CF92003DA90E /* PassengerInfo.m */; };
@@ -95,6 +97,11 @@
 		FA4776E817A76C59004F6A74 /* dropbox-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dropbox-1.png"; path = "../dropbox-1.png"; sourceTree = "<group>"; };
 		FA4C1CE717AA6297003AB59A /* ODRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ODRefreshControl.h; path = vendor/ORDRefreshControl/ODRefreshControl/ODRefreshControl.h; sourceTree = SOURCE_ROOT; };
 		FA4C1CE817AA6297003AB59A /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ODRefreshControl.m; path = vendor/ORDRefreshControl/ODRefreshControl/ODRefreshControl.m; sourceTree = SOURCE_ROOT; };
+		FA683F1817AB7921003D32FB /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPullToRefresh.h; sourceTree = "<group>"; };
+		FA683F1917AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVInfiniteScrolling.h"; sourceTree = "<group>"; };
+		FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
+		FA683F1B17AB7921003D32FB /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
+		FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
 		FAB56A22179C27D8006A05BF /* TDBStationName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBStationName.h; sourceTree = "<group>"; };
 		FAB56A23179C27D8006A05BF /* TDBStationName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationName.m; sourceTree = "<group>"; };
 		FABA969E17A193F80018B20A /* TDBDatepickSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDatepickSheet.h; sourceTree = "<group>"; };
@@ -214,6 +221,19 @@
 			name = ORDRefreshControl;
 			sourceTree = "<group>";
 		};
+		FA683F1717AB7921003D32FB /* SVPullToRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				FA683F1817AB7921003D32FB /* SVPullToRefresh.h */,
+				FA683F1917AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.h */,
+				FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */,
+				FA683F1B17AB7921003D32FB /* UIScrollView+SVPullToRefresh.h */,
+				FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */,
+			);
+			name = SVPullToRefresh;
+			path = vendor/SVPullToRefresh/SVPullToRefresh;
+			sourceTree = SOURCE_ROOT;
+		};
 		FAED1B44179A4CCA003DA90E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +296,7 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				FA683F1717AB7921003D32FB /* SVPullToRefresh */,
 				FA4C1CE617AA6264003AB59A /* ORDRefreshControl */,
 				FAFC0A3717A966E300CD273E /* MBProgressHUD */,
 				FAFC0A2D17A9667400CD273E /* Hpple */,
@@ -414,6 +435,8 @@
 				FAFC0A3617A9667400CD273E /* XPathQuery.m in Sources */,
 				FAFC0A3A17A966E300CD273E /* MBProgressHUD.m in Sources */,
 				FA4C1CE917AA6297003AB59A /* ODRefreshControl.m in Sources */,
+				FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */,
+				FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

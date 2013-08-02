@@ -15,11 +15,9 @@
 #import "TDBEPayEntryViewController.h"
 #import "MBProgressHUD.h"
 #import <QuartzCore/QuartzCore.h>
-#import "ODRefreshControl.h"
+#import "SVPullToRefresh.h"
 
 @interface TDBOrderListViewController ()
-
-@property (nonatomic, strong) ODRefreshControl *odr;
 
 @property (nonatomic) NSMutableArray *orderList;
 @property (nonatomic, copy) NSString *apacheToken;
@@ -27,14 +25,6 @@
 @end
 
 @implementation TDBOrderListViewController
-
-- (NSArray *)orderList
-{
-    if (_orderList == nil) {
-        _orderList = [[NSMutableArray alloc] init];
-    }
-    return _orderList;
-}
 
 - (ORDER_PARSER_MSG)parseHTMLWithData:(NSData *)htmlData toList:(NSMutableArray *)tempList
 {
@@ -231,7 +221,12 @@
                 });
             });
             
-            [self.odr endRefreshing];
+            NSDate *date = [NSDate date];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"上次更新： MM-dd HH:mm"];
+
+            [self.tableView.pullToRefreshView setSubtitle:[formatter stringFromDate:date] forState:SVPullToRefreshStateAll];
+            [self.tableView.pullToRefreshView stopAnimating];
         });
     });
 }
@@ -250,8 +245,17 @@
 {
     [super viewDidLoad];
     
-    self.odr = [[ODRefreshControl alloc] initInScrollView:self.tableView];
-    [self.odr addTarget:self action:@selector(iWantRefresh:) forControlEvents:UIControlEventValueChanged];
+    // 防止循环引用
+    __weak typeof(self) weakSelf = self;
+    [self.tableView addPullToRefreshWithActionHandler:^{
+        typeof(self) mySelf = weakSelf;
+        if (mySelf) {
+            [mySelf iWantRefresh:nil];
+        }
+    }];
+    [self.tableView.pullToRefreshView setTitle:@"下拉刷新订单" forState:SVPullToRefreshStateStopped];
+    [self.tableView.pullToRefreshView setTitle:@"松开后刷新订单" forState:SVPullToRefreshStateTriggered];
+    [self.tableView.pullToRefreshView setTitle:@"正在载入" forState:SVPullToRefreshStateLoading];
     
     // 这个属性就用来判断是否正在拉取
     self.refreshBtn.enabled = NO;
