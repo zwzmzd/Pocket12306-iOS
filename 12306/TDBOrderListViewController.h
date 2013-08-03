@@ -15,8 +15,6 @@ typedef enum {
 
 @interface TDBOrderListViewController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshBtn;
-
 - (IBAction)iWantReturn:(id)sender;
 - (IBAction)iWantRefresh:(id)sender;
 

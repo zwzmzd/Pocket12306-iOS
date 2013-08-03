@@ -22,6 +22,8 @@
 @property (nonatomic) NSMutableArray *orderList;
 @property (nonatomic, copy) NSString *apacheToken;
 
+@property (nonatomic) BOOL refreshProcessEnable;
+
 @end
 
 @implementation TDBOrderListViewController
@@ -193,7 +195,7 @@
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     // 这个属性就用来判断是否正在拉取
-    self.refreshBtn.enabled = NO;
+    self.refreshProcessEnable = NO;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         ORDER_PARSER_MSG result;
@@ -231,7 +233,7 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
                 sleep(5);
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    self.refreshBtn.enabled = YES;
+                    self.refreshProcessEnable = YES;
                 });
             });
             
@@ -259,6 +261,8 @@
 {
     [super viewDidLoad];
     
+    _refreshProcessEnable = YES;
+    
     // 防止循环引用
     __weak typeof(self) weakSelf = self;
     [self.tableView addPullToRefreshWithActionHandler:^{
@@ -270,8 +274,7 @@
     [self.tableView.pullToRefreshView setTitle:@"正在载入" forState:SVPullToRefreshStateLoading];
     [self.tableView.pullToRefreshView setTitle:@"松开后刷新订单" forState:SVPullToRefreshStateTriggered];
     [self.tableView.pullToRefreshView setTitle:@"下拉刷新订单" forState:SVPullToRefreshStateStopped];
-    
-    [self retriveEssentialInfoUsingGCD];
+    [self.tableView triggerPullToRefresh];
 }
 
 - (void)didReceiveMemoryWarning
@@ -382,7 +385,7 @@
 }
 
 - (IBAction)iWantRefresh:(id)sender {
-    if (self.refreshBtn.enabled == YES) {
+    if (self.refreshProcessEnable == YES) {
         // 由于这个方法还被ODRefreshControl调用，所以先判断一下是否正在执行
         
         // 不要在这里就self.orderList = nil了。因为对于下拉刷新来说，还可能因为滚动的原因导致Cell复用，中途会获取数组中的内容，容易出现异常

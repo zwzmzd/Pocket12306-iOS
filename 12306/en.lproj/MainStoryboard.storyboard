@@ -266,20 +266,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="订单查看" id="MQJ-bU-0XW">
-                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="6jv-8T-fgW">
-                            <connections>
-                                <action selector="iWantRefresh:" destination="ccV-o0-mT7" id="Fdl-Di-ABF"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="完成" style="done" id="kmA-nP-fIg">
                             <connections>
                                 <action selector="iWantReturn:" destination="ccV-o0-mT7" id="6Eu-Vm-19Q"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="refreshBtn" destination="6jv-8T-fgW" id="HYV-G5-FPW"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FWc-Vp-iWn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
