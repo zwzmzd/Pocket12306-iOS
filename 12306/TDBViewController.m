@@ -122,10 +122,7 @@
                                     getTelecodeUsingName:self.selectorView.departStationField.text];
         lv.arriveStationTelecode = [self.stationNameController
                                     getTelecodeUsingName:self.selectorView.arriveStationField.text];
-        
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd"];
-        lv.dateInString = [formatter stringFromDate:self.selectorView.userSelectedDate];
+        lv.orderDate = self.selectorView.userSelectedDate;
         
         NSLog(@"%@ %@", lv.departStationTelecode, lv.arriveStationTelecode);
     }

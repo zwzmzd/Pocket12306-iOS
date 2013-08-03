@@ -17,9 +17,18 @@
 
 @interface TDBListViewController ()
 
+@property (nonatomic, readonly) NSString *dateInString;
+
 @end
 
 @implementation TDBListViewController
+
+- (NSString *)dateInString
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    return [formatter stringFromDate:self.orderDate];
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -135,7 +144,7 @@
     if ([[segue identifier] isEqualToString:@"TicketDetail"]) {
         TDBTicketDetailViewController *detail = [segue destinationViewController];
         detail.train = [self.dataController getTrainInfoForIndex:[self.tableView indexPathForCell:sender].row];
-        detail.departDate = self.dateInString;
+        detail.orderDate = self.orderDate;
     }
 }
 
