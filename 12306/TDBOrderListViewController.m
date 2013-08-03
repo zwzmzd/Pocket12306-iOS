@@ -84,6 +84,16 @@
 //                }
 //                NSLog(@"[finish]");
                 
+                // 先把改签过的票面信息去掉，防止干扰用户
+                if (textNodeList.count < 11) {
+                    order.statusDescription = @"失败";
+                } else {
+                    order.statusDescription = [textNodeList objectAtIndex:10];
+                }
+                if ([order.statusDescription isEqualToString:@"已改签"]) {
+                    continue;
+                }
+                
                 if (isFirstPerson) { // first person
                     isFirstPerson = NO;
                     
@@ -111,7 +121,9 @@
                         order.status = ORDER_STATUS_UNFINISHED;
                     } else if ([order.statusDescription isEqualToString:@"已支付"]) {
                         order.status = ORDER_STATUS_PAID;
-                    } else {
+                    } else if ([order.statusDescription isEqualToString:@"改签票"]) {
+                        order.status = ORDER_STATUS_PAID;
+                    }else {
                         order.status = ORDER_STATUS_OTHER;
                     }
                 
@@ -180,6 +192,8 @@
 - (void)retriveEssentialInfoUsingGCD
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    // 这个属性就用来判断是否正在拉取
+    self.refreshBtn.enabled = NO;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         ORDER_PARSER_MSG result;
@@ -213,9 +227,9 @@
                 [hud hide:YES afterDelay:2];
             }
             
-            // 防止刷新过速，每次刷新之后延迟1秒再启用refreshBtn
+            // 防止刷新过速，每次刷新之后延迟5秒再启用refreshBtn
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
-                sleep(1);
+                sleep(5);
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
                     self.refreshBtn.enabled = YES;
                 });
@@ -253,12 +267,10 @@
             [mySelf iWantRefresh:nil];
         }
     }];
-    [self.tableView.pullToRefreshView setTitle:@"下拉刷新订单" forState:SVPullToRefreshStateStopped];
-    [self.tableView.pullToRefreshView setTitle:@"松开后刷新订单" forState:SVPullToRefreshStateTriggered];
     [self.tableView.pullToRefreshView setTitle:@"正在载入" forState:SVPullToRefreshStateLoading];
+    [self.tableView.pullToRefreshView setTitle:@"松开后刷新订单" forState:SVPullToRefreshStateTriggered];
+    [self.tableView.pullToRefreshView setTitle:@"下拉刷新订单" forState:SVPullToRefreshStateStopped];
     
-    // 这个属性就用来判断是否正在拉取
-    self.refreshBtn.enabled = NO;
     [self retriveEssentialInfoUsingGCD];
 }
 
@@ -374,8 +386,9 @@
         // 由于这个方法还被ODRefreshControl调用，所以先判断一下是否正在执行
         
         // 不要在这里就self.orderList = nil了。因为对于下拉刷新来说，还可能因为滚动的原因导致Cell复用，中途会获取数组中的内容，容易出现异常
-        self.refreshBtn.enabled = NO;
         [self retriveEssentialInfoUsingGCD];
+    } else {
+        [self.tableView.pullToRefreshView stopAnimating];
     }
 }
 @end
