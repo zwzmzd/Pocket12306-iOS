@@ -521,6 +521,36 @@
     return result;
 }
 
+- (NSDictionary *)queryaTrainStopTimeByTrainNo:(NSString *)trainNo fromStationTelecode:(NSString *)fromStationTelecode toStationTelecode:(NSString *)toStationTelecode departDate:(NSString *)departDate
+{
+    NSLog(@"queryaTrainStopTimeByTrainNo");
+    [self assertLoggedIn];
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:@"queryaTrainStopTimeByTrainNo" forKey:@"method"];
+    [argument addValue:trainNo forKey:@"train_no"];
+    [argument addValue:fromStationTelecode forKey:@"from_station_telecode"];
+    [argument addValue:toStationTelecode forKey:@"to_station_telecode"];
+    [argument addValue:departDate forKey:@"depart_date"];
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@", [argument getFinalData]];
+    NSURL *url = [NSURL URLWithString:path];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSError *jsonErr = nil;
+    NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:result options:0 error:&jsonErr];
+    
+    if (jsonErr) {
+        return nil;
+    } else {
+        return dict;
+    }
+}
+
 - (void)assertLoggedIn
 {
     NSAssert(YES, @"Before This Operation, You must Login");
