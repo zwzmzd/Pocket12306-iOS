@@ -35,7 +35,7 @@
     
     static UIBarButtonItem *buyTicket = nil;
     if ([GlobalDataStorage tdbss]) {
-        self.navigationItem.leftBarButtonItem = nil;
+        self.navigationItem.leftBarButtonItem.title = @"更换账户";
         self.title = @"车票查询";
         
         if (buyTicket)

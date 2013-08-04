@@ -38,6 +38,7 @@
 		FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
+		FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */; };
 		FAED1B331798CF92003DA90E /* PassengerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B321798CF92003DA90E /* PassengerInfo.m */; };
 		FAED1B43179A4977003DA90E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FAED1B42179A4977003DA90E /* libxml2.dylib */; };
 		FAED1B4B179ACD57003DA90E /* TDBSeatDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B4A179ACD57003DA90E /* TDBSeatDetailViewController.m */; };
@@ -106,6 +107,8 @@
 		FAB56A23179C27D8006A05BF /* TDBStationName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationName.m; sourceTree = "<group>"; };
 		FABA969E17A193F80018B20A /* TDBDatepickSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDatepickSheet.h; sourceTree = "<group>"; };
 		FABA969F17A193F80018B20A /* TDBDatepickSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBDatepickSheet.m; sourceTree = "<group>"; };
+		FAE88A2717AE5FAF00D632F2 /* TDBOrderOperationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBOrderOperationViewController.h; sourceTree = "<group>"; };
+		FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBOrderOperationViewController.m; sourceTree = "<group>"; };
 		FAED1B311798CF92003DA90E /* PassengerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassengerInfo.h; sourceTree = "<group>"; };
 		FAED1B321798CF92003DA90E /* PassengerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassengerInfo.m; sourceTree = "<group>"; };
 		FAED1B42179A4977003DA90E /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -239,6 +242,8 @@
 			children = (
 				FA3BACA617A54FEE00D535BC /* TDBEPayEntryViewController.h */,
 				FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */,
+				FAE88A2717AE5FAF00D632F2 /* TDBOrderOperationViewController.h */,
+				FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */,
 				FA3BACA317A5124200D535BC /* TDBOrderDetailViewController.h */,
 				FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */,
 				FA3BAC9A17A4BC9300D535BC /* TDBOrderListViewController.h */,
@@ -437,6 +442,7 @@
 				FA4C1CE917AA6297003AB59A /* ODRefreshControl.m in Sources */,
 				FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */,
+				FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,4 +17,6 @@ typedef enum {
 
 - (IBAction)iWantReturn:(id)sender;
 
+- (void)forceRefreshOrderList;
+
 @end

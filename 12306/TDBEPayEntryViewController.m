@@ -11,7 +11,7 @@
 #import "GlobalDataStorage.h"
 #import "TFHpple.h"
 
-@interface TDBEPayEntryViewController () <UIAlertViewDelegate>
+@interface TDBEPayEntryViewController ()
 
 @end
 
@@ -68,29 +68,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (IBAction)iWantCancle:(id)sender {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSData *result = [[GlobalDataStorage tdbss] cancleMyOrderNotComplete:self.orderSequenceNo apacheToken:self.apacheToken];
-        NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
-        NSRange range = [html rangeOfString:@"取消订单成功"];
-        BOOL success = (range.length > 0);
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if (success) {
-                [[[UIAlertView alloc] initWithTitle:@"取消成功" message:@"您已成功取消订单" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] show];
-            } else {
-                [[[UIAlertView alloc] initWithTitle:@"取消失败" message:@"无法取消订单" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] show];
-            }
-        });
-    });
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

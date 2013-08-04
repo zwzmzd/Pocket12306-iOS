@@ -12,7 +12,7 @@
 #import "GlobalDataStorage.h"
 #import "TDBOrder.h"
 #import "TDBOrderDetailViewController.h"
-#import "TDBEPayEntryViewController.h"
+#import "TDBOrderOperationViewController.h"
 #import "MBProgressHUD.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SVPullToRefresh.h"
@@ -229,9 +229,9 @@
                 [hud hide:YES afterDelay:2];
             }
             
-            // 防止刷新过速，每次刷新之后延迟5秒再启用refreshBtn
+            // 防止刷新过速，每次刷新之后延迟2秒再启用refreshBtn
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
-                sleep(5);
+                sleep(2);
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
                     self.refreshProcessEnable = YES;
                 });
@@ -342,14 +342,13 @@
         TDBOrder *order = [self.orderList objectAtIndex:index];
         detailViewController.passengerList = order.passengers;
         [detailViewController.tableView reloadData];
-    } else if ([segue.identifier isEqualToString:@"EpaySegue"]) {
-        TDBEPayEntryViewController *epayViewController = segue.destinationViewController;
+    } else if ([segue.identifier isEqualToString:@"OrderControlSegue"]) {
+        TDBOrderOperationViewController *detailViewController = segue.destinationViewController;
         
         NSUInteger index = [self.tableView indexPathForCell:sender].row;
-        TDBOrder *order = [self.orderList objectAtIndex:index];
-        epayViewController.apacheToken = self.apacheToken;
-        epayViewController.ticketKey = order.ticketKey;
-        epayViewController.orderSequenceNo = order.orderSquence_no;
+        detailViewController.apacheToken = self.apacheToken;
+        detailViewController.order = [self.orderList objectAtIndex:index];
+        detailViewController.receiver = self;
     }
 }
 
@@ -366,8 +365,14 @@
     TDBOrder *order = [self.orderList objectAtIndex:index];
     
     if (order.status == ORDER_STATUS_UNFINISHED) {
-        [self performSegueWithIdentifier:@"EpaySegue" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+        [self performSegueWithIdentifier:@"OrderControlSegue" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
     }
+}
+
+- (void)forceRefreshOrderList
+{
+    self.refreshProcessEnable = YES;
+    [self.tableView triggerPullToRefresh];
 }
 
 - (IBAction)iWantReturn:(id)sender {

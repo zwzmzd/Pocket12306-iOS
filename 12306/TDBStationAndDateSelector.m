@@ -31,7 +31,7 @@
         _departStationField.minimumFontSize = 6;
         
         _departStationField.placeholder = @"起点站";
-        _departStationField.text = @"南京";
+        _departStationField.text = @"无锡";
         [self addSubview:_departStationField];
     }
     return _departStationField;
@@ -50,7 +50,7 @@
         _arriveStationField.minimumFontSize = 6;
         
         _arriveStationField.placeholder = @"终点站";
-        _arriveStationField.text = @"无锡";
+        _arriveStationField.text = @"南京";
         [self addSubview:_arriveStationField];
     }
     return _arriveStationField;
