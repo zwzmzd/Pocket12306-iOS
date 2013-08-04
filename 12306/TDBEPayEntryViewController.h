@@ -11,6 +11,7 @@
 @interface TDBEPayEntryViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
+- (IBAction)iWantCancle:(id)sender;
 
 @property (nonatomic) NSString *apacheToken;
 @property (nonatomic) NSString *orderSequenceNo;

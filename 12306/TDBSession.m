@@ -551,6 +551,30 @@
     }
 }
 
+- (NSData *)cancleMyOrderNotComplete:(NSString *)sequenceNo apacheToken:(NSString *)apacheToken
+{
+    NSLog(@"cancleMyOrderNotComplete");
+    [self assertLoggedIn];
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
+    [argument addValue:sequenceNo forKey:@"sequence_no"];
+    [argument addValue:@"" forKey:@"orderRequest.tour_flag"];
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/orderAction.do?method=cancelMyOrderNotComplete"];
+    NSURL *url = [NSURL URLWithString:path];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:SYSURL @"/otsweb/order/myOrderAction.do?method=queryMyOrderNotComplete&leftmenu=Y" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+
+    return result;
+}
+
 - (void)assertLoggedIn
 {
     NSAssert(YES, @"Before This Operation, You must Login");

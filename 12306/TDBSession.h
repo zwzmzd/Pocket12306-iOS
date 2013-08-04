@@ -54,6 +54,8 @@ typedef enum {
                              toStationTelecode:(NSString *)toStationTelecode
                                     departDate:(NSString *)departDate;
 
+- (NSData *)cancleMyOrderNotComplete:(NSString *)sequenceNo apacheToken:(NSString *)apacheToken;
+
 - (void)restartSession;
 
 
