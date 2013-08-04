@@ -298,8 +298,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"OrderInfo";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"OrderInfoCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     UILabel *train_no = (UILabel *)[cell viewWithTag:10];
     UILabel *from = (UILabel *)[cell viewWithTag:1];
@@ -333,23 +333,9 @@
     return cell;
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
-{
-    // 似乎 MBProgressHUD 会浮动在 tableView 上，此时tableView可以滑动，但是无法接收事件
-    // 所以不用考虑用户在刷新状态下的点击异常
-    if ([identifier isEqualToString:@"EpaySegue"]) {
-        NSUInteger index = [self.tableView indexPathForCell:sender].row;
-        TDBOrder *order = [self.orderList objectAtIndex:index];
-        
-        return (order.status == ORDER_STATUS_UNFINISHED);
-    }
-    
-    return YES;
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"PassengerDetailSegue"]) {
+    if ([segue.identifier isEqualToString:@"OrderDetailSegue"]) {
         TDBOrderDetailViewController *detailViewController = segue.destinationViewController;
         
         NSUInteger index = [self.tableView indexPathForCell:sender].row;
@@ -369,15 +355,19 @@
 
 #pragma mark - Table view delegate
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"OrderDetailSegue" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    NSUInteger index = indexPath.row;
+    TDBOrder *order = [self.orderList objectAtIndex:index];
+    
+    if (order.status == ORDER_STATUS_UNFINISHED) {
+        [self performSegueWithIdentifier:@"EpaySegue" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+    }
 }
 
 - (IBAction)iWantReturn:(id)sender {

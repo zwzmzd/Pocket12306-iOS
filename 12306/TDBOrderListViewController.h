@@ -16,6 +16,5 @@ typedef enum {
 @interface TDBOrderListViewController : UITableViewController
 
 - (IBAction)iWantReturn:(id)sender;
-- (IBAction)iWantRefresh:(id)sender;
 
 @end

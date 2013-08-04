@@ -143,6 +143,7 @@
     
     CGSize size = self.view.bounds.size;
     self.selectorView.frame = CGRectMake(0, 0, size.width, size.height);
+    [self.selectorView setNeedsLayout];
 }
 
 - (void)resizeMainViewAfterADelay

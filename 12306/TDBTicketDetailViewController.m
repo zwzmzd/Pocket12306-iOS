@@ -25,9 +25,9 @@
 @property (nonatomic, copy) NSString *html;
 @property (nonatomic, copy) NSString *leftTicketID;
 @property (nonatomic, copy) NSString *apacheToken;
-@property (nonatomic) NSArray *ticketList;
-@property (nonatomic) NSArray *seatTypeList;
-@property (nonatomic) NSArray *ticketTypeList;
+@property (nonatomic) NSArray *ticketList; // 余票和票价
+@property (nonatomic) NSArray *seatTypeList; // 一等座、二等、硬座等等
+@property (nonatomic) NSArray *ticketTypeList; // 成人，学生，残军
 
 @property (nonatomic, readonly) NSString *departDate;
 @property (nonatomic, readonly) NSString *weekday;
@@ -330,8 +330,9 @@
         return;
     }
     
+    NSString *seatType = [[self.seatTypeList objectAtIndex:self.seatTypeSelector.selectedSegmentIndex] objectAtIndex:1];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确认日期和车次"
-                                                    message:[NSString stringWithFormat:@"%@ %@\n%@次列车", self.departDate, self.weekday, [self.train getTrainNo]]
+                                                    message:[NSString stringWithFormat:@"%@ %@\n%@次列车 %@", self.departDate, self.weekday, [self.train getTrainNo], seatType]
                                                    delegate:self
                                           cancelButtonTitle:@"取消"
                                           otherButtonTitles:@"确认", nil];
