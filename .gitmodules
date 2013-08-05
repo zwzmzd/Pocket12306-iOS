@@ -4,3 +4,6 @@
 [submodule "vendor/SVPullToRefresh"]
 	path = vendor/SVPullToRefresh
 	url = git@github.com:samvermette/SVPullToRefresh.git
+[submodule "vendor/ViewDeck"]
+	path = vendor/ViewDeck
+	url = git@github.com:Inferis/ViewDeck.git
