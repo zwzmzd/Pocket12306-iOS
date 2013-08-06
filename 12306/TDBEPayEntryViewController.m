@@ -37,7 +37,12 @@
 {
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
     NSArray *elements = [xpathParser searchWithXPathQuery:@"//form[@id='epayForm']"];
-    return [[elements objectAtIndex:0] raw];
+    
+    if (elements.count == 0) {
+        return @"";
+    } else {
+        return [[elements objectAtIndex:0] raw];
+    }
 }
 
 - (void)retriveEssentialInfoUsingGCD
@@ -60,6 +65,8 @@
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self.webView loadHTMLString:htmlCode baseURL:nil];
             });
+        } else {
+#warning 订单支付时发现超时或已被取消的提示
         }
     });
 }
