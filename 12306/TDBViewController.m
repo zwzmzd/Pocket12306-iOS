@@ -70,13 +70,6 @@
     
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
     [manager addNotificationHandler:self];
-    
-    // 用于后台唤醒程序时键盘遮挡处理
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(resizeMainViewAfterADelay)
-                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    [self resizeMainView];
 }
 
 
@@ -86,8 +79,6 @@
     
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
     [manager removeNotificationHandler:self];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -140,40 +131,19 @@
      但键盘的开启会遮挡部分试图，输入控件可能会位于键盘下方，所以要在别的地方侦听
      键盘开启关闭消息，并设置正确的self.view.frame
      **/
-    
-    CGSize size = self.view.bounds.size;
-    self.selectorView.frame = CGRectMake(0, 0, size.width, size.height);
-    [self.selectorView setNeedsLayout];
+
+    // 这里更改了控制，现在是保证主界面的size不变，子界面根据主界面size和当前keyboard高度计算出自己的size
+    [self resizeSubMainView];
 }
 
-- (void)resizeMainViewAfterADelay
+- (void)resizeSubMainView
 {
-    // 主要用于从后台唤醒时的键盘遮挡处理
-    // 只能这么办了，此时接收不到键盘的通知。系统在发出UIApplicationDidBecomeActiveNotification后，
-    // 还会将self.view设置成不含键盘的高度，所以延迟一段时间后作调整
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        sleep(0.5);
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self resizeMainView];
-        });
-    });
-}
-- (void)resizeMainView
-{
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    BOOL isLandscape = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
+//    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+//    BOOL isLandscape = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
     
-    if (isLandscape) {
-        CGSize size = [[UIScreen mainScreen] bounds].size;
-        self.view.frame = CGRectMake(0,0, size.height ,
-                                     size.width - self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
-    } else {
-        CGSize size = [[UIScreen mainScreen] bounds].size;
-        self.view.frame = CGRectMake(0,0, size.width , size.height - self.navigationController.navigationBar.frame.size.height - 20 - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
-        
-        size = self.view.bounds.size;
-    }
+    CGSize size = self.view.frame.size;
+    self.selectorView.frame = CGRectMake(0,0, size.width ,
+                                 size.height - [TDBKeybordNotificationManager getSharedManager].keyboardHeight);
 }
 
 - (IBAction)cancleLogin:(UIStoryboard *)segue
@@ -204,7 +174,7 @@
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:timeInterval];
     
-    [self resizeMainView];
+    [self resizeSubMainView];
     
     [UIView commitAnimations];
 }
