@@ -70,6 +70,12 @@
     
     TDBKeybordNotificationManager *manager = [TDBKeybordNotificationManager getSharedManager];
     [manager addNotificationHandler:self];
+    
+    // 下面是专门为iOS 6+准备的，是系统一个奇怪的特性
+    // 在键盘的中文输入状态下，键盘上方有个中文输入的框，如果此时push（或者present）一个页面，再返回时
+    // 这个中文框就会消失，键盘变动的消息会在viewDidAppear之前发生，只能在这里多计算一次
+    
+    [self resizeSubMainView];
 }
 
 

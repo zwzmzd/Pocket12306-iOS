@@ -367,7 +367,6 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-#warning You should set alert's delegate properly
     switch (alertView.tag) {
         case SUBMUTORDER_MSG_UNFINISHORDER_DETECTED: {
             [self.navigationController popViewControllerAnimated:YES];
