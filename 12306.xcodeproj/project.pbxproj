@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */; };
 		FA320A2517966A0800F2E282 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA320A2417966A0800F2E282 /* UIKit.framework */; };
 		FA320A2717966A0800F2E282 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA320A2617966A0800F2E282 /* Foundation.framework */; };
 		FA320A2917966A0800F2E282 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA320A2817966A0800F2E282 /* CoreGraphics.framework */; };
@@ -51,6 +52,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA0311A317B3704C0024FB55 /* MTStatusBarOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStatusBarOverlay.h; path = vendor/MTStatusBarOverlay/MTStatusBarOverlay.h; sourceTree = SOURCE_ROOT; };
+		FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTStatusBarOverlay.m; path = vendor/MTStatusBarOverlay/MTStatusBarOverlay.m; sourceTree = SOURCE_ROOT; };
 		FA320A2117966A0800F2E282 /* 12306.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 12306.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA320A2417966A0800F2E282 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FA320A2617966A0800F2E282 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -145,6 +148,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA0311A617B370530024FB55 /* MTStatusBarOverlay */ = {
+			isa = PBXGroup;
+			children = (
+				FA0311A317B3704C0024FB55 /* MTStatusBarOverlay.h */,
+				FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */,
+			);
+			name = MTStatusBarOverlay;
+			sourceTree = "<group>";
+		};
 		FA320A1817966A0800F2E282 = {
 			isa = PBXGroup;
 			children = (
@@ -300,6 +312,7 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				FA0311A617B370530024FB55 /* MTStatusBarOverlay */,
 				FA683F1717AB7921003D32FB /* SVPullToRefresh */,
 				FA4C1CE617AA6264003AB59A /* ORDRefreshControl */,
 				FAFC0A3717A966E300CD273E /* MBProgressHUD */,
@@ -441,6 +454,7 @@
 				FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */,
 				FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */,
+				FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

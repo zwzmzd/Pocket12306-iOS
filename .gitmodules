@@ -4,3 +4,6 @@
 [submodule "vendor/ViewDeck"]
 	path = vendor/ViewDeck
 	url = git@github.com:Inferis/ViewDeck.git
+[submodule "vendor/MTStatusBarOverlay"]
+	path = vendor/MTStatusBarOverlay
+	url = git@github.com:myell0w/MTStatusBarOverlay.git
