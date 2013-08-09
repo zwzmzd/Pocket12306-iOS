@@ -12,7 +12,7 @@
 #import "GlobalDataStorage.h"
 #import "TDBSession.h"
 #import "TDBTicketDetailViewController.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "TDBLeftTicketForList.h"
 
 @interface TDBListViewController ()
@@ -55,7 +55,7 @@
 
 - (void)retriveTrainInfoListUsingGCD
 {
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
     dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 traininfo", NULL);
     dispatch_async(downloadVerifyCode, ^(void) {
         
@@ -73,21 +73,13 @@
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             self.dataController = controller;
             [self.tableView reloadData];
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
             
             if ( dataIsError) { // 未正确获取数据
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.mode = MBProgressHUDModeText;
-                hud.labelText = @"获取车次信息失败，请重试";
-                hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:2];
-                
+                [SVProgressHUD showErrorWithStatus:@"获取车次信息失败，请重试"];
             } else if ([self.dataController count] == 0) { // 获取的数据长度为0
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.mode = MBProgressHUDModeText;
-                hud.labelText = @"没有符合条件的列车了";
-                hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:2];
+                [SVProgressHUD showErrorWithStatus:@"没有符合条件的列车了"];
+            } else {
+                [SVProgressHUD dismiss];
             }
         });
     });

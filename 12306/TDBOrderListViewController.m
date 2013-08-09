@@ -13,7 +13,7 @@
 #import "TDBOrder.h"
 #import "TDBOrderDetailViewController.h"
 #import "TDBOrderOperationViewController.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SVPullToRefresh.h"
 
@@ -193,7 +193,7 @@
 
 - (void)retriveEssentialInfoUsingGCD
 {
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
     // 这个属性就用来判断是否正在拉取
     self.refreshProcessEnable = NO;
     
@@ -219,14 +219,9 @@
             if (result == ORDER_PARSER_MSG_SUCCESS) {
                 self.orderList = tempList;
                 [self.tableView reloadData];
-                
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [SVProgressHUD dismiss];
             } else {
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.mode = MBProgressHUDModeText;
-                hud.labelText = @"获取列表信息失败，请重试";
-                hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:2];
+                [SVProgressHUD showErrorWithStatus:@"获取列表信息失败，请重试"];
             }
             
             // 防止刷新过速，每次刷新之后延迟2秒再启用refreshBtn
