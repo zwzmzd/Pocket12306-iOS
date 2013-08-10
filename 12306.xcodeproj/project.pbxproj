@@ -40,6 +40,9 @@
 		FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
+		FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */; };
+		FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */; };
+		FAE1272117B60D2E00BAD9C4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE1272017B60D2E00BAD9C4 /* Security.framework */; };
 		FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */; };
 		FAED1B331798CF92003DA90E /* PassengerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B321798CF92003DA90E /* PassengerInfo.m */; };
 		FAED1B43179A4977003DA90E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FAED1B42179A4977003DA90E /* libxml2.dylib */; };
@@ -114,6 +117,11 @@
 		FAB56A23179C27D8006A05BF /* TDBStationName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationName.m; sourceTree = "<group>"; };
 		FABA969E17A193F80018B20A /* TDBDatepickSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDatepickSheet.h; sourceTree = "<group>"; };
 		FABA969F17A193F80018B20A /* TDBDatepickSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBDatepickSheet.m; sourceTree = "<group>"; };
+		FAE1271A17B60CBE00BAD9C4 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendor/SSKeychain/SSKeychain/SSKeychain.h; sourceTree = SOURCE_ROOT; };
+		FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendor/SSKeychain/SSKeychain/SSKeychain.m; sourceTree = SOURCE_ROOT; };
+		FAE1271C17B60CBE00BAD9C4 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.h; sourceTree = SOURCE_ROOT; };
+		FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychainQuery.m; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.m; sourceTree = SOURCE_ROOT; };
+		FAE1272017B60D2E00BAD9C4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		FAE88A2717AE5FAF00D632F2 /* TDBOrderOperationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBOrderOperationViewController.h; sourceTree = "<group>"; };
 		FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBOrderOperationViewController.m; sourceTree = "<group>"; };
 		FAED1B311798CF92003DA90E /* PassengerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassengerInfo.h; sourceTree = "<group>"; };
@@ -140,6 +148,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAE1272117B60D2E00BAD9C4 /* Security.framework in Frameworks */,
 				FA3BAC9917A4B7C200D535BC /* QuartzCore.framework in Frameworks */,
 				FAED1B43179A4977003DA90E /* libxml2.dylib in Frameworks */,
 				FA320A2517966A0800F2E282 /* UIKit.framework in Frameworks */,
@@ -181,6 +190,7 @@
 		FA320A1817966A0800F2E282 = {
 			isa = PBXGroup;
 			children = (
+				FAE1272017B60D2E00BAD9C4 /* Security.framework */,
 				FA320A2A17966A0800F2E282 /* 12306 */,
 				FA320A2317966A0800F2E282 /* Frameworks */,
 				FA320A2217966A0800F2E282 /* Products */,
@@ -269,6 +279,17 @@
 			path = vendor/SVPullToRefresh/SVPullToRefresh;
 			sourceTree = SOURCE_ROOT;
 		};
+		FAE1271317B60C7A00BAD9C4 /* SSKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				FAE1271A17B60CBE00BAD9C4 /* SSKeychain.h */,
+				FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */,
+				FAE1271C17B60CBE00BAD9C4 /* SSKeychainQuery.h */,
+				FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */,
+			);
+			name = SSKeychain;
+			sourceTree = "<group>";
+		};
 		FAED1B44179A4CCA003DA90E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +354,7 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				FAE1271317B60C7A00BAD9C4 /* SSKeychain */,
 				FA26F41117B4D0F900DAB404 /* SVProgressHUD */,
 				FA26F40A17B4C4BC00DAB404 /* MBProgressHUD */,
 				FA0311A617B370530024FB55 /* MTStatusBarOverlay */,
@@ -468,6 +490,8 @@
 				FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */,
 				FA26F40917B4C4B500DAB404 /* MBProgressHUD.m in Sources */,
 				FA26F41017B4D0F000DAB404 /* SVProgressHUD.m in Sources */,
+				FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */,
+				FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

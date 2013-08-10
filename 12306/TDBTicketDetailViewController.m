@@ -14,7 +14,7 @@
 #import "MBProgressHUD.h"
 #import "TFHpple.h"
 #import "TDBSeatDetailViewController.h"
-#import "KGStatusBar.h"
+#import "MTStatusBarOverlay.h"
 
 #define CONFIRM_DATA_AV 0xf00001
 
@@ -104,67 +104,73 @@
         return SUBMUTORDER_MSG_UNFINISHORDER_DETECTED;
     }
     
-    
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
-    
-    self.leftTicketID = [self parseLeftTicketID:xpathParser];
-    self.apacheToken = [self parseApacheToken:xpathParser];
-    
-    NSLog(@"leftTicketID = %@ ; apacheToken = %@", self.leftTicketID, self.apacheToken);
-    
-    /* 获取余票和票价 */
-    {
-        NSArray *elements = [xpathParser searchWithXPathQuery:@"//form[@id='confirmPassenger']/table"];
-        NSMutableArray *array = [[NSMutableArray alloc] init];
-    
-        elements = [[[[elements objectAtIndex:0] children] objectAtIndex:6] children];
-    
-        for (TFHppleElement *element in elements) {
-            NSString *ticket = [element.firstChild content];
-            if (ticket)
-                [array addObject:ticket];
-        }
-        self.ticketList = [[NSArray alloc] initWithArray:array];
-    }
-    
-    /* 获取可用的座位类型，比如硬座、硬卧 */
-    {
-        NSArray *elements = [xpathParser searchWithXPathQuery:@"//select[@name='passenger_1_seat']/option"];
-        NSMutableArray *array = [[NSMutableArray alloc] init];
+    @try {
+        TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
         
-        for (TFHppleElement *element in elements) {
-            NSArray *e = [[NSArray alloc] initWithObjects:
-                          [element.attributes objectForKey:@"value"],
-                          [element.firstChild content],
-                          nil];
-            if (e)
-                [array addObject:e];
-        }
-        self.seatTypeList = [[NSArray alloc] initWithArray:array];
-    }
-    if (self.seatTypeList.count == 0)
-        return SUBMUTORDER_MSG_ERR;
-    
-    {
-        NSArray *elements = [xpathParser searchWithXPathQuery:@"//select[@name='passenger_1_ticket']/option"];
-        NSMutableArray *array = [[NSMutableArray alloc] init];
+        self.leftTicketID = [self parseLeftTicketID:xpathParser];
+        self.apacheToken = [self parseApacheToken:xpathParser];
         
-        for (TFHppleElement *element in elements) {
-            NSArray *e = @[[element.attributes objectForKey:@"value"],[element.firstChild content]];
-            NSString *title = [element.firstChild content];
-            if ([title hasPrefix:@"儿童"]) {
-                // 儿童票由于不能单独购买，所以先省略
-            } else {
-                [array addObject:e];
+        NSLog(@"leftTicketID = %@ ; apacheToken = %@", self.leftTicketID, self.apacheToken);
+        
+        /* 获取余票和票价 */
+        {
+            NSArray *elements = [xpathParser searchWithXPathQuery:@"//form[@id='confirmPassenger']/table"];
+            NSMutableArray *array = [[NSMutableArray alloc] init];
+            
+            elements = [[[[elements objectAtIndex:0] children] objectAtIndex:6] children];
+            
+            for (TFHppleElement *element in elements) {
+                NSString *ticket = [element.firstChild content];
+                if (ticket)
+                    [array addObject:ticket];
             }
+            self.ticketList = [[NSArray alloc] initWithArray:array];
         }
-        self.ticketTypeList = [[NSArray alloc] initWithArray:array];
+        
+        /* 获取可用的座位类型，比如硬座、硬卧 */
+        {
+            NSArray *elements = [xpathParser searchWithXPathQuery:@"//select[@name='passenger_1_seat']/option"];
+            NSMutableArray *array = [[NSMutableArray alloc] init];
+            
+            for (TFHppleElement *element in elements) {
+                NSArray *e = [[NSArray alloc] initWithObjects:
+                              [element.attributes objectForKey:@"value"],
+                              [element.firstChild content],
+                              nil];
+                if (e)
+                    [array addObject:e];
+            }
+            self.seatTypeList = [[NSArray alloc] initWithArray:array];
+        }
+        if (self.seatTypeList.count == 0)
+            return SUBMUTORDER_MSG_ERR;
+        
+        {
+            NSArray *elements = [xpathParser searchWithXPathQuery:@"//select[@name='passenger_1_ticket']/option"];
+            NSMutableArray *array = [[NSMutableArray alloc] init];
+            
+            for (TFHppleElement *element in elements) {
+                NSArray *e = @[[element.attributes objectForKey:@"value"],[element.firstChild content]];
+                NSString *title = [element.firstChild content];
+                if ([title hasPrefix:@"儿童"]) {
+                    // 儿童票由于不能单独购买，所以先省略
+                } else {
+                    [array addObject:e];
+                }
+            }
+            self.ticketTypeList = [[NSArray alloc] initWithArray:array];
+        }
+        
+        if (self.ticketTypeList.count == 0)
+            return SUBMUTORDER_MSG_ERR;
+        
+        return SUBMUTORDER_MSG_SUCCESS;
     }
-    
-    if (self.ticketTypeList.count == 0)
-        return SUBMUTORDER_MSG_ERR;
-    
-    return SUBMUTORDER_MSG_SUCCESS;
+    @catch (NSException *exception) {
+        // 主要用于识别登录超时的情况
+        NSLog(@"%@", exception);
+        return SUBMUTORDER_MSG_ACCESS_FAILED;
+    }
 }
 
 - (void)retriveEssentialInfoUsingGCD
@@ -209,6 +215,12 @@
                 [alert show];
             } else if (result == SUBMUTORDER_MSG_EXPIRED) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"该车次已停止办理互联网售票业务" delegate:self
+                                                      cancelButtonTitle:@"好的" otherButtonTitles: nil];
+                alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
+                [alert show];
+            } else if (result == SUBMUTORDER_MSG_ACCESS_FAILED) {
+                // 主要用于提示登录超时出现的问题
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"登录超时" message:@"请重新登录" delegate:self
                                                       cancelButtonTitle:@"好的" otherButtonTitles: nil];
                 alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
                 [alert show];
@@ -300,20 +312,22 @@
 
 - (BOOL)checkTextField
 {
+    MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
+    overlay.hidesActivity = YES;
     if (self.name.text.length == 0) {
-        [KGStatusBar showErrorWithStatus:@"请正确填写您的姓名"];
+        [overlay postMessage:@"请填写您的姓名" duration:2.f];
         return NO;
     }
     if (self.idCardNo.text.length == 0) {
-        [KGStatusBar showErrorWithStatus:@"请正确填写您的身份证号码"];
+        [overlay postErrorMessage:@"请正确填写您的身份证号码" duration:2.f];
         return NO;
     }
     if (![self ValidateIDCardNo:self.idCardNo.text]) {
-        [KGStatusBar showErrorWithStatus:@"身份证号码有误,请检查"];
+        [overlay postErrorMessage:@"身份证号码有误,请检查" duration:2.f];
         return NO;
     }
     if (self.verifyCode.text.length == 0) {
-        [KGStatusBar showErrorWithStatus:@"请填写验证码"];
+        [overlay postErrorMessage:@"请填写验证码" duration:2.f];
         return NO;
     }
     
@@ -397,7 +411,10 @@
             [spinner startAnimating];
             UIBarButtonItem *submitBtn = self.navigationItem.rightBarButtonItem;
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
-            [KGStatusBar showWithStatus:@"正在提交请求"];
+            
+            MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
+            overlay.hidesActivity = NO;
+            [overlay postMessage:@"正在提交请求"];
             
             __block BOOL haveError = NO;
             dispatch_queue_t orderQueue = dispatch_queue_create("12306 orderTicket", DISPATCH_QUEUE_SERIAL);
@@ -409,14 +426,14 @@
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         self.progressView.progress = 0.33;
-                        [KGStatusBar showWithStatus:@"订单信息验证成功"];
+                        [overlay postMessage:@"订单信息验证成功" duration:2.f];
                     });
                     
                 } else {
                     haveError = YES;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         self.progressView.progress = 0.33;
-                        [KGStatusBar showErrorWithStatus:@"验证码错误，请点击图片后重新输入"];
+                        [overlay postErrorMessage:@"验证码错误，请点击图片后重新输入" duration:2.f];
                         self.navigationItem.rightBarButtonItem = submitBtn;
                     });
                 }
@@ -431,7 +448,7 @@
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
                             self.progressView.progress = 0.66;
-                            [KGStatusBar showWithStatus:@"余票信息确认完毕"];
+                            [overlay postMessage:@"余票信息确认完毕" duration:2.f];
                         });
                     } else {
                         haveError = YES;
@@ -449,7 +466,7 @@
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
                             self.progressView.progress = 1;
-                            [KGStatusBar showSuccessWithStatus:@"订票信息已经确认，请继续完成支付"];
+                            [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:2.f animated:YES];
                             self.navigationItem.rightBarButtonItem = nil;
                         });
                     }
