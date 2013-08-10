@@ -319,8 +319,6 @@
 				FAED1B4A179ACD57003DA90E /* TDBSeatDetailViewController.m */,
 				FAE1272417B655DC00BAD9C4 /* TDBTrainTimetableViewController.h */,
 				FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */,
-				FAE1272717B6560900BAD9C4 /* TDBTrainTimetableCell.h */,
-				FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */,
 			);
 			name = BuyTicket;
 			sourceTree = "<group>";
@@ -370,6 +368,8 @@
 				FAF32E15179F6FE3006C2CC9 /* TDBStationAndDateSelector.m */,
 				FABA969E17A193F80018B20A /* TDBDatepickSheet.h */,
 				FABA969F17A193F80018B20A /* TDBDatepickSheet.m */,
+				FAE1272717B6560900BAD9C4 /* TDBTrainTimetableCell.h */,
+				FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
