@@ -49,7 +49,6 @@
 		FAED1B4B179ACD57003DA90E /* TDBSeatDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B4A179ACD57003DA90E /* TDBSeatDetailViewController.m */; };
 		FAF32E16179F6FE3006C2CC9 /* TDBStationAndDateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF32E15179F6FE3006C2CC9 /* TDBStationAndDateSelector.m */; };
 		FAF32E1D179FA361006C2CC9 /* TDBKeybordNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF32E1C179FA361006C2CC9 /* TDBKeybordNotificationManager.m */; };
-		FAFC0A2C17A964FA00CD273E /* KGStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFC0A2B17A964FA00CD273E /* KGStatusBar.m */; };
 		FAFC0A3417A9667400CD273E /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFC0A2F17A9667400CD273E /* TFHpple.m */; };
 		FAFC0A3517A9667400CD273E /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFC0A3117A9667400CD273E /* TFHppleElement.m */; };
 		FAFC0A3617A9667400CD273E /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFC0A3317A9667400CD273E /* XPathQuery.m */; };
@@ -133,8 +132,6 @@
 		FAF32E15179F6FE3006C2CC9 /* TDBStationAndDateSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationAndDateSelector.m; sourceTree = "<group>"; };
 		FAF32E1B179FA360006C2CC9 /* TDBKeybordNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBKeybordNotificationManager.h; sourceTree = "<group>"; };
 		FAF32E1C179FA361006C2CC9 /* TDBKeybordNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBKeybordNotificationManager.m; sourceTree = "<group>"; };
-		FAFC0A2A17A964FA00CD273E /* KGStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KGStatusBar.h; sourceTree = "<group>"; };
-		FAFC0A2B17A964FA00CD273E /* KGStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KGStatusBar.m; sourceTree = "<group>"; };
 		FAFC0A2E17A9667400CD273E /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
 		FAFC0A2F17A9667400CD273E /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
 		FAFC0A3017A9667400CD273E /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
@@ -361,20 +358,9 @@
 				FA683F1717AB7921003D32FB /* SVPullToRefresh */,
 				FA4C1CE617AA6264003AB59A /* ORDRefreshControl */,
 				FAFC0A2D17A9667400CD273E /* Hpple */,
-				FAFC0A2917A964FA00CD273E /* KGStatusBar */,
 			);
 			name = Vendor;
 			sourceTree = "<group>";
-		};
-		FAFC0A2917A964FA00CD273E /* KGStatusBar */ = {
-			isa = PBXGroup;
-			children = (
-				FAFC0A2A17A964FA00CD273E /* KGStatusBar.h */,
-				FAFC0A2B17A964FA00CD273E /* KGStatusBar.m */,
-			);
-			name = KGStatusBar;
-			path = vendor/KGStatusBar;
-			sourceTree = SOURCE_ROOT;
 		};
 		FAFC0A2D17A9667400CD273E /* Hpple */ = {
 			isa = PBXGroup;
@@ -480,7 +466,6 @@
 				FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */,
 				FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */,
 				FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */,
-				FAFC0A2C17A964FA00CD273E /* KGStatusBar.m in Sources */,
 				FAFC0A3417A9667400CD273E /* TFHpple.m in Sources */,
 				FAFC0A3517A9667400CD273E /* TFHppleElement.m in Sources */,
 				FAFC0A3617A9667400CD273E /* XPathQuery.m in Sources */,

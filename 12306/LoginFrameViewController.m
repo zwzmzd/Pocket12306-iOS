@@ -10,6 +10,13 @@
 #import "TDBSession.h"
 #import "GlobalDataStorage.h"
 #import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
+#import "SSKeychain.h"
+
+#define KEYCHAIN_SERVICE (@"12306_account")
+#define KEYCHAIN_USERNAME_KEY (@"12306_account_username")
+#define KEYCHAIN_PASSWORD_KEY (@"12306_account_password")
+#define REMEMEBR_PROFILE_STATE_STOREAGE_KEY (@"rememberProfile_state")
 
 @interface LoginFrameViewController ()
 
@@ -24,7 +31,6 @@
     if (_tdbss == nil){
         _tdbss = [[TDBSession alloc] init];
     }
-    
     return _tdbss;
 }
 
@@ -46,17 +52,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 verify", NULL);
-    dispatch_async(downloadVerifyCode, ^(void) {
-        NSData *imageRawData = [self.tdbss getVerifyImage];
-        NSData *parsedData = imageRawData;
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            UIImage *image = [UIImage imageWithData:parsedData];
-            self.verifyImage.image = image;
-        });
-    });
-
+    
+    [self retriveVerifyImageUsingGCD];
+    self.username.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
+    self.password.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    BOOL isOn = [ud boolForKey:REMEMEBR_PROFILE_STATE_STOREAGE_KEY];
+    [self.rememberProfile setOn:isOn];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -88,6 +91,12 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (result == LOGIN_MSG_SUCCESS) {
                     GlobalDataStorage.tdbss = self.tdbss;
+                    
+                    if (self.rememberProfile.isOn) {
+                        [SSKeychain setPassword:username forService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
+                        [SSKeychain setPassword:password forService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
+                    }
+                    
                     [self dismissViewControllerAnimated:YES completion:NULL];
                 } else {
                     float latency;
@@ -121,9 +130,21 @@
     }
 }
 
-- (IBAction)iWantToRetriveVerifyCode:(id)sender {
-    dispatch_queue_t downloadVerifyCode = dispatch_queue_create("12306 verify", NULL);
-    dispatch_async(downloadVerifyCode, ^(void) {
+- (IBAction)switcherClicked:(id)sender {
+    BOOL isOn = [sender isOn];
+    if (isOn == NO) {
+        [SSKeychain deletePasswordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
+        [SSKeychain deletePasswordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
+        [SVProgressHUD showSuccessWithStatus:@"保存的用户名密码已被清除"];
+    }
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setBool:isOn forKey:REMEMEBR_PROFILE_STATE_STOREAGE_KEY];
+}
+
+- (void)retriveVerifyImageUsingGCD
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSData *imageRawData = [self.tdbss getVerifyImage];
         NSData *parsedData = imageRawData;
         
@@ -133,12 +154,19 @@
             self.verifyCode.text = @"";
         });
     });
+}
 
+- (IBAction)iWantToRetriveVerifyCode:(id)sender {
+    [self retriveVerifyImageUsingGCD];
 }
 
 - (IBAction)iWantResetSession:(id)sender {
     //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.tdbss = [[TDBSession alloc] init];
     [self iWantToRetriveVerifyCode:sender];
+}
+- (void)viewDidUnload {
+    [self setRememberProfile:nil];
+    [super viewDidUnload];
 }
 @end

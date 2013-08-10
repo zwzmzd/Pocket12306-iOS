@@ -15,11 +15,11 @@
 @property (weak, nonatomic) IBOutlet UIImageView *verifyImage;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *retriveVerifyCodeButton;
+@property (weak, nonatomic) IBOutlet UISwitch *rememberProfile;
 
 - (IBAction)iWantCancle:(id)sender;
-
 - (IBAction)iWantLogin:(id)sender;
-
+- (IBAction)switcherClicked:(id)sender;
 - (IBAction)iWantToRetriveVerifyCode:(id)sender;
 - (IBAction)iWantResetSession:(id)sender;
 
