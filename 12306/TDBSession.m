@@ -521,7 +521,7 @@
     return result;
 }
 
-- (NSDictionary *)queryaTrainStopTimeByTrainNo:(NSString *)trainNo fromStationTelecode:(NSString *)fromStationTelecode toStationTelecode:(NSString *)toStationTelecode departDate:(NSString *)departDate
+- (NSArray *)queryaTrainStopTimeByTrainNo:(NSString *)trainNo fromStationTelecode:(NSString *)fromStationTelecode toStationTelecode:(NSString *)toStationTelecode departDate:(NSString *)departDate
 {
     NSLog(@"queryaTrainStopTimeByTrainNo");
     [self assertLoggedIn];
@@ -542,7 +542,7 @@
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
     NSError *jsonErr = nil;
-    NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:result options:0 error:&jsonErr];
+    NSArray *dict = (NSArray *)[NSJSONSerialization JSONObjectWithData:result options:0 error:&jsonErr];
     
     if (jsonErr) {
         return nil;

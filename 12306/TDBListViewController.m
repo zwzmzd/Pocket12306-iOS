@@ -14,9 +14,11 @@
 #import "TDBTicketDetailViewController.h"
 #import "SVProgressHUD.h"
 #import "TDBLeftTicketForList.h"
+#import "TDBTrainTimetableViewController.h"
 
 @interface TDBListViewController ()
 
+@property (nonatomic) TDBTrainInfoController *dataController;
 @property (nonatomic, readonly) NSString *dateInString;
 
 @end
@@ -105,7 +107,7 @@
     static NSString *CellIdentifier = @"TrainInfo";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    UILabel *train_no = (UILabel *)[cell viewWithTag:10];
+    UIButton *train_no = (UIButton *)[cell viewWithTag:10];
     UILabel *from = (UILabel *)[cell viewWithTag:1];
     UILabel *to = (UILabel *)[cell viewWithTag:2];
     UILabel *time_from = (UILabel *)[cell viewWithTag:3];
@@ -116,7 +118,7 @@
     
     TDBTrainInfo *train = [self.dataController getTrainInfoForIndex:indexPath.row];
     
-    train_no.text = [train getTrainNo];
+    [train_no setTitle:[train getTrainNo] forState:UIControlStateNormal];
     from.text = [train getDapartStationName];;
     to.text = [train getArriveStationName];
     time_from.text = [train getDepartTime];
@@ -137,6 +139,12 @@
         TDBTicketDetailViewController *detail = [segue destinationViewController];
         detail.train = [self.dataController getTrainInfoForIndex:[self.tableView indexPathForCell:sender].row];
         detail.orderDate = self.orderDate;
+    } else if ([segue.identifier isEqualToString:@"TrainTimetableSegue"]) {
+        UITableViewCell *clickedCell = (UITableViewCell *)[[sender superview] superview];
+        NSIndexPath *clickedButtonPath = [self.tableView indexPathForCell:clickedCell];
+        TDBTrainTimetableViewController *detailVC = [segue destinationViewController];
+        detailVC.train = [self.dataController getTrainInfoForIndex:clickedButtonPath.row];
+        detailVC.departDate = self.dateInString;
     }
 }
 

@@ -43,6 +43,8 @@
 		FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */; };
 		FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */; };
 		FAE1272117B60D2E00BAD9C4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE1272017B60D2E00BAD9C4 /* Security.framework */; };
+		FAE1272617B655DC00BAD9C4 /* TDBTrainTimetableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */; };
+		FAE1272917B6560900BAD9C4 /* TDBTrainTimetableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */; };
 		FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */; };
 		FAED1B331798CF92003DA90E /* PassengerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B321798CF92003DA90E /* PassengerInfo.m */; };
 		FAED1B43179A4977003DA90E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FAED1B42179A4977003DA90E /* libxml2.dylib */; };
@@ -121,6 +123,10 @@
 		FAE1271C17B60CBE00BAD9C4 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.h; sourceTree = SOURCE_ROOT; };
 		FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychainQuery.m; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.m; sourceTree = SOURCE_ROOT; };
 		FAE1272017B60D2E00BAD9C4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		FAE1272417B655DC00BAD9C4 /* TDBTrainTimetableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBTrainTimetableViewController.h; sourceTree = "<group>"; };
+		FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBTrainTimetableViewController.m; sourceTree = "<group>"; };
+		FAE1272717B6560900BAD9C4 /* TDBTrainTimetableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBTrainTimetableCell.h; sourceTree = "<group>"; };
+		FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBTrainTimetableCell.m; sourceTree = "<group>"; };
 		FAE88A2717AE5FAF00D632F2 /* TDBOrderOperationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBOrderOperationViewController.h; sourceTree = "<group>"; };
 		FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBOrderOperationViewController.m; sourceTree = "<group>"; };
 		FAED1B311798CF92003DA90E /* PassengerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassengerInfo.h; sourceTree = "<group>"; };
@@ -287,25 +293,45 @@
 			name = SSKeychain;
 			sourceTree = "<group>";
 		};
-		FAED1B44179A4CCA003DA90E /* ViewController */ = {
+		FAE1272217B654A000BAD9C4 /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				FA3BACA617A54FEE00D535BC /* TDBEPayEntryViewController.h */,
-				FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */,
-				FAE88A2717AE5FAF00D632F2 /* TDBOrderOperationViewController.h */,
-				FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */,
 				FA3BACA317A5124200D535BC /* TDBOrderDetailViewController.h */,
 				FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */,
 				FA3BAC9A17A4BC9300D535BC /* TDBOrderListViewController.h */,
 				FA3BAC9B17A4BC9300D535BC /* TDBOrderListViewController.m */,
-				FAED1B49179ACD57003DA90E /* TDBSeatDetailViewController.h */,
-				FAED1B4A179ACD57003DA90E /* TDBSeatDetailViewController.m */,
+				FA3BACA617A54FEE00D535BC /* TDBEPayEntryViewController.h */,
+				FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */,
+				FAE88A2717AE5FAF00D632F2 /* TDBOrderOperationViewController.h */,
+				FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */,
+			);
+			name = Order;
+			sourceTree = "<group>";
+		};
+		FAE1272317B654C600BAD9C4 /* BuyTicket */ = {
+			isa = PBXGroup;
+			children = (
 				FA320A531797991C00F2E282 /* TDBListViewController.h */,
 				FA320A541797991C00F2E282 /* TDBListViewController.m */,
-				FA320A3F17966A0800F2E282 /* TDBViewController.h */,
-				FA320A4017966A0800F2E282 /* TDBViewController.m */,
 				FA320A6217980D7A00F2E282 /* TDBTicketDetailViewController.h */,
 				FA320A6317980D7A00F2E282 /* TDBTicketDetailViewController.m */,
+				FAED1B49179ACD57003DA90E /* TDBSeatDetailViewController.h */,
+				FAED1B4A179ACD57003DA90E /* TDBSeatDetailViewController.m */,
+				FAE1272417B655DC00BAD9C4 /* TDBTrainTimetableViewController.h */,
+				FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */,
+				FAE1272717B6560900BAD9C4 /* TDBTrainTimetableCell.h */,
+				FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */,
+			);
+			name = BuyTicket;
+			sourceTree = "<group>";
+		};
+		FAED1B44179A4CCA003DA90E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FAE1272317B654C600BAD9C4 /* BuyTicket */,
+				FAE1272217B654A000BAD9C4 /* Order */,
+				FA320A3F17966A0800F2E282 /* TDBViewController.h */,
+				FA320A4017966A0800F2E282 /* TDBViewController.m */,
 				FA320A4D1796715600F2E282 /* LoginFrameViewController.h */,
 				FA320A4E1796715600F2E282 /* LoginFrameViewController.m */,
 			);
@@ -477,6 +503,8 @@
 				FA26F41017B4D0F000DAB404 /* SVProgressHUD.m in Sources */,
 				FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */,
 				FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */,
+				FAE1272617B655DC00BAD9C4 /* TDBTrainTimetableViewController.m in Sources */,
+				FAE1272917B6560900BAD9C4 /* TDBTrainTimetableCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

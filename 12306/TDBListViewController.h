@@ -15,6 +15,5 @@
 @property (nonatomic) NSString *departStationTelecode;
 @property (nonatomic) NSString *arriveStationTelecode;
 @property (nonatomic) NSDate *orderDate;
-@property (nonatomic) TDBTrainInfoController *dataController;
 
 @end

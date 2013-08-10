@@ -49,7 +49,7 @@ typedef enum {
                              apacheToken:(NSString *)apacheToken
                                ticketKey:(NSString *)ticketKey;
 
-- (NSDictionary *)queryaTrainStopTimeByTrainNo:(NSString *)trainNo
+- (NSArray *)queryaTrainStopTimeByTrainNo:(NSString *)trainNo
                            fromStationTelecode:(NSString *)fromStationTelecode
                              toStationTelecode:(NSString *)toStationTelecode
                                     departDate:(NSString *)departDate;

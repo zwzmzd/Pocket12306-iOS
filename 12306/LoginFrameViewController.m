@@ -144,7 +144,7 @@
 
 - (void)retriveVerifyImageUsingGCD
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
         NSData *imageRawData = [self.tdbss getVerifyImage];
         NSData *parsedData = imageRawData;
         
