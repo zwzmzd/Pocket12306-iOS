@@ -40,6 +40,7 @@
 		FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
+		FAC510A517B87D8100896AB3 /* WKVerticalScrollBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */; };
 		FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */; };
 		FAE1272117B60D2E00BAD9C4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE1272017B60D2E00BAD9C4 /* Security.framework */; };
@@ -118,6 +119,8 @@
 		FAB56A23179C27D8006A05BF /* TDBStationName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationName.m; sourceTree = "<group>"; };
 		FABA969E17A193F80018B20A /* TDBDatepickSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDatepickSheet.h; sourceTree = "<group>"; };
 		FABA969F17A193F80018B20A /* TDBDatepickSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBDatepickSheet.m; sourceTree = "<group>"; };
+		FAC510A317B87D8100896AB3 /* WKVerticalScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKVerticalScrollBar.h; path = vendor/WKVerticalScrollBar/WKVerticalScrollBar/WKVerticalScrollBar.h; sourceTree = SOURCE_ROOT; };
+		FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKVerticalScrollBar.m; path = vendor/WKVerticalScrollBar/WKVerticalScrollBar/WKVerticalScrollBar.m; sourceTree = SOURCE_ROOT; };
 		FAE1271A17B60CBE00BAD9C4 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendor/SSKeychain/SSKeychain/SSKeychain.h; sourceTree = SOURCE_ROOT; };
 		FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendor/SSKeychain/SSKeychain/SSKeychain.m; sourceTree = SOURCE_ROOT; };
 		FAE1271C17B60CBE00BAD9C4 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.h; sourceTree = SOURCE_ROOT; };
@@ -282,6 +285,15 @@
 			path = vendor/SVPullToRefresh/SVPullToRefresh;
 			sourceTree = SOURCE_ROOT;
 		};
+		FAC510A617B87D9D00896AB3 /* WKVerticalScrollBar */ = {
+			isa = PBXGroup;
+			children = (
+				FAC510A317B87D8100896AB3 /* WKVerticalScrollBar.h */,
+				FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */,
+			);
+			name = WKVerticalScrollBar;
+			sourceTree = "<group>";
+		};
 		FAE1271317B60C7A00BAD9C4 /* SSKeychain */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,6 +389,7 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				FAC510A617B87D9D00896AB3 /* WKVerticalScrollBar */,
 				FAE1271317B60C7A00BAD9C4 /* SSKeychain */,
 				FA26F41117B4D0F900DAB404 /* SVProgressHUD */,
 				FA26F40A17B4C4BC00DAB404 /* MBProgressHUD */,
@@ -505,6 +518,7 @@
 				FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */,
 				FAE1272617B655DC00BAD9C4 /* TDBTrainTimetableViewController.m in Sources */,
 				FAE1272917B6560900BAD9C4 /* TDBTrainTimetableCell.m in Sources */,
+				FAC510A517B87D8100896AB3 /* WKVerticalScrollBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

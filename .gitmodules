@@ -16,3 +16,6 @@
 [submodule "vendor/SSKeychain"]
 	path = vendor/SSKeychain
 	url = git@github.com:soffes/sskeychain.git
+[submodule "vendor/WKVerticalScrollBar"]
+	path = vendor/WKVerticalScrollBar
+	url = git@github.com:litl/WKVerticalScrollBar.git
