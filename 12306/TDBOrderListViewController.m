@@ -201,18 +201,24 @@
         ORDER_PARSER_MSG result;
         NSMutableArray *tempList = [NSMutableArray new];
         
-        NSData *htmlData = [[GlobalDataStorage tdbss] queryMyOrderNotComplete];
-        result = [self parseHTMLWithData:htmlData toList:tempList];
-        
-        if (result == ORDER_PARSER_MSG_SUCCESS) {
-            NSDate *now = [NSDate date];
-            NSDate *a_month_ago = [NSDate dateWithTimeIntervalSinceNow: -30 * 24 * 3600];
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyyy-MM-dd"];
-            
-            htmlData = [[GlobalDataStorage tdbss] queryMyOrderWithFromOrderDate:[formatter stringFromDate:a_month_ago]
-                                                                   endOrderDate:[formatter stringFromDate:now]];
+        @try {
+            NSData *htmlData = [[GlobalDataStorage tdbss] queryMyOrderNotComplete];
             result = [self parseHTMLWithData:htmlData toList:tempList];
+            
+            if (result == ORDER_PARSER_MSG_SUCCESS) {
+                NSDate *now = [NSDate date];
+                NSDate *a_month_ago = [NSDate dateWithTimeIntervalSinceNow: -30 * 24 * 3600];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"yyyy-MM-dd"];
+                
+                htmlData = [[GlobalDataStorage tdbss] queryMyOrderWithFromOrderDate:[formatter stringFromDate:a_month_ago]
+                                                                               endOrderDate:[formatter stringFromDate:now]];
+                result = [self parseHTMLWithData:htmlData toList:tempList];
+            }
+        }
+        @catch (NSException *exception) {
+            NSLog(@"%@", exception);
+            result = ORDER_PARSER_MSG_ERR;
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
