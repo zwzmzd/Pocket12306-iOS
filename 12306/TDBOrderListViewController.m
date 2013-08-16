@@ -193,7 +193,6 @@
 
 - (void)retriveEssentialInfoUsingGCD
 {
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
     // 这个属性就用来判断是否正在拉取
     self.refreshProcessEnable = NO;
     
@@ -217,7 +216,7 @@
             }
         }
         @catch (NSException *exception) {
-            NSLog(@"%@", exception);
+            NSLog(@"[EXCEPTION] %@", exception);
             result = ORDER_PARSER_MSG_ERR;
         }
         
@@ -225,7 +224,6 @@
             if (result == ORDER_PARSER_MSG_SUCCESS) {
                 self.orderList = tempList;
                 [self.tableView reloadData];
-                [SVProgressHUD dismiss];
             } else {
                 [SVProgressHUD showErrorWithStatus:@"获取列表信息失败，请重试"];
             }

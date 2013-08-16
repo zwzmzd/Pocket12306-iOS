@@ -168,7 +168,7 @@
     }
     @catch (NSException *exception) {
         // 主要用于识别登录超时的情况
-        NSLog(@"%@", exception);
+        NSLog(@"[EXCEPTION] %@", exception);
         return SUBMUTORDER_MSG_ACCESS_FAILED;
     }
 }
