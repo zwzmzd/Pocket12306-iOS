@@ -11,6 +11,26 @@
 
 @implementation TDBAppDelegate
 
+- (void)_customGlobalUserInterface
+{
+    
+    
+    // navigationBar's background
+    id navigationBarAppearance = [UINavigationBar appearance];
+    UIImage *barBackgroundImage = [[UIImage imageNamed:@"header_bk"] resizableImageWithCapInsets:UIEdgeInsetsMake(5.f, 5.f, 5.f, 5.f)];
+    [navigationBarAppearance setBackgroundImage:barBackgroundImage forBarMetrics:UIBarMetricsDefault];
+    [navigationBarAppearance setTitleTextAttributes:@{
+                                     UITextAttributeFont:[UIFont fontWithName:@"Helvetica" size:20.f]
+     }];
+    
+    // back button
+    id backButtonAppearance = [UIBarButtonItem appearance];
+    UIImage *backButtonImageForNormalState  = [UIImage imageNamed:@"header_leftbtn_nor"];
+    UIImage *backButtonImageForHighlightedState = [UIImage imageNamed:@"header_leftbtn_press"];
+    [backButtonAppearance setBackButtonBackgroundImage:backButtonImageForNormalState forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [backButtonAppearance setBackButtonBackgroundImage:backButtonImageForHighlightedState forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024
@@ -19,11 +39,12 @@
     [NSURLCache setSharedURLCache:URLCache];
     //NSLog(@"%@", NSHomeDirectory());
     
-    // Override point for customization after application launch.
     [[TDBKeybordNotificationManager getSharedManager] registerSelfToNotificationCenter];
+    
+    [self _customGlobalUserInterface];
     return YES;
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
