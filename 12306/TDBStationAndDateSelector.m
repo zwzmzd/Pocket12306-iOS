@@ -9,8 +9,12 @@
 #import "TDBStationAndDateSelector.h"
 #import "GlobalDataStorage.h"
 #import "TDBDatepickSheet.h"
+#import "CKCalendarView.h"
+#import "TDBDatePickerView.h"
 
-@interface TDBStationAndDateSelector() <UIActionSheetDelegate>
+@interface TDBStationAndDateSelector() <CKCalendarDelegate>
+
+@property (nonatomic, strong) TDBDatePickerView *pickerView;
 
 @end
 
@@ -69,6 +73,15 @@
     return _dateShower;
 }
 
+- (TDBDatePickerView *)pickerView
+{
+    if (_pickerView == nil) {
+        _pickerView = [[TDBDatePickerView alloc] initWithFrame:CGRectZero];
+        _pickerView.delegate = self;
+    }
+    return _pickerView;
+}
+
 
 - (void)setUserSelectedDate:(NSDate *)userSelectedDate
 {
@@ -124,6 +137,8 @@
     self.arriveStationField.frame = CGRectMake(0.35f * size.width, size.height - 35, 0.3f * size.width, 30.f);
     self.dateShower.frame = CGRectMake(0.675f * size.width, size.height - 35, 0.3f * size.width, 30.f);
     
+    // 将子view填充整个view，这样就能点击后消失
+    self.pickerView.frame = self.bounds;
     /* 用于更新self.dateShower的显示和布局 */
     self.userSelectedDate = self.userSelectedDate;
 }
@@ -135,23 +150,15 @@
     [self.departStationField resignFirstResponder];
     [self.arriveStationField resignFirstResponder];
     
-    TDBDatepickSheet *sheet = [[TDBDatepickSheet alloc] initWithTitle:@"\n\n\n\n\n\n\n\n\n\n\n"
-                                                             delegate:self
-                                                    cancelButtonTitle:@"取消"
-                                               destructiveButtonTitle:@"确认乘车日期"
-                                                    otherButtonTitles:nil];
-    sheet.initialDate = self.userSelectedDate;
-
-    [sheet showInView:self];
+    [self addSubview:self.pickerView];
 }
 
-#pragma mark - UIActionSheetDelegate
+#pragma mark -  CKCalendarDelegate
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)calendar:(CKCalendarView *)calendar didSelectDate:(NSDate *)date
 {
-    if (buttonIndex != actionSheet.cancelButtonIndex) {
-        TDBDatepickSheet *sheet = (TDBDatepickSheet *)actionSheet;
-        self.userSelectedDate = sheet.pickView.date;
+    if (date) {
+        self.userSelectedDate = date;
     }
 }
 
