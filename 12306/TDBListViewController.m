@@ -51,7 +51,7 @@
     
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    [self.navigationItem setLeftBarButtonItem:backButton animated:YES];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
 }
 
 - (IBAction)_backPressed:(id)sender

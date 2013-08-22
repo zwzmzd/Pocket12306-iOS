@@ -15,6 +15,7 @@
 #import "TFHpple.h"
 #import "TDBSeatDetailViewController.h"
 #import "MTStatusBarOverlay.h"
+#import "UIButton+TDBAddition.h"
 
 #define CONFIRM_DATA_AV 0xf00001
 
@@ -267,6 +268,15 @@
     self.isLoadingFinished = NO;
     [self configureView];
     [self retriveEssentialInfoUsingGCD];
+    
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
