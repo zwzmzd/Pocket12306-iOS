@@ -292,8 +292,13 @@
 
 - (BOOL)ValidateIDCardNo:(NSString *)idCardNo
 {
+    // 之前的校验算法有问题
+    // 目前参考 http://www.xixiaoxi.com/2009/06/%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E8%A7%A3%E5%AF%86%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%B0%BE%E6%95%B0%E6%A0%A1%E9%AA%8C%E7%A0%81%E7%AE%97%E6%B3%95id-card-information.html
     static const NSUInteger weight[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+    static const char checkcode[] = {'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'};
     
+    // 先全部转化成大写，主要针对末尾的X
+    idCardNo = [idCardNo uppercaseString];
     if (idCardNo.length != 18) {
         return NO;
     }
@@ -301,7 +306,7 @@
     NSUInteger acc = 0;
     for (NSUInteger i = 0; i < 17; i++) {
         unichar c = [idCardNo characterAtIndex:i];
-        if (c == 'X' || c == 'x') {
+        if (c == 'X') {
             acc += 10 * weight[i];
             acc %= 11;
         } else if (c >= '0' && c <= '9') {
@@ -313,11 +318,7 @@
     }
     
     unichar lastChar = [idCardNo characterAtIndex:17];
-    if (lastChar == 'x' || lastChar == 'X') {
-        return (weight[acc] == 10);
-    } else {
-        return (weight[acc] == lastChar - '0');
-    }
+    return (lastChar == checkcode[acc]);
 }
 
 - (BOOL)checkTextField
@@ -413,7 +414,7 @@
             passenger.ticket = [[self.ticketTypeList objectAtIndex:self.ticketTypeSelector.selectedSegmentIndex] objectAtIndex:0];
             passenger.name = self.name.text;
             passenger.id_cardtype = @"1";
-            passenger.id_cardno = self.idCardNo.text;
+            passenger.id_cardno = [self.idCardNo.text uppercaseString];
             passenger.mobileno = self.mobileno.text;
             NSString *verifyCode = self.verifyCode.text;
             
