@@ -22,7 +22,8 @@
 {
     if (_ckView == nil) {
         _ckView = [[CKCalendarView alloc] init];
-        _ckView.frame = CGRectMake(0.f, 0.f, 250.f, 150.f);
+        // height必须设置为这个值, 就算设置小了，_ckView也会自己调整变大
+        _ckView.frame = CGRectMake(0.f, 0.f, 250.f, 241.f);
         [self addSubview:_ckView];
     }
     return _ckView;
@@ -50,10 +51,8 @@
 
 - (void)setAnchor:(CGPoint)rightBottomAnchor
 {
-    NSLog(@"%f %f", rightBottomAnchor.x, rightBottomAnchor.y);
     CGSize size = self.ckView.frame.size;
     CGRect rect = CGRectMake(rightBottomAnchor.x - PADDING - size.width, rightBottomAnchor.y - PADDING - size.height, size.width, size.height);
-    NSLog(@"%f %f %f %f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     self.ckView.frame = rect;
 }
 
