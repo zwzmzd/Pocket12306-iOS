@@ -137,6 +137,8 @@
     self.arriveStationField.frame = CGRectMake(0.35f * size.width, size.height - 35, 0.3f * size.width, 30.f);
     self.dateShower.frame = CGRectMake(0.675f * size.width, size.height - 35, 0.3f * size.width, 30.f);
     
+    NSLog(@"%f", size.height - 35);
+    
     // 将子view填充整个view，这样就能点击后消失
     self.pickerView.frame = self.bounds;
     /* 用于更新self.dateShower的显示和布局 */
@@ -150,7 +152,9 @@
     [self.departStationField resignFirstResponder];
     [self.arriveStationField resignFirstResponder];
     
+    CGSize size = self.frame.size;
     [self addSubview:self.pickerView];
+    [self.pickerView setAnchor:CGPointMake(size.width, size.height - 35.f)];
 }
 
 #pragma mark -  CKCalendarDelegate

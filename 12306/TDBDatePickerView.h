@@ -13,4 +13,6 @@
 
 @property (nonatomic, weak) id<CKCalendarDelegate> delegate;
 
+- (void)setAnchor:(CGPoint)rightBottomAnchor;
+
 @end

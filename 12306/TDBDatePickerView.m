@@ -8,6 +8,8 @@
 
 #import "TDBDatePickerView.h"
 
+#define PADDING 5.f
+
 @interface TDBDatePickerView()
 
 @property (nonatomic, strong) CKCalendarView *ckView;
@@ -44,6 +46,15 @@
 {
     UITapGestureRecognizer *tapgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_tapped:)];
     [self addGestureRecognizer:tapgr];
+}
+
+- (void)setAnchor:(CGPoint)rightBottomAnchor
+{
+    NSLog(@"%f %f", rightBottomAnchor.x, rightBottomAnchor.y);
+    CGSize size = self.ckView.frame.size;
+    CGRect rect = CGRectMake(rightBottomAnchor.x - PADDING - size.width, rightBottomAnchor.y - PADDING - size.height, size.width, size.height);
+    NSLog(@"%f %f %f %f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+    self.ckView.frame = rect;
 }
 
 -(IBAction)_tapped:(id)sender

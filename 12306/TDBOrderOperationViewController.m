@@ -37,6 +37,15 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -64,21 +73,6 @@ typedef enum {
         epayViewController.ticketKey = order.ticketKey;
         epayViewController.orderSequenceNo = order.orderSquence_no;
     }
-}
-
-#pragma mark - Table view data source
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    
-    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
-}
-
-- (IBAction)_backPressed:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)iWantToRefresh:(id)sender {
