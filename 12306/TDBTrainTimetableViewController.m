@@ -12,6 +12,7 @@
 #import "TDBTrainInfo.h"
 #import "GlobalDataStorage.h"
 #import "TDBSession.h"
+#import "UIButton+TDBAddition.h"
 
 @interface TDBTrainTimetableViewController ()
 
@@ -34,8 +35,17 @@
 {
     [super viewDidLoad];
     
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+    
     self.title = [NSString stringWithFormat:@"%@次列车", self.train.getTrainNo];
     [self retriveEssentialDataUsingGCD];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)retriveEssentialDataUsingGCD

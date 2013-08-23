@@ -12,6 +12,7 @@
 #import "TDBOrder.h"
 #import "TDBEPayEntryViewController.h"
 #import "TDBOrderListViewController.h"
+#import "UIButton+TDBAddition.h"
 
 typedef enum {
     TAGLIST_BEFORE_CANCLE = 1,
@@ -36,6 +37,15 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -65,11 +75,6 @@ typedef enum {
     }
 }
 
-#pragma mark - Table view data source
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-}
 - (IBAction)iWantToRefresh:(id)sender {
     [self popAndRefresh];
 }
