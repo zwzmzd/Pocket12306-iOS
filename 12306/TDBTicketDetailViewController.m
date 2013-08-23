@@ -15,6 +15,7 @@
 #import "TFHpple.h"
 #import "TDBSeatDetailViewController.h"
 #import "MTStatusBarOverlay.h"
+#import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
 
 #define CONFIRM_DATA_AV 0xf00001
@@ -176,6 +177,7 @@
 
 - (void)retriveEssentialInfoUsingGCD
 {
+    [SVProgressHUD show];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate];
@@ -234,12 +236,14 @@
 
 - (void)retriveVerifyCodeUsingGCD
 {
+    [SVProgressHUD show];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSData *image = [[GlobalDataStorage tdbss] getRandpImage];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             self.verifyCodeImage.image = [UIImage imageWithData:image];
             [self.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
+            [SVProgressHUD dismiss];
         });
     });
 }

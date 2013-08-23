@@ -162,6 +162,7 @@
 {
     if (date) {
         self.userSelectedDate = date;
+        [self.pickerView removeFromSuperview];
     }
 }
 
