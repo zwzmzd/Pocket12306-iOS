@@ -8,6 +8,7 @@
 
 #import "TDBOrderDetailViewController.h"
 #import "TDBOrder.h"
+#import "UIButton+TDBAddition.h"
 
 @interface TDBOrderDetailViewController ()
 
@@ -27,6 +28,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning

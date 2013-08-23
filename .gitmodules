@@ -19,3 +19,6 @@
 [submodule "vendor/WKVerticalScrollBar"]
 	path = vendor/WKVerticalScrollBar
 	url = git@github.com:litl/WKVerticalScrollBar.git
+[submodule "vendor/CKCalendar"]
+	path = vendor/CKCalendar
+	url = git@github.com:jaykz52/CKCalendar.git

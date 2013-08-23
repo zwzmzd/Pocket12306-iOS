@@ -33,20 +33,20 @@
 {
     [super viewWillAppear:animated];
     
-    static UIBarButtonItem *buyTicket = nil;
-    if ([GlobalDataStorage tdbss]) {
-        self.navigationItem.leftBarButtonItem.title = @"注销/更换账户";
-        self.title = @"车票查询";
-        
-        if (buyTicket)
-            self.navigationItem.rightBarButtonItem = buyTicket;
-        
-        
-    } else {
-        if (self.navigationItem.rightBarButtonItem)
-            buyTicket = self.navigationItem.rightBarButtonItem;
-        self.navigationItem.rightBarButtonItem = nil;
-    }
+//    static UIBarButtonItem *buyTicket = nil;
+//    if ([GlobalDataStorage tdbss]) {
+//        self.navigationItem.leftBarButtonItem.title = @"注销/更换账户";
+//        self.title = @"车票查询";
+//        
+//        if (buyTicket)
+//            self.navigationItem.rightBarButtonItem = buyTicket;
+//        
+//        
+//    } else {
+//        if (self.navigationItem.rightBarButtonItem)
+//            buyTicket = self.navigationItem.rightBarButtonItem;
+//        self.navigationItem.rightBarButtonItem = nil;
+//    }
     
     if (_selectorView == nil) {
         TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];

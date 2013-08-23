@@ -15,6 +15,7 @@
 #import "SVProgressHUD.h"
 #import "TDBLeftTicketForList.h"
 #import "TDBTrainTimetableViewController.h"
+#import "UIButton+TDBAddition.h"
 
 @interface TDBListViewController ()
 
@@ -47,6 +48,15 @@
     
     self.title = [NSString stringWithFormat:@"%@车票", self.dateInString];
     [self retriveTrainInfoListUsingGCD];
+    
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning

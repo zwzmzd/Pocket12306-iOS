@@ -10,6 +10,7 @@
 #import "TDBSession.h"
 #import "GlobalDataStorage.h"
 #import "TFHpple.h"
+#import "UIButton+TDBAddition.h"
 
 @interface TDBEPayEntryViewController ()
 
@@ -30,7 +31,17 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+    
     [self retriveEssentialInfoUsingGCD];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (NSString *)parseHTMLWithData:(NSData *)htmlData

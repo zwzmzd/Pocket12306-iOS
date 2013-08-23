@@ -7,6 +7,7 @@
 //
 
 #import "TDBSeatDetailViewController.h"
+#import "UIButton+TDBAddition.h"
 
 @interface TDBSeatDetailViewController ()
 
@@ -27,14 +28,14 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    //NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:0];
-    //[self.tableView insertSections:indexSet withRowAnimation:nil];
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning

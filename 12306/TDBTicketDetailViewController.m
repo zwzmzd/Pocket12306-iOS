@@ -15,6 +15,8 @@
 #import "TFHpple.h"
 #import "TDBSeatDetailViewController.h"
 #import "MTStatusBarOverlay.h"
+#import "SVProgressHUD.h"
+#import "UIButton+TDBAddition.h"
 
 #define CONFIRM_DATA_AV 0xf00001
 
@@ -175,6 +177,7 @@
 
 - (void)retriveEssentialInfoUsingGCD
 {
+    [SVProgressHUD show];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate];
@@ -233,12 +236,14 @@
 
 - (void)retriveVerifyCodeUsingGCD
 {
+    [SVProgressHUD show];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSData *image = [[GlobalDataStorage tdbss] getRandpImage];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             self.verifyCodeImage.image = [UIImage imageWithData:image];
             [self.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
+            [SVProgressHUD dismiss];
         });
     });
 }
@@ -267,6 +272,15 @@
     self.isLoadingFinished = NO;
     [self configureView];
     [self retriveEssentialInfoUsingGCD];
+    
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (IBAction)_backPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -282,8 +296,13 @@
 
 - (BOOL)ValidateIDCardNo:(NSString *)idCardNo
 {
+    // 之前的校验算法有问题
+    // 目前参考 http://www.xixiaoxi.com/2009/06/%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E8%A7%A3%E5%AF%86%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%B0%BE%E6%95%B0%E6%A0%A1%E9%AA%8C%E7%A0%81%E7%AE%97%E6%B3%95id-card-information.html
     static const NSUInteger weight[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+    static const char checkcode[] = {'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'};
     
+    // 先全部转化成大写，主要针对末尾的X
+    idCardNo = [idCardNo uppercaseString];
     if (idCardNo.length != 18) {
         return NO;
     }
@@ -291,7 +310,7 @@
     NSUInteger acc = 0;
     for (NSUInteger i = 0; i < 17; i++) {
         unichar c = [idCardNo characterAtIndex:i];
-        if (c == 'X' || c == 'x') {
+        if (c == 'X') {
             acc += 10 * weight[i];
             acc %= 11;
         } else if (c >= '0' && c <= '9') {
@@ -303,11 +322,7 @@
     }
     
     unichar lastChar = [idCardNo characterAtIndex:17];
-    if (lastChar == 'x' || lastChar == 'X') {
-        return (weight[acc] == 10);
-    } else {
-        return (weight[acc] == lastChar - '0');
-    }
+    return (lastChar == checkcode[acc]);
 }
 
 - (BOOL)checkTextField
@@ -403,7 +418,7 @@
             passenger.ticket = [[self.ticketTypeList objectAtIndex:self.ticketTypeSelector.selectedSegmentIndex] objectAtIndex:0];
             passenger.name = self.name.text;
             passenger.id_cardtype = @"1";
-            passenger.id_cardno = self.idCardNo.text;
+            passenger.id_cardno = [self.idCardNo.text uppercaseString];
             passenger.mobileno = self.mobileno.text;
             NSString *verifyCode = self.verifyCode.text;
             
