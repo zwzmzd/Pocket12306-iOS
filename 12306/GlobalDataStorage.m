@@ -13,6 +13,9 @@ static TDBSession *_tdbss = nil;
 static NSArray *_seatNameAbbr;
 static NSArray *_seatNameFull;
 
+static NSString *_userInputDepartStation = nil;
+static NSString *_userInputArriveStation = nil;
+
 @implementation GlobalDataStorage
 
 + (TDBSession *)tdbss
@@ -42,6 +45,22 @@ static NSArray *_seatNameFull;
     return _seatNameFull;
 }
 
++ (NSString *)userInputArriveStation
+{
+    return _userInputArriveStation;
+}
++ (NSString *)userInputDepartStation
+{
+    return _userInputDepartStation;
+}
++ (void)setUserInputDepartStation:(NSString *)userInputDepartStation
+{
+    _userInputDepartStation = userInputDepartStation;
+}
++ (void)setUserInputArriveStation:(NSString *)userInputArriveStation
+{
+    _userInputArriveStation = userInputArriveStation;
+}
 
 
 @end

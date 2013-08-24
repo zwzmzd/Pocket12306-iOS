@@ -115,6 +115,11 @@
 {
     if ([segue.identifier isEqualToString:@"PushToListView"]) {
         TDBListViewController *lv = [segue destinationViewController];
+        
+        // 记录下目前输入的信息，在购票详情页面校验起点和终点站是否一致
+        [GlobalDataStorage setUserInputArriveStation:self.selectorView.arriveStationField.text];
+        [GlobalDataStorage setUserInputDepartStation:self.selectorView.departStationField.text];
+        
         lv.departStationTelecode = [self.stationNameController
                                     getTelecodeUsingName:self.selectorView.departStationField.text];
         lv.arriveStationTelecode = [self.stationNameController
