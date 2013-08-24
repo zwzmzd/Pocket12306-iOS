@@ -76,10 +76,20 @@
                                                                        to:self.arriveStationTelecode];
         BOOL dataIsError = (array == nil);
         
+        NSString *userInputDepartStationName = [GlobalDataStorage userInputDepartStation];
+        NSString *userInputArriveStationName = [GlobalDataStorage userInputArriveStation];
+        
         TDBTrainInfoController *controller = [[TDBTrainInfoController alloc] init];
         NSUInteger count = [array count];
         for (NSUInteger i = 0; i < count; i++) {
-            [controller addTrainInfoWithDataArray:[array objectAtIndex:i]];
+            TDBTrainInfo *train = [[TDBTrainInfo alloc] initWithArray:[array objectAtIndex:i]];
+            
+            if (self.stationNameExactlyMatch && (![userInputArriveStationName isEqualToString:[train getArriveStationName]]
+                || ![userInputDepartStationName isEqualToString:[train getDapartStationName]])) {
+                continue;
+            }
+            
+            [controller addTrainInfo:train];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {

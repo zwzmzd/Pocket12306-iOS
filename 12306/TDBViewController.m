@@ -136,6 +136,8 @@
         lv.arriveStationTelecode = [self.stationNameController
                                     getTelecodeUsingName:self.selectorView.arriveStationField.text];
         lv.orderDate = self.selectorView.userSelectedDate;
+        // 设置精确匹配站名
+        lv.stationNameExactlyMatch = YES;
         
         NSLog(@"%@ %@", lv.departStationTelecode, lv.arriveStationTelecode);
     }
