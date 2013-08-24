@@ -18,8 +18,7 @@
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
 
-#define CONFIRM_DATA_AV 0xf00001
-#define CONFIRM_DEPART_ARRIVE_STATION 0xf00002
+#define CONFIRM_DATE_AV 0xf00001
 
 @interface TDBTicketDetailViewController () <UIAlertViewDelegate>
 
@@ -77,13 +76,6 @@
     
     [self.seatTypeSelector removeAllSegments];
     [self.ticketTypeSelector removeAllSegments];
-}
-
-- (BOOL)checkStation
-{
-    BOOL a = [[GlobalDataStorage userInputArriveStation] isEqualToString:[self.train getArriveStationName]];
-    BOOL b = [[GlobalDataStorage userInputDepartStation] isEqualToString:[self.train getDapartStationName]];
-    return (a && b);
 }
 
 - (SUBMUTORDER_MSG)parseHTMLWithData:(NSData *)htmlData
@@ -279,22 +271,7 @@
 
     self.isLoadingFinished = NO;
     [self configureView];
-    
-    if ([self checkStation]) {
-        [self retriveEssentialInfoUsingGCD];
-    } else {
-        NSString *tips = [NSString stringWithFormat:@"您输入的乘车区间是:\n%@ -- %@\n当前车次运行区间是:\n%@ -- %@",
-                          [GlobalDataStorage userInputDepartStation], [GlobalDataStorage userInputArriveStation],
-                          [self.train getDapartStationName], [self.train getArriveStationName]
-                          ];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"车站名称不匹配"
-                                                            message:tips
-                                                           delegate:self
-                                                  cancelButtonTitle:@"重新选择"
-                                                  otherButtonTitles:@"正常购票", nil];
-        alertView.tag = CONFIRM_DEPART_ARRIVE_STATION;
-        [alertView show];
-    }
+    [self retriveEssentialInfoUsingGCD];
     
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
@@ -388,7 +365,7 @@
                                                    delegate:self
                                           cancelButtonTitle:@"取消"
                                           otherButtonTitles:@"确认", nil];
-    alert.tag = CONFIRM_DATA_AV;
+    alert.tag = CONFIRM_DATE_AV;
     [alert show];
     
     
@@ -428,15 +405,7 @@
             [self.navigationController popViewControllerAnimated:YES];
             break;
         }
-        case CONFIRM_DEPART_ARRIVE_STATION: {
-            if (buttonIndex == alertView.cancelButtonIndex) {
-                [self.navigationController popViewControllerAnimated:YES];
-            } else {
-                [self retriveEssentialInfoUsingGCD];
-            }
-            break;
-        }
-        case CONFIRM_DATA_AV: {
+        case CONFIRM_DATE_AV: {
             if (buttonIndex == alertView.cancelButtonIndex) {
                 break;
             }
