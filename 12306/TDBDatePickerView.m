@@ -25,6 +25,7 @@
         // width和height有一定相关性，无法随意设置
         _ckView.frame = CGRectMake(0.f, 0.f, 280.f, 261.f);
         [self addSubview:_ckView];
+        [self bringSubviewToFront:_ckView];
     }
     return _ckView;
 }
@@ -45,8 +46,6 @@
 
 - (void)_initialize
 {
-    UITapGestureRecognizer *tapgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_tapped:)];
-    [self addGestureRecognizer:tapgr];
 }
 
 - (void)setAnchor:(CGPoint)rightBottomAnchor
