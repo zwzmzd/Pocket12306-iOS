@@ -22,3 +22,6 @@
 [submodule "vendor/CKCalendar"]
 	path = vendor/CKCalendar
 	url = git@github.com:jaykz52/CKCalendar.git
+[submodule "vendor/EGOCache"]
+	path = vendor/EGOCache
+	url = git@github.com:enormego/EGOCache.git

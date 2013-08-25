@@ -56,6 +56,8 @@
 		FAE1272617B655DC00BAD9C4 /* TDBTrainTimetableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */; };
 		FAE1272917B6560900BAD9C4 /* TDBTrainTimetableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */; };
 		FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */; };
+		FAEB719217C9B23500C047E4 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEB719117C9B23500C047E4 /* EGOCache.m */; };
+		FAEB719517C9B98200C047E4 /* TDBPassengerInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEB719417C9B98200C047E4 /* TDBPassengerInfoViewController.m */; };
 		FAED1B331798CF92003DA90E /* PassengerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B321798CF92003DA90E /* PassengerInfo.m */; };
 		FAED1B43179A4977003DA90E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FAED1B42179A4977003DA90E /* libxml2.dylib */; };
 		FAED1B4B179ACD57003DA90E /* TDBSeatDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAED1B4A179ACD57003DA90E /* TDBSeatDetailViewController.m */; };
@@ -157,6 +159,10 @@
 		FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBTrainTimetableCell.m; sourceTree = "<group>"; };
 		FAE88A2717AE5FAF00D632F2 /* TDBOrderOperationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBOrderOperationViewController.h; sourceTree = "<group>"; };
 		FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBOrderOperationViewController.m; sourceTree = "<group>"; };
+		FAEB719017C9B23500C047E4 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EGOCache.h; path = vendor/EGOCache/EGOCache.h; sourceTree = SOURCE_ROOT; };
+		FAEB719117C9B23500C047E4 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EGOCache.m; path = vendor/EGOCache/EGOCache.m; sourceTree = SOURCE_ROOT; };
+		FAEB719317C9B98200C047E4 /* TDBPassengerInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBPassengerInfoViewController.h; sourceTree = "<group>"; };
+		FAEB719417C9B98200C047E4 /* TDBPassengerInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBPassengerInfoViewController.m; sourceTree = "<group>"; };
 		FAED1B311798CF92003DA90E /* PassengerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassengerInfo.h; sourceTree = "<group>"; };
 		FAED1B321798CF92003DA90E /* PassengerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassengerInfo.m; sourceTree = "<group>"; };
 		FAED1B42179A4977003DA90E /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -398,8 +404,19 @@
 				FAED1B4A179ACD57003DA90E /* TDBSeatDetailViewController.m */,
 				FAE1272417B655DC00BAD9C4 /* TDBTrainTimetableViewController.h */,
 				FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */,
+				FAEB719317C9B98200C047E4 /* TDBPassengerInfoViewController.h */,
+				FAEB719417C9B98200C047E4 /* TDBPassengerInfoViewController.m */,
 			);
 			name = BuyTicket;
+			sourceTree = "<group>";
+		};
+		FAEB718F17C9B20D00C047E4 /* EGOCache */ = {
+			isa = PBXGroup;
+			children = (
+				FAEB719017C9B23500C047E4 /* EGOCache.h */,
+				FAEB719117C9B23500C047E4 /* EGOCache.m */,
+			);
+			name = EGOCache;
 			sourceTree = "<group>";
 		};
 		FAED1B44179A4CCA003DA90E /* ViewController */ = {
@@ -480,6 +497,7 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				FAEB718F17C9B20D00C047E4 /* EGOCache */,
 				FAF9029B17C6814B0080A5CC /* CKCalendar */,
 				FAC510A617B87D9D00896AB3 /* WKVerticalScrollBar */,
 				FAE1271317B60C7A00BAD9C4 /* SSKeychain */,
@@ -626,6 +644,8 @@
 				FA1091C617C5BDF200FB24B3 /* UIButton+TDBAddition.m in Sources */,
 				FAF902A317C6816A0080A5CC /* CKCalendarView.m in Sources */,
 				FAF902AA17C6848B0080A5CC /* TDBDatePickerView.m in Sources */,
+				FAEB719217C9B23500C047E4 /* EGOCache.m in Sources */,
+				FAEB719517C9B98200C047E4 /* TDBPassengerInfoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

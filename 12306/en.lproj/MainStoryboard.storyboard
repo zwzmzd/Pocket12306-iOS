@@ -303,15 +303,15 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="乘车人信息" id="Lo4-4H-4nN">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="28S-i1-VLK">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="28S-i1-VLK">
                                         <rect key="frame" x="0.0" y="270" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <rect key="frame" x="10" y="1" width="267" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="姓名" minimumFontSize="17" clearButtonMode="whileEditing" id="N80-zm-q4T">
-                                                    <rect key="frame" x="20" y="7" width="260" height="30"/>
+                                                    <rect key="frame" x="17" y="7" width="231" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -473,11 +473,44 @@
                         <outlet property="seatTypeSelector" destination="v4R-Qs-bQ5" id="fEd-WX-00G"/>
                         <outlet property="ticketTypeSelector" destination="gAc-ex-LbJ" id="1P9-aV-47n"/>
                         <outlet property="verifyCode" destination="5T2-5a-nCf" id="bw7-md-DmR"/>
+                        <segue destination="mrA-xv-3bf" kind="push" identifier="SelectPassenger" id="vbY-8I-143"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5c3-np-uL5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1771" y="121"/>
+        </scene>
+        <!--Passenger Info View Controller - 乘车人-->
+        <scene sceneID="URH-yl-cLD">
+            <objects>
+                <tableViewController id="mrA-xv-3bf" customClass="TDBPassengerInfoViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" id="3C4-bp-9gY">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="63" id="HxU-lr-9WH">
+                                <rect key="frame" x="0.0" y="22" width="320" height="63"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="62"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="mrA-xv-3bf" id="gYs-s3-ph6"/>
+                            <outlet property="delegate" destination="mrA-xv-3bf" id="3ej-ft-RUf"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="乘车人" id="J1k-Hf-s92">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="gKh-3e-opi"/>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jMH-QO-dVE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2293" y="-648"/>
         </scene>
         <!--Seat Detail View Controller - 余票和票价-->
         <scene sceneID="mcH-sg-ROW">
@@ -967,7 +1000,6 @@
         <!--Navigation Controller-->
         <scene sceneID="Zmb-aN-Lj2">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6lc-zV-Fvi" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="bmC-DP-Jkp" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3S1-Pi-IT3">
@@ -979,6 +1011,7 @@
                         <segue destination="M5t-TF-cDA" kind="relationship" relationship="rootViewController" id="nHd-54-Gop"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6lc-zV-Fvi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="484" y="-837"/>
         </scene>
@@ -1046,6 +1079,9 @@
                 <relationship kind="action" name="iWantToCancleOrder:"/>
                 <relationship kind="action" name="iWantToRefresh:"/>
             </relationships>
+        </class>
+        <class className="TDBPassengerInfoViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBPassengerInfoViewController.h"/>
         </class>
         <class className="TDBSeatDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBSeatDetailViewController.h"/>

@@ -17,6 +17,7 @@
 #import "MTStatusBarOverlay.h"
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
+#import "TDBPassengerInfoViewController.h"
 
 #define CONFIRM_DATE_AV 0xf00001
 
@@ -367,9 +368,6 @@
                                           otherButtonTitles:@"确认", nil];
     alert.tag = CONFIRM_DATE_AV;
     [alert show];
-    
-    
-    
 }
 
 - (IBAction)refreshVerifyCode:(id)sender {
@@ -381,6 +379,13 @@
     [textField resignFirstResponder];
     
     return YES;
+}
+
+#pragma mark - UITablbeViewDelegate
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"SelectPassenger" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
