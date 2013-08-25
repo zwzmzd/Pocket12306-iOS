@@ -7,12 +7,31 @@
 //
 
 #import "TDBPassengerInfoViewController.h"
+#import "TDBSession.h"
+#import "GlobalDataStorage.h"
+#import "FMDatabase.h"
+#import "SVProgressHUD.h"
+
+#define SQL_TABLE_NAME @"passenger"
 
 @interface TDBPassengerInfoViewController ()
+
+@property (nonatomic, strong) NSArray *dataModel;
 
 @end
 
 @implementation TDBPassengerInfoViewController
+
++ (NSString *)databasePath
+{
+    static NSString *_path = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString* docsdir = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+        _path = [docsdir stringByAppendingPathComponent:@"user.sqlite"];
+    });
+    return _path;
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -26,12 +45,71 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+     
+    [self getInformationFromDatabaseUsingGCD];
+}
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+- (void)getInformationFromDatabaseUsingGCD
+{
+    [SVProgressHUD show];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        
+        NSString *dbPath = [self.class databasePath];
+        FMDatabase* db = [FMDatabase databaseWithPath:dbPath];
+        
+        [db open];
+        FMResultSet *rs = [db executeQuery:@"select * from " SQL_TABLE_NAME @" order by first_letter asc"];
+        while ([rs next]) {
+            NSDictionary *dict = @{
+                                   @"name": [rs stringForColumn:@"name"],
+                                   @"mobile_no": [rs stringForColumn:@"mobile_no"],
+                                   @"passenger_id_no": [rs stringForColumn:@"passenger_id_no"],
+                                   @"first_letter": [rs stringForColumn:@"first_letter"]
+                                   };
+            [array addObject:dict];
+            
+        }
+        [db close];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            self.dataModel = array;
+            [self.tableView reloadData];
+            
+            [SVProgressHUD dismiss];
+        });
+    });
+    
+}
+
+- (void)getInformationFromNetworkUsingGCD
+{
+    [SVProgressHUD show];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        TDBSession *tdbss = [GlobalDataStorage tdbss];
+        NSDictionary *dict = [tdbss getPassengersWithIndex:0 size:100];
+        
+        NSString *dbPath = [self.class databasePath];
+        FMDatabase* db = [FMDatabase databaseWithPath:dbPath];
+        
+        [db open];
+        [db executeUpdate:@"drop table " SQL_TABLE_NAME];
+        [db executeUpdate:@"create table " SQL_TABLE_NAME @" (name text, mobile_no text, passenger_id_no text, first_letter text)"];
+        NSArray *rows = [dict objectForKey:@"rows"];
+        for (NSDictionary *row in rows) {
+            BOOL result = [db executeUpdate:@"insert into " SQL_TABLE_NAME " (name, mobile_no, passenger_id_no, first_letter) values (?, ?, ?, ?)", [row objectForKey:@"passenger_name"], [row objectForKey:@"mobile_no"], [row objectForKey:@"passenger_id_no"], [row objectForKey:@"first_letter"]];
+            if (!result) {
+                NSLog(@"[warning] FMDB not inserted");
+            }
+        }
+        [db close];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [self getInformationFromDatabaseUsingGCD];
+        });
+    });
 }
 
 - (void)didReceiveMemoryWarning
@@ -44,78 +122,39 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    return self.dataModel.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *cellIdentifier = @"PassengerInfoCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    // Configure the cell...
+    NSDictionary *dict = [self.dataModel objectAtIndex:indexPath.row];
+    
+    UILabel *title = (UILabel *)[cell viewWithTag:1];
+    UILabel *subTitle = (UILabel *)[cell viewWithTag:2];
+    
+    title.text = [dict objectForKey:@"name"];
+    subTitle.text = [dict objectForKey:@"passenger_id_no"];
     
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    [self.delegate didSelectPassenger:@[[self.dataModel objectAtIndex:indexPath.row]]];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)retrivePassengerList:(UIBarButtonItem *)sender {
+    [self getInformationFromNetworkUsingGCD];
+}
 @end

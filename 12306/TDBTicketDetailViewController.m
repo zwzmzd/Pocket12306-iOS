@@ -21,7 +21,7 @@
 
 #define CONFIRM_DATE_AV 0xf00001
 
-@interface TDBTicketDetailViewController () <UIAlertViewDelegate>
+@interface TDBTicketDetailViewController () <UIAlertViewDelegate, PassengerSelectorDelegate>
 
 @property (nonatomic,strong) MBProgressHUD *HUD;
 
@@ -394,7 +394,20 @@
         TDBSeatDetailViewController *vc = [segue destinationViewController];
         vc.dataController = self.ticketList;
         [vc.tableView reloadData];
+    } else if ([segue.identifier isEqualToString:@"SelectPassenger"]) {
+        TDBPassengerInfoViewController *vc = [segue destinationViewController];
+        vc.delegate = self;
     }
+}
+
+#pragma mark - PassengerSelectorDelegate
+
+- (void)didSelectPassenger:(NSArray *)passengerInfoList
+{
+    NSDictionary *passenger = [passengerInfoList objectAtIndex:0];
+    self.name.text = [passenger objectForKey:@"name"];
+    self.mobileno.text = [passenger objectForKey:@"mobile_no"];
+    self.idCardNo.text = [passenger objectForKey:@"passenger_id_no"];
 }
 
 #pragma mark - UIAlertViewDelegate

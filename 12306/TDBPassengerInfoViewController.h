@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol PassengerSelectorDelegate;
 @interface TDBPassengerInfoViewController : UITableViewController
+
+@property (nonatomic, weak) id<PassengerSelectorDelegate> delegate;
+
+- (IBAction)retrivePassengerList:(UIBarButtonItem *)sender;
+
+@end
+
+@protocol PassengerSelectorDelegate <NSObject>
+
+@required
+- (void)didSelectPassenger:(NSArray *)passengerInfoList;
 
 @end

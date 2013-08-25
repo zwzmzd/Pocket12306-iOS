@@ -25,3 +25,6 @@
 [submodule "vendor/EGOCache"]
 	path = vendor/EGOCache
 	url = git@github.com:enormego/EGOCache.git
+[submodule "vendor/fmdb"]
+	path = vendor/fmdb
+	url = git@github.com:ccgus/fmdb.git
