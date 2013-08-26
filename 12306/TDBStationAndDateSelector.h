@@ -13,6 +13,7 @@
 @property (nonatomic) UIScrollView *autocompleteList;
 @property (nonatomic) UITextField *departStationField;
 @property (nonatomic) UITextField *arriveStationField;
+@property (nonatomic) UISwitch *stationNameExactlyMatch;
 @property (nonatomic) UIButton *dateShower;
 @property (nonatomic) NSDate *userSelectedDate;
 

@@ -35,7 +35,6 @@
         _departStationField.minimumFontSize = 6;
         
         _departStationField.placeholder = @"起点站";
-        _departStationField.text = @"无锡";
         [self addSubview:_departStationField];
     }
     return _departStationField;
@@ -54,10 +53,18 @@
         _arriveStationField.minimumFontSize = 6;
         
         _arriveStationField.placeholder = @"终点站";
-        _arriveStationField.text = @"南京";
         [self addSubview:_arriveStationField];
     }
     return _arriveStationField;
+}
+
+- (UISwitch *)stationNameExactlyMatch
+{
+    if (_stationNameExactlyMatch == nil) {
+        _stationNameExactlyMatch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        [self addSubview:_stationNameExactlyMatch];
+    }
+    return _stationNameExactlyMatch;
 }
 
 - (UIButton *)dateShower
@@ -136,6 +143,9 @@
     self.departStationField.frame = CGRectMake(0.025f * size.width, size.height - 35, 0.3f * size.width, 30.f);
     self.arriveStationField.frame = CGRectMake(0.35f * size.width, size.height - 35, 0.3f * size.width, 30.f);
     self.dateShower.frame = CGRectMake(0.675f * size.width, size.height - 35, 0.3f * size.width, 30.f);
+    
+    CGSize switchSize = self.stationNameExactlyMatch.frame.size;
+    self.stationNameExactlyMatch.frame = CGRectMake(size.width - 10.f - switchSize.width, size.height - 40.f - switchSize.height, switchSize.width, switchSize.height);
     
     // 将子view填充整个view，这样就能点击后消失
     self.pickerView.frame = self.bounds;

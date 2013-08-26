@@ -12,6 +12,8 @@
 
 @interface TDBListViewController : UITableViewController
 
+@property (nonatomic) BOOL stationNameExactlyMatch;
+
 @property (nonatomic) NSString *departStationTelecode;
 @property (nonatomic) NSString *arriveStationTelecode;
 @property (nonatomic) NSDate *orderDate;

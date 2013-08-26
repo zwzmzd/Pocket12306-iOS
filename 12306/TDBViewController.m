@@ -14,6 +14,10 @@
 #import "TDBKeybordNotificationManager.h"
 #import "TDBListViewController.h"
 
+#define USER_LAST_INPUT_DEPART_STATION_NAME (@"__userLastInputDepartStationName")
+#define USER_LAST_INPUT_ARRIVE_STATION_NAME (@"__userLastInputArriveStationName")
+#define USER_SELECT_STATION_NAME_EXACTLY_MATCH (@"__userSelectStationNameExactlyMatch")
+
 @interface TDBViewController ()
 
 @property (nonatomic) TDBStationName *stationNameController;
@@ -26,7 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -52,12 +55,16 @@
         TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
         
         [self.view addSubview:customView];
-        self.selectorView = customView;
-        
         /*
          这个方法结束后，self.view会被设置，所以只要好好实现viewDidLayoutSubviews，这里不需要
          设置customView.fram
          */
+        self.selectorView = customView;
+        
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        self.selectorView.departStationField.text = [ud stringForKey:USER_LAST_INPUT_DEPART_STATION_NAME];
+        self.selectorView.arriveStationField.text = [ud stringForKey:USER_LAST_INPUT_ARRIVE_STATION_NAME];
+        [self.selectorView.stationNameExactlyMatch setOn:[ud boolForKey:USER_SELECT_STATION_NAME_EXACTLY_MATCH]];
     }
     
     [self initStationNameControllerUsingGCD];
@@ -115,11 +122,28 @@
 {
     if ([segue.identifier isEqualToString:@"PushToListView"]) {
         TDBListViewController *lv = [segue destinationViewController];
+        
+        // 记录下目前输入的信息，在购票详情页面校验起点和终点站是否一致
+        [GlobalDataStorage setUserInputArriveStation:self.selectorView.arriveStationField.text];
+        [GlobalDataStorage setUserInputDepartStation:self.selectorView.departStationField.text];
+        
+        // 标识用户是否需要精确匹配站名
+        BOOL stationNameExactlyMatch = self.selectorView.stationNameExactlyMatch.isOn;
+        
+        // 保存用户偏好
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        [ud setObject:self.selectorView.departStationField.text forKey:USER_LAST_INPUT_DEPART_STATION_NAME];
+        [ud setObject:self.selectorView.arriveStationField.text forKey:USER_LAST_INPUT_ARRIVE_STATION_NAME];
+        [ud setBool:stationNameExactlyMatch forKey:USER_SELECT_STATION_NAME_EXACTLY_MATCH];
+        [ud synchronize];
+        
         lv.departStationTelecode = [self.stationNameController
                                     getTelecodeUsingName:self.selectorView.departStationField.text];
         lv.arriveStationTelecode = [self.stationNameController
                                     getTelecodeUsingName:self.selectorView.arriveStationField.text];
         lv.orderDate = self.selectorView.userSelectedDate;
+        // 设置精确匹配站名
+        lv.stationNameExactlyMatch = stationNameExactlyMatch;
         
         NSLog(@"%@ %@", lv.departStationTelecode, lv.arriveStationTelecode);
     }

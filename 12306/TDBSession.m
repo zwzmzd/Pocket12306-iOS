@@ -575,6 +575,36 @@
     return result;
 }
 
+- (NSDictionary *)getPassengersWithIndex:(NSUInteger)index size:(NSUInteger)size
+{
+    NSLog(@"getPassengers");
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:[NSString stringWithFormat:@"%u", index] forKey:@"pageIndex"];
+    [argument addValue:[NSString stringWithFormat:@"%u", size] forKey:@"pageSize"];
+    [argument addValue:@"" forKey:@"passenger_name"];
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passengerAction.do?method=getPagePassengerAll"];
+    NSURL *url = [NSURL URLWithString:path];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:SYSURL @"/otsweb/passengerAction.do?method=initUsualPassenger12306" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSError *jsonErr = nil;
+    NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:result options:0 error:&jsonErr];
+    
+    if (jsonErr) {
+        return nil;
+    } else {
+        return dict;
+    }
+}
+
 - (void)assertLoggedIn
 {
     NSAssert(YES, @"Before This Operation, You must Login");

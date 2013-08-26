@@ -18,4 +18,10 @@
 + (NSArray *)seatNameAbbr;
 + (NSArray *)seatNameFull;
 
++ (NSString *)userInputDepartStation;
++ (void)setUserInputDepartStation:(NSString *)userInputDepartStation;
+
++ (NSString *)userInputArriveStation;
++ (void)setUserInputArriveStation:(NSString *)userInputArriveStation;
+
 @end

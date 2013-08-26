@@ -68,6 +68,9 @@ typedef enum {
 // 取消一个未完成订单
 - (NSData *)cancleMyOrderNotComplete:(NSString *)sequenceNo apacheToken:(NSString *)apacheToken;
 
+// 获取联系人
+- (NSDictionary *)getPassengersWithIndex:(NSUInteger)index size:(NSUInteger)size;
+
 - (void)restartSession;
 
 

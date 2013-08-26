@@ -8,7 +8,7 @@
 
 #import "TDBDatePickerView.h"
 
-#define PADDING 5.f
+#define PADDING 15.f
 
 @interface TDBDatePickerView()
 
@@ -22,9 +22,10 @@
 {
     if (_ckView == nil) {
         _ckView = [[CKCalendarView alloc] init];
-        // height必须设置为这个值, 就算设置小了，_ckView也会自己调整变大
-        _ckView.frame = CGRectMake(0.f, 0.f, 250.f, 241.f);
+        // width和height有一定相关性，无法随意设置
+        _ckView.frame = CGRectMake(0.f, 0.f, 280.f, 261.f);
         [self addSubview:_ckView];
+        [self bringSubviewToFront:_ckView];
     }
     return _ckView;
 }
@@ -45,8 +46,6 @@
 
 - (void)_initialize
 {
-    UITapGestureRecognizer *tapgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_tapped:)];
-    [self addGestureRecognizer:tapgr];
 }
 
 - (void)setAnchor:(CGPoint)rightBottomAnchor
