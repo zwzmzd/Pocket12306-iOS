@@ -45,6 +45,7 @@
 		FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */; };
 		FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */; };
 		FA4776E917A76C59004F6A74 /* dropbox-1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4776E817A76C59004F6A74 /* dropbox-1.png */; };
+		FA4F7B5617D2221300DF19A0 /* epay.html in Resources */ = {isa = PBXBuildFile; fileRef = FA4F7B5517D2221300DF19A0 /* epay.html */; };
 		FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */; };
 		FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
@@ -144,6 +145,7 @@
 		FA4776E817A76C59004F6A74 /* dropbox-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dropbox-1.png"; path = "../dropbox-1.png"; sourceTree = "<group>"; };
 		FA4C1CE717AA6297003AB59A /* ODRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ODRefreshControl.h; path = vendor/ORDRefreshControl/ODRefreshControl/ODRefreshControl.h; sourceTree = SOURCE_ROOT; };
 		FA4C1CE817AA6297003AB59A /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ODRefreshControl.m; path = vendor/ORDRefreshControl/ODRefreshControl/ODRefreshControl.m; sourceTree = SOURCE_ROOT; };
+		FA4F7B5517D2221300DF19A0 /* epay.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = epay.html; path = template/epay.html; sourceTree = "<group>"; };
 		FA683F1817AB7921003D32FB /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPullToRefresh.h; sourceTree = "<group>"; };
 		FA683F1917AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVInfiniteScrolling.h"; sourceTree = "<group>"; };
 		FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 		FA1091AE17C53CF600FB24B3 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				FA4F7B5417D221D600DF19A0 /* template */,
 				FA1091AF17C53CF600FB24B3 /* theme */,
 			);
 			path = resource;
@@ -365,6 +368,14 @@
 				FA4C1CE817AA6297003AB59A /* ODRefreshControl.m */,
 			);
 			name = ORDRefreshControl;
+			sourceTree = "<group>";
+		};
+		FA4F7B5417D221D600DF19A0 /* template */ = {
+			isa = PBXGroup;
+			children = (
+				FA4F7B5517D2221300DF19A0 /* epay.html */,
+			);
+			name = template;
 			sourceTree = "<group>";
 		};
 		FA683F1717AB7921003D32FB /* SVPullToRefresh */ = {
@@ -646,6 +657,7 @@
 				FAF902A517C6816A0080A5CC /* left_arrow@2x.png in Resources */,
 				FAF902A617C6816A0080A5CC /* right_arrow.png in Resources */,
 				FAF902A717C6816A0080A5CC /* right_arrow@2x.png in Resources */,
+				FA4F7B5617D2221300DF19A0 /* epay.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

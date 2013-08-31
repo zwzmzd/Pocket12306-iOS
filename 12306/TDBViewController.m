@@ -123,6 +123,10 @@
     if ([segue.identifier isEqualToString:@"PushToListView"]) {
         TDBListViewController *lv = [segue destinationViewController];
         
+        NSCharacterSet *characterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+        self.selectorView.departStationField.text = [self.selectorView.departStationField.text stringByTrimmingCharactersInSet:characterSet];
+        self.selectorView.arriveStationField.text = [self.selectorView.arriveStationField.text stringByTrimmingCharactersInSet:characterSet];
+        
         // 记录下目前输入的信息，在购票详情页面校验起点和终点站是否一致
         [GlobalDataStorage setUserInputArriveStation:self.selectorView.arriveStationField.text];
         [GlobalDataStorage setUserInputDepartStation:self.selectorView.departStationField.text];
