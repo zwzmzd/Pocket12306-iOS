@@ -38,6 +38,8 @@ typedef enum {
 {
     [super viewDidLoad];
     
+    self.orderSquenceNo.text = self.order.orderSquence_no;
+    
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
@@ -114,4 +116,8 @@ typedef enum {
     }
 }
 
+- (void)viewDidUnload {
+    [self setOrderSquenceNo:nil];
+    [super viewDidUnload];
+}
 @end

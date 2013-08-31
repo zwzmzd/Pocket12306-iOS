@@ -15,6 +15,8 @@
 - (IBAction)iWantToRefresh:(id)sender;
 - (IBAction)iWantToCancleOrder:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UILabel *orderSquenceNo;
+
 @property (nonatomic) NSString *apacheToken;
 @property (nonatomic) TDBOrder *order;
 @property (nonatomic, weak) TDBOrderListViewController *receiver;

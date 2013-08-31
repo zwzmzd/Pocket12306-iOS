@@ -602,27 +602,16 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="总票价:120" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Aax-Rf-aQi">
-                                                    <rect key="frame" x="20" y="0.0" width="260" height="43"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="E19424333" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hvw-TP-NLt">
+                                                    <rect key="frame" x="102" y="0.0" width="178" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="17"/>
+                                                    <color key="textColor" red="0.60010762120000005" green="0.1140787248" blue="0.2440267981" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="tm1-a5-0X1">
-                                        <rect key="frame" x="0.0" y="91" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="支付剩余时间: 32分钟" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oAT-bO-95v">
-                                                    <rect key="frame" x="20" y="0.0" width="260" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="订单号" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="du5-nb-e33">
+                                                    <rect key="frame" x="20" y="11" width="74" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -632,7 +621,7 @@
                                         </view>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="HSV-7Z-bF8">
-                                        <rect key="frame" x="0.0" y="135" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="91" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="300" height="43"/>
@@ -654,7 +643,7 @@
                             <tableViewSection headerTitle="支付操作" id="Z5r-i4-xk3">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="hPo-rX-VvC">
-                                        <rect key="frame" x="0.0" y="226" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="182" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="280" height="43"/>
@@ -664,7 +653,7 @@
                                                     <rect key="frame" x="20" y="0.0" width="260" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <color key="textColor" red="0.60010762120000005" green="0.1140787248" blue="0.2440267981" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.1357959715666831" green="0.44094784311753288" blue="0.71655771683673475" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                             </subviews>
@@ -675,7 +664,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="a2g-X4-zYY">
-                                        <rect key="frame" x="0.0" y="271" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="227" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="280" height="43"/>
@@ -705,7 +694,7 @@
                             <tableViewSection headerTitle="其它操作" id="9tb-kR-gyW">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="kcp-XA-MTR">
-                                        <rect key="frame" x="0.0" y="362" width="320" height="46"/>
+                                        <rect key="frame" x="0.0" y="318" width="320" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="280" height="43"/>
@@ -739,6 +728,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="未完成订单" id="O44-AS-sfl"/>
+                    <connections>
+                        <outlet property="orderSquenceNo" destination="hvw-TP-NLt" id="7HY-VQ-gtU"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wCl-Hu-sje" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1093,6 +1085,9 @@
         </class>
         <class className="TDBOrderDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBOrderDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="_backPressed:"/>
+            </relationships>
         </class>
         <class className="TDBOrderListViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBOrderListViewController.h"/>
@@ -1103,6 +1098,7 @@
         <class className="TDBOrderOperationViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBOrderOperationViewController.h"/>
             <relationships>
+                <relationship kind="action" name="_backPressed:"/>
                 <relationship kind="action" name="iWantToCancleOrder:"/>
                 <relationship kind="action" name="iWantToRefresh:"/>
             </relationships>
@@ -1110,6 +1106,7 @@
         <class className="TDBPassengerInfoViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBPassengerInfoViewController.h"/>
             <relationships>
+                <relationship kind="action" name="_backPressed:"/>
                 <relationship kind="action" name="retrivePassengerList:" candidateClass="UIBarButtonItem"/>
             </relationships>
         </class>
@@ -1119,6 +1116,7 @@
         <class className="TDBTicketDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBTicketDetailViewController.h"/>
             <relationships>
+                <relationship kind="action" name="_backPressed:"/>
                 <relationship kind="action" name="iWantOrder:"/>
                 <relationship kind="action" name="refreshVerifyCode:"/>
                 <relationship kind="outlet" name="detailArriveLabel" candidateClass="UILabel"/>
