@@ -195,7 +195,7 @@
                                             <rect key="frame" x="191" y="30" width="84" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="12"/>
-                                            <color key="textColor" red="0.47080309187178149" green="0.35715556382271707" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.40939299512424987" green="0.55482363178556882" blue="0.65768494897959184" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                     </subviews>
@@ -1085,15 +1085,9 @@
         </class>
         <class className="TDBListViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBListViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="_backPressed:"/>
-            </relationships>
         </class>
         <class className="TDBOrderDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBOrderDetailViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="_backPressed:"/>
-            </relationships>
         </class>
         <class className="TDBOrderListViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBOrderListViewController.h"/>
@@ -1104,7 +1098,6 @@
         <class className="TDBOrderOperationViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBOrderOperationViewController.h"/>
             <relationships>
-                <relationship kind="action" name="_backPressed:"/>
                 <relationship kind="action" name="iWantToCancleOrder:"/>
                 <relationship kind="action" name="iWantToRefresh:"/>
                 <relationship kind="outlet" name="orderSquenceNo" candidateClass="UILabel"/>
@@ -1113,20 +1106,15 @@
         <class className="TDBPassengerInfoViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBPassengerInfoViewController.h"/>
             <relationships>
-                <relationship kind="action" name="_backPressed:"/>
                 <relationship kind="action" name="retrivePassengerList:" candidateClass="UIBarButtonItem"/>
             </relationships>
         </class>
         <class className="TDBSeatDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBSeatDetailViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="_backPressed:"/>
-            </relationships>
         </class>
         <class className="TDBTicketDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBTicketDetailViewController.h"/>
             <relationships>
-                <relationship kind="action" name="_backPressed:"/>
                 <relationship kind="action" name="iWantOrder:"/>
                 <relationship kind="action" name="refreshVerifyCode:"/>
                 <relationship kind="outlet" name="detailArriveLabel" candidateClass="UILabel"/>
@@ -1145,9 +1133,6 @@
         </class>
         <class className="TDBTrainTimetableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBTrainTimetableViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="_backPressed:"/>
-            </relationships>
         </class>
         <class className="TDBViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBViewController.h"/>
