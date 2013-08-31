@@ -304,7 +304,7 @@
     }
 }
 
-- (BOOL)checkOrderInfo:(TDBTrainInfo *)train  passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode
+- (NSString *)checkOrderInfo:(TDBTrainInfo *)train  passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode
 {
     NSLog(@"checkOrderInfo");
     [self assertLoggedIn];
@@ -374,18 +374,23 @@
     
     if (jsonErr) {
         NSLog(@"%@", html);
-        return NO;
+        return @"请求失败，请检查网络";
     } else {
         NSLog(@"%@", dict);
         NSString *msg = [dict objectForKey:@"msg"];
         NSString *errMsg = [dict objectForKey:@"errMsg"];
         
-        if (msg.length != 0 || ![errMsg isEqualToString:@"Y"]) {
+        if (msg.length != 0) {
             NSLog(@"msg: '%@'; errMsg: '%@'", msg, errMsg);
-            return NO;
+            return msg;
+        } else if (![errMsg isEqualToString:@"Y"]) {
+            NSLog(@"msg: '%@'; errMsg: '%@'", msg, errMsg);
+            return errMsg;
         }
         
-        return YES;
+        // 未发生错误，提示购票成功
+        // 实际上也会有失败的情况不能检测出来，例如无法购买学生票==，需要改进
+        return nil;
     }
     
 }
