@@ -57,6 +57,9 @@
             NSArray *tableChildren = [table children];
             NSUInteger count = tableChildren.count;
             
+            // table下面的每个<tr>对应一位乘客，但在table和tr之间有很多无用信息，需要先跳过
+            // 另外表格中的第1个<tr>是表格的头部信息，并无用处，一并跳过
+            // 下面是表头的下一个元素在父节点(table[@class='table_clist'])上的位置
             NSUInteger firstPos = 0;
             for (NSUInteger i = 0; i < count; i++) {
                 if ([[[tableChildren objectAtIndex:i] tagName] isEqualToString:@"tr"]) {
@@ -65,33 +68,36 @@
                 }
             }
             
+            // 在一些特别的情况下，比如出票失败，表头之后还会夹杂很多input标签，需要跳过
+            // 直到遇到一个tr
+            for (NSInteger i = firstPos; i < count; i++) {
+                if ([[[tableChildren objectAtIndex:i] tagName] isEqualToString:@"tr"]) {
+                    firstPos = i;
+                    break;
+                }
+            }
+            
+            // 一个订单可能有多个乘客，很多信息只需要从第一个乘客中获取
             BOOL isFirstPerson = YES;
             NSMutableArray *passengerList = [NSMutableArray new];
+            
+            // 最后一个tr里面不是乘客的信息
             for (NSUInteger i = firstPos; i < count - 1; i++) {
-                
-                // 在一些特别的情况下，比如出票失败，页面中间会夹杂很多input标签
                 TFHppleElement *personTR = [tableChildren objectAtIndex:i];
-                if (![personTR.tagName isEqualToString:@"tr"]) {
-                    continue;
-                }
+                
                 //every person in order
                 NSMutableArray *textNodeList = [[NSMutableArray alloc] init];
                 NSMutableArray *inputNodeList = [[NSMutableArray alloc] init];
                 
                 [self parseDOM:personTR textNodeOut:textNodeList inputNodeOut:inputNodeList];
                 
-//                NSLog(@"[hello]");
-//                for (NSString *str in textNodeList) {
-//                    NSLog(@"%@", str);
-//                }
-//                NSLog(@"[finish]");
-                
-                // 先把改签过的票面信息去掉，防止干扰用户
                 if (textNodeList.count < 11) {
                     order.statusDescription = @"失败";
                 } else {
                     order.statusDescription = [textNodeList objectAtIndex:10];
                 }
+                
+                // 对于改签票，先把改签前的票面信息去掉，防止干扰用户
                 if ([order.statusDescription isEqualToString:@"已改签"]) {
                     continue;
                 }
@@ -125,10 +131,15 @@
                         order.status = ORDER_STATUS_PAID;
                     } else if ([order.statusDescription isEqualToString:@"改签票"]) {
                         order.status = ORDER_STATUS_PAID;
-                    }else {
+                    } else {
                         order.status = ORDER_STATUS_OTHER;
                     }
-                
+                    
+                    // 对于已完成的订单，订单号可以从“打印订单”按钮的JS代码中获取
+                    NSString *orderSequenceFromLastTr = [self _findOrderSequenceNoFromLastTr:[tableChildren objectAtIndex:count - 1]];
+                    if (orderSequenceFromLastTr) {
+                        order.orderSquence_no = orderSequenceFromLastTr;
+                    }
                 }
                 
                 PassengerInOrder *pio = [[PassengerInOrder alloc] init];
@@ -180,6 +191,25 @@
             }
         }
     }
+}
+
+- (NSString *)_findOrderSequenceNoFromLastTr:(TFHppleElement *)element
+{
+    NSString *text = element.raw;
+    NSRange range = [text rangeOfString:@"printTickets('"];
+    
+    if (range.length == 0) {
+        return nil;
+    }
+    
+    text = [text substringFromIndex:range.location + range.length];
+    range = [text rangeOfString:@"');"];
+    
+    if (range.length == 0) {
+        return nil;
+    }
+    
+    return [text substringToIndex:range.location];
 }
 
 - (NSString *)parseApacheToken:(TFHpple *)xpathParser
@@ -307,6 +337,7 @@
     UILabel *date = (UILabel *)[cell viewWithTag:21];
     UILabel *unfinished = (UILabel *)[cell viewWithTag:22];
     UILabel *firstPassengerName = (UILabel *)[cell viewWithTag:23];
+    UILabel *orderSequenceNo = (UILabel *)[cell viewWithTag:24];
     
     // 此处暂时去除圆角效果，因为经测试设置后很影响显示性能
     // unfinished.layer.cornerRadius = 8.f;
@@ -318,6 +349,7 @@
     time_from.text = order.departTime;
     date.text = order.date;
     firstPassengerName.text = [[order.passengers objectAtIndex:0] name];
+    orderSequenceNo.text = order.orderSquence_no;
     
     unfinished.text = order.statusDescription;
     
