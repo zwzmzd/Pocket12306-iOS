@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link  href="/otsweb/css/style.css" rel="stylesheet"  type="text/css"/>
+    <link  href="/otsweb/css/newsty.css" rel="stylesheet"  type="text/css"/>
+    <link  href="/otsweb/css/contact.css" rel="stylesheet"  type="text/css"/>
+    <link  href="/css/validation.css" rel="stylesheet" type="text/css" />
+    %@
+    
+    <script type="text/javascript">
+        //<![CDATA[
+        
+        var updateWithLeaseTime = function(leaseTime) {
+            var leaseTimeMinute = Math.floor(leaseTime / 60);
+            var leaseTimeSecond = leaseTime - leaseTimeMinute * 60;
+            
+            var node = document.getElementById('ShowTime');
+            node.innerHTML = '支付订单剩余时间：<strong>' + leaseTimeMinute + '分' + leaseTimeSecond + '秒</strong>';
+        }
+        
+        var updateViewEverySecond = function(leaseTimeNow) {
+            updateWithLeaseTime(leaseTimeNow);
+            var leaseTimeForNextSecond = leaseTimeNow - 1;
+            window.setTimeout('updateViewEverySecond(' + leaseTimeForNextSecond + ')', 1000);
+        }
+        
+        window.onload = function() {
+            %@
+            var leaseTime = parseInt((loseTime - beginTime) / 1000);
+            updateViewEverySecond(leaseTime);
+        }
+        //]]>
+    </script>
+</head>
+<body>
+    <div class="conWrap">
+        <div class="enter_w">
+            %@
+            %@
+            <div>%@<div style="text-align: right"><input type="submit" value="点此按钮进入支付页面" /></div></form></div>
+        </div>
+    </div>
+</body>
+</html>
