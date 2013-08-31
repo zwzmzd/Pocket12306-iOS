@@ -42,8 +42,8 @@ typedef enum {
 // 在余票列表中选择一个车次后，获取订票页面
 - (NSData *)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date;
 
-// 购票第一步：验证订单信息正确性
-- (BOOL)checkOrderInfo:(TDBTrainInfo *)train  passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode;
+// 购票第一步：验证订单信息正确性。若订单信息正确，返回nil；否则返回错误信息
+- (NSString *)checkOrderInfo:(TDBTrainInfo *)train  passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode;
 // 购票第二步，照抄即可
 - (BOOL)getQueueCount:(TDBTrainInfo *)train passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketID:(NSString *)leftTicketID;
 // 购票第三步，正式提交订单信息

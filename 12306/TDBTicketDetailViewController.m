@@ -454,8 +454,9 @@
             dispatch_async(orderQueue, ^(void) {
                 
                 sleep(0.5);
-                if ([tdbss checkOrderInfo:self.train passenger:passenger date:date
-                            leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
+                NSString *returnMsg = [tdbss checkOrderInfo:self.train passenger:passenger date:date
+                                              leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode];
+                if (returnMsg == nil) {
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         self.progressView.progress = 0.33;
@@ -466,7 +467,7 @@
                     haveError = YES;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         self.progressView.progress = 0.33;
-                        [overlay postErrorMessage:@"验证码错误，请点击图片后重新输入" duration:2.f];
+                        [overlay postErrorMessage:returnMsg duration:2.f];
                         self.navigationItem.rightBarButtonItem = submitBtn;
                     });
                 }
