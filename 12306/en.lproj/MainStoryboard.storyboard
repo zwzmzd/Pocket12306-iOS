@@ -173,6 +173,7 @@
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="22" contentMode="left" text="待支付" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="L01-sP-yT0">
                                             <rect key="frame" x="216" y="59" width="59" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60010762120000005" green="0.1140787248" blue="0.2440267981" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -185,6 +186,7 @@
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="23" contentMode="left" text="乘车人" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UnW-TP-f6Z">
                                             <rect key="frame" x="191" y="11" width="84" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1074,6 +1076,7 @@
         <class className="TDBEPayEntryViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBEPayEntryViewController.h"/>
             <relationships>
+                <relationship kind="action" name="_backPressed:"/>
                 <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
             </relationships>
         </class>
@@ -1082,6 +1085,9 @@
         </class>
         <class className="TDBListViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBListViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="_backPressed:"/>
+            </relationships>
         </class>
         <class className="TDBOrderDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBOrderDetailViewController.h"/>
@@ -1101,6 +1107,7 @@
                 <relationship kind="action" name="_backPressed:"/>
                 <relationship kind="action" name="iWantToCancleOrder:"/>
                 <relationship kind="action" name="iWantToRefresh:"/>
+                <relationship kind="outlet" name="orderSquenceNo" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="TDBPassengerInfoViewController" superclassName="UITableViewController">
@@ -1112,6 +1119,9 @@
         </class>
         <class className="TDBSeatDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBSeatDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="_backPressed:"/>
+            </relationships>
         </class>
         <class className="TDBTicketDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBTicketDetailViewController.h"/>
@@ -1135,6 +1145,9 @@
         </class>
         <class className="TDBTrainTimetableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBTrainTimetableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="_backPressed:"/>
+            </relationships>
         </class>
         <class className="TDBViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TDBViewController.h"/>
