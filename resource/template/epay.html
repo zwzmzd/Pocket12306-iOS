@@ -5,7 +5,7 @@
     <link  href="/otsweb/css/style.css" rel="stylesheet"  type="text/css"/>
     <link  href="/otsweb/css/newsty.css" rel="stylesheet"  type="text/css"/>
     <link  href="/otsweb/css/contact.css" rel="stylesheet"  type="text/css"/>
-    <link  href="/css/validation.css" rel="stylesheet" type="text/css" />
+    <link  href="/otsweb/css/validation.css" rel="stylesheet" type="text/css" />
     %@
     
     <script type="text/javascript">
@@ -29,6 +29,14 @@
             %@
             var leaseTime = parseInt((loseTime - beginTime) / 1000);
             updateViewEverySecond(leaseTime);
+            
+            var epayForm = document.getElementById('epayForm');
+            epayForm.onsubmit = function() {
+                var epay_entry = document.getElementById('epay-entry');
+                epay_entry.setAttribute('value', '正在加载，请稍后');
+                epay_entry.setAttribute('disabled', 'disabled');
+                return true;
+            }
         }
         //]]>
     </script>
@@ -38,7 +46,7 @@
         <div class="enter_w">
             %@
             %@
-            <div>%@<div style="text-align: right"><input type="submit" value="点此按钮进入支付页面" /></div></form></div>
+            <div>%@<div style="text-align: right"><input id="epay-entry" type="submit" value="点此按钮进入支付页面" /></div></form></div>
         </div>
     </div>
 </body>
