@@ -140,6 +140,11 @@
                     if (orderSequenceFromLastTr) {
                         order.orderSquence_no = orderSequenceFromLastTr;
                     }
+                    
+                    NSString *ticketKeyFromCheckbox = [self _findTicketKeyFromCheckbox:personTR];
+                    if (ticketKeyFromCheckbox) {
+                        order.ticketKey = ticketKeyFromCheckbox;
+                    }
                 }
                 
                 PassengerInOrder *pio = [[PassengerInOrder alloc] init];
@@ -210,6 +215,18 @@
     }
     
     return [text substringToIndex:range.location];
+}
+
+- (NSString *)_findTicketKeyFromCheckbox:(TFHppleElement *)element
+{
+    TFHpple *parser = [[TFHpple alloc] initWithHTMLData:[element.raw dataUsingEncoding:NSUTF8StringEncoding]];
+    NSArray *elements = [parser searchWithXPathQuery:@"//input[@id='checkbox_all']"];
+    if (elements.count > 0) {
+        TFHppleElement *element = [elements objectAtIndex:0];
+        return [[element attributes] objectForKey:@"value"];
+    } else {
+        return nil;
+    }
 }
 
 - (NSString *)parseApacheToken:(TFHpple *)xpathParser
