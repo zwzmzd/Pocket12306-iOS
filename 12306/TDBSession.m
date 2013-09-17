@@ -69,42 +69,58 @@
 }
 
 - (NSData *)getVerifyImage {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeAction.do?rand=sjrand&0.%d", abs(arc4random())];
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=login&rand=sjrand&0.%d%d", abs(arc4random()), abs(arc4random())];
     NSURL *url = [NSURL URLWithString:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
+    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+}
+
+- (NSData *)getLoginPasscode
+{
+    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/dynamicJsAction.do?jsversion=%@&method=loginJs", randCode];
+    NSURL *url = [NSURL URLWithString:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
     return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 }
 
 - (NSData *)getRandpImage {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeAction.do?rand=randp&%d", abs(arc4random())];
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=passenger&rand=randp&0.%d%d", abs(arc4random()), abs(arc4random())];
     NSURL *url = [NSURL URLWithString:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
     return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 }
 
-- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode
+- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode passkey:(NSString *)passkey passcode:(NSString *)passcode
 {
     NSDictionary *extraInfo = [self loginAysnSuggest];
-    NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-    
-    [info setObject:[extraInfo objectForKey:@"loginRand"] forKey:@"loginRand"];
-    [info setObject:@"N" forKey:@"refundLogin"];
-    [info setObject:@"Y" forKey:@"refundFlag"];
-    [info setObject:name forKey:@"loginUser.user_name"];
-    [info setObject:@"" forKey:@"nameErrorFocus"];
-    [info setObject:password forKey:@"user.password"];
-    [info setObject:@"" forKey:@"passwordErrorFocus"];
-    [info setObject:verifyCode forKey:@"randCode"];
-    [info setObject:@"" forKey:@"randErrorFocus"];
+    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+    [arguments addValue:[extraInfo objectForKey:@"loginRand"] forKey:@"loginRand"];
+    [arguments addValue:@"N" forKey:@"refundLogin"];
+    [arguments addValue:@"Y" forKey:@"refundFlag"];
+    [arguments addValue:@"" forKey:@"isClick"];
+    [arguments addValue:@"null" forKey:@"from_tk"];
+    [arguments addValue:name forKey:@"loginUser.user_name"];
+    [arguments addValue:@"" forKey:@"nameErrorFocus"];
+    [arguments addValue:password forKey:@"user.password"];
+    [arguments addValue:@"" forKey:@"passwordErrorFocus"];
+    [arguments addValue:verifyCode forKey:@"randCode"];
+    [arguments addValue:@"" forKey:@"randErrorFocus"];
+    [arguments addValue:passcode forKey:passkey];
+    [arguments addValue:@"undefined" forKey:@"myversion"];
     
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/loginAction.do?method=login"];
     NSURL *url = [NSURL URLWithString:path];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.HTTPMethod = @"POST";
-    request.HTTPBody = [[DataSerializeUtility generatePOSTDataWithDictionary:info] dataUsingEncoding:NSUTF8StringEncoding];
+    request.HTTPBody = [[arguments getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
+    [request setValue:SYSURL @"/otsweb/loginAction.do?method=init" forHTTPHeaderField:@"Referer"];
     
     NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *result = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];

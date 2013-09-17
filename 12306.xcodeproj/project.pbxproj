@@ -48,8 +48,9 @@
 		FA4F7B5617D2221300DF19A0 /* epay.html in Resources */ = {isa = PBXBuildFile; fileRef = FA4F7B5517D2221300DF19A0 /* epay.html */; };
 		FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */; };
 		FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */; };
+		FA77E04117E8181F009308BF /* login_encode.js in Sources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
+		FA77E04217E81C7C009308BF /* login_encode.js in Resources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
-		FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FABA969F17A193F80018B20A /* TDBDatepickSheet.m */; };
 		FAC510A517B87D8100896AB3 /* WKVerticalScrollBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */; };
 		FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */; };
@@ -151,10 +152,9 @@
 		FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
 		FA683F1B17AB7921003D32FB /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
 		FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
+		FA77E04017E8181F009308BF /* login_encode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = login_encode.js; sourceTree = "<group>"; };
 		FAB56A22179C27D8006A05BF /* TDBStationName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBStationName.h; sourceTree = "<group>"; };
 		FAB56A23179C27D8006A05BF /* TDBStationName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationName.m; sourceTree = "<group>"; };
-		FABA969E17A193F80018B20A /* TDBDatepickSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDatepickSheet.h; sourceTree = "<group>"; };
-		FABA969F17A193F80018B20A /* TDBDatepickSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBDatepickSheet.m; sourceTree = "<group>"; };
 		FAC510A317B87D8100896AB3 /* WKVerticalScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKVerticalScrollBar.h; path = vendor/WKVerticalScrollBar/WKVerticalScrollBar/WKVerticalScrollBar.h; sourceTree = SOURCE_ROOT; };
 		FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKVerticalScrollBar.m; path = vendor/WKVerticalScrollBar/WKVerticalScrollBar/WKVerticalScrollBar.m; sourceTree = SOURCE_ROOT; };
 		FAE1271A17B60CBE00BAD9C4 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendor/SSKeychain/SSKeychain/SSKeychain.h; sourceTree = SOURCE_ROOT; };
@@ -240,7 +240,7 @@
 		FA1091AE17C53CF600FB24B3 /* resource */ = {
 			isa = PBXGroup;
 			children = (
-				FA4F7B5417D221D600DF19A0 /* template */,
+				FA4F7B5417D221D600DF19A0 /* web */,
 				FA1091AF17C53CF600FB24B3 /* theme */,
 			);
 			path = resource;
@@ -370,12 +370,13 @@
 			name = ORDRefreshControl;
 			sourceTree = "<group>";
 		};
-		FA4F7B5417D221D600DF19A0 /* template */ = {
+		FA4F7B5417D221D600DF19A0 /* web */ = {
 			isa = PBXGroup;
 			children = (
+				FA77E04017E8181F009308BF /* login_encode.js */,
 				FA4F7B5517D2221300DF19A0 /* epay.html */,
 			);
-			name = template;
+			name = web;
 			sourceTree = "<group>";
 		};
 		FA683F1717AB7921003D32FB /* SVPullToRefresh */ = {
@@ -523,8 +524,6 @@
 				FA3BAC9517A3B72B00D535BC /* TDBLeftTicketForList.m */,
 				FAF32E14179F6FE3006C2CC9 /* TDBStationAndDateSelector.h */,
 				FAF32E15179F6FE3006C2CC9 /* TDBStationAndDateSelector.m */,
-				FABA969E17A193F80018B20A /* TDBDatepickSheet.h */,
-				FABA969F17A193F80018B20A /* TDBDatepickSheet.m */,
 				FAE1272717B6560900BAD9C4 /* TDBTrainTimetableCell.h */,
 				FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */,
 				FAF902A817C6848B0080A5CC /* TDBDatePickerView.h */,
@@ -616,6 +615,11 @@
 				CLASSPREFIX = TDB;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = zwz;
+				TargetAttributes = {
+					FA320A2017966A0800F2E282 = {
+						DevelopmentTeam = FA2369NZKZ;
+					};
+				};
 			};
 			buildConfigurationList = FA320A1C17966A0800F2E282 /* Build configuration list for PBXProject "12306" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -639,6 +643,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA77E04217E81C7C009308BF /* login_encode.js in Resources */,
 				FA320A2F17966A0800F2E282 /* InfoPlist.strings in Resources */,
 				FA320A3717966A0800F2E282 /* Default.png in Resources */,
 				FA320A3917966A0800F2E282 /* Default@2x.png in Resources */,
@@ -674,6 +679,7 @@
 				FA320A4F1796715600F2E282 /* LoginFrameViewController.m in Sources */,
 				FA320A521796911000F2E282 /* TDBSession.m in Sources */,
 				FA320A551797991C00F2E282 /* TDBListViewController.m in Sources */,
+				FA77E04117E8181F009308BF /* login_encode.js in Sources */,
 				FA320A581797AB3A00F2E282 /* DataSerializeUtility.m in Sources */,
 				FA320A5B1797D77100F2E282 /* TDBTrainInfo.m in Sources */,
 				FA320A5E1797DC4100F2E282 /* TDBTrainInfoController.m in Sources */,
@@ -684,7 +690,6 @@
 				FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */,
 				FAF32E16179F6FE3006C2CC9 /* TDBStationAndDateSelector.m in Sources */,
 				FAF32E1D179FA361006C2CC9 /* TDBKeybordNotificationManager.m in Sources */,
-				FABA96A017A193F80018B20A /* TDBDatepickSheet.m in Sources */,
 				FA3BAC9617A3B72B00D535BC /* TDBLeftTicketForList.m in Sources */,
 				FA3BAC9C17A4BC9400D535BC /* TDBOrderListViewController.m in Sources */,
 				FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */,
@@ -799,12 +804,15 @@
 		FA320A4517966A0800F2E282 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "12306/12306-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"${SDK_DIR}\"/usr/include/libxml2";
 				INFOPLIST_FILE = "12306/12306-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -812,12 +820,15 @@
 		FA320A4617966A0800F2E282 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "12306/12306-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"${SDK_DIR}\"/usr/include/libxml2";
 				INFOPLIST_FILE = "12306/12306-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

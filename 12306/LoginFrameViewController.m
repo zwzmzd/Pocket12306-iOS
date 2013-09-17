@@ -21,10 +21,14 @@
 @interface LoginFrameViewController ()
 
 @property (nonatomic, strong) TDBSession *tdbss;
+@property (nonatomic, strong) NSString *passcode;
+@property (nonatomic, strong) NSString *passkey;
 
 @end
 
 @implementation LoginFrameViewController
+
+# pragma mark - setter & getter
 
 - (TDBSession *)tdbss
 {
@@ -53,13 +57,19 @@
 {
     [super viewDidLoad];
     
-    [self retriveVerifyImageUsingGCD];
     self.username.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
     self.password.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     BOOL isOn = [ud boolForKey:REMEMEBR_PROFILE_STATE_STOREAGE_KEY];
     [self.rememberProfile setOn:isOn];
+    
+    [self retriveLoginPassTokenUsingGCD];
+    double delayInSeconds = 1.f;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self retriveVerifyImageUsingGCD];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,7 +97,9 @@
         
         dispatch_queue_t downloadQueue = dispatch_queue_create("12306 Login", NULL);
         dispatch_async(downloadQueue, ^{
-            LOGIN_MSG_TYPE result = [self.tdbss loginWithName:username AndPassword:password andVerifyCode:verifyCode];
+            LOGIN_MSG_TYPE result = [self.tdbss loginWithName:username AndPassword:password
+                                                andVerifyCode:verifyCode
+                                                      passkey:self.passkey passcode:self.passcode];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (result == LOGIN_MSG_SUCCESS) {
                     GlobalDataStorage.tdbss = self.tdbss;
@@ -156,6 +168,36 @@
     });
 }
 
+- (void)retriveLoginPassTokenUsingGCD
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+        NSString *rawJs = [[NSString alloc] initWithData:[self.tdbss getLoginPasscode] encoding:NSUTF8StringEncoding];
+        NSString *key = nil;
+        @try {
+            NSRange range = [rawJs rangeOfString:@"var key='"];
+            rawJs = [rawJs substringFromIndex:range.location + range.length];
+            range = [rawJs rangeOfString:@"';"];
+            key = [rawJs substringToIndex:range.location];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"[loginPasscode] fetchFail");
+        }
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"login_encode" ofType:@"js"];
+            NSString *loginJS = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+            [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
+            
+            NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
+            self.passcode = [jsEngine stringByEvaluatingJavaScriptFromString:command];
+            self.passkey = key;
+            NSLog(@"%@: %@", self.passkey, self.passcode);
+        });
+    });
+}
+
 - (IBAction)iWantToRetriveVerifyCode:(id)sender {
     [self retriveVerifyImageUsingGCD];
 }
@@ -164,6 +206,7 @@
     //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.tdbss = [[TDBSession alloc] init];
     [self iWantToRetriveVerifyCode:sender];
+    [self retriveLoginPassTokenUsingGCD];
 }
 - (void)viewDidUnload {
     [self setRememberProfile:nil];

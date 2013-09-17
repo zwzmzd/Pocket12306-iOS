@@ -30,11 +30,13 @@ typedef enum {
 // 这个是登录页面的验证码获取
 - (NSData *)getVerifyImage;
 
+- (NSData *)getLoginPasscode;
+
 // 这个是用于购票页面验证码获取
 - (NSData *)getRandpImage;
 
 // 登录12306
-- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode;
+- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode passkey:(NSString *)passkey passcode:(NSString *)passcode;
 
 // 输入购票时间，起点站，终点站，获取余票信息
 - (NSArray *)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to;
