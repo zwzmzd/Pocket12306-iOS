@@ -82,11 +82,17 @@
     return self;
 }
 
+-(NSString *)encodeURL:(NSString *)urlString
+{
+    CFStringRef newString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)urlString, NULL, CFSTR("!*'();:@&=+@,/?#[]"), kCFStringEncodingUTF8);
+    return (NSString *)CFBridgingRelease(newString);
+}
+
 - (void)addValue:(NSString *)value forKey:(NSString *)key
 {
     [self.array addObject:[NSString stringWithFormat:@"%@=%@",
-                      [key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                      [value stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+                           [self encodeURL:key],
+                           [self encodeURL:value]]];
 }
 
 - (NSString *)getFinalData
