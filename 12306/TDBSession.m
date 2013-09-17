@@ -69,7 +69,7 @@
 }
 
 - (NSData *)getVerifyImage {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=login&rand=sjrand&0.%d", abs(arc4random())];
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=login&rand=sjrand&0.%d%d", abs(arc4random()), abs(arc4random())];
     NSURL *url = [NSURL URLWithString:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
@@ -78,7 +78,7 @@
 
 - (NSData *)getLoginPasscode
 {
-    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 10000];
+    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/dynamicJsAction.do?jsversion=%@&method=loginJs", randCode];
     NSURL *url = [NSURL URLWithString:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -87,7 +87,7 @@
 }
 
 - (NSData *)getRandpImage {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=passenger&rand=randp&0.%d", abs(arc4random())];
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=passenger&rand=randp&0.%d%d", abs(arc4random()), abs(arc4random())];
     NSURL *url = [NSURL URLWithString:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
