@@ -11,8 +11,9 @@
 #import "GlobalDataStorage.h"
 #import "TFHpple.h"
 #import "UIButton+TDBAddition.h"
+#import "SVProgressHUD.h"
 
-@interface TDBEPayEntryViewController ()
+@interface TDBEPayEntryViewController () <UIWebViewDelegate>
 
 @end
 
@@ -34,6 +35,7 @@
     
     // 进入后，用户总览全局
     self.webView.scalesPageToFit = YES;
+    self.webView.delegate = self;
     
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
@@ -95,7 +97,7 @@
 
 - (void)retriveEssentialInfoUsingGCD
 {
-    
+    [SVProgressHUD show];
     dispatch_queue_t EpayQueue = dispatch_queue_create("12306 Epay", NULL);
     dispatch_async(EpayQueue, ^(void) {
         
@@ -124,6 +126,10 @@
             });
         } else {
 #warning 订单支付时发现超时或已被取消的提示
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [SVProgressHUD showErrorWithStatus:@"网络异常，请重新进入"];
+                NSLog(@"网络异常，请重新进入");
+            });
         }
     });
 }
@@ -132,6 +138,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - UIWebViewDelegate
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [SVProgressHUD dismiss];
 }
 
 @end
