@@ -141,10 +141,41 @@
     }
 }
 
+- (void)qt:(NSString *)date from:(NSString *)from to:(NSString *)to
+{
+    NSLog(@"queryLeftTicketWithDate qt");
+    [self assertLoggedIn];
+    
+    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+    [arguments addValue:@"qt" forKey:@"method"];
+    [arguments addValue:date forKey:@"orderRequest.train_date"];
+    [arguments addValue:from forKey:@"orderRequest.from_station_telecode"];
+    [arguments addValue:to forKey:@"orderRequest.to_station_telecode"];
+    [arguments addValue:@"" forKey:@"orderRequest.train_no"];
+    [arguments addValue:@"QB" forKey:@"trainPassType"];
+    [arguments addValue:@"QB#D#Z#T#K#QT#" forKey:@"trainClass"];
+    [arguments addValue:@"00" forKey:@"includeStudent"];
+    [arguments addValue:@"" forKey:@"seatTypeAndNum"];
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
+    
+    NSURL *url = [NSURL URLWithString:path];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    
+    [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+}
+
+
 - (NSArray *)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to
 {
     NSLog(@"queryLeftTicketWithDate");
     [self assertLoggedIn];
+    
+    [self qt:date from:from to:to];
+    [NSThread sleepForTimeInterval:1.f];
 
     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
     [arguments addValue:@"queryLeftTicket" forKey:@"method"];
