@@ -105,7 +105,7 @@
     [arguments addValue:@"N" forKey:@"refundLogin"];
     [arguments addValue:@"Y" forKey:@"refundFlag"];
     [arguments addValue:@"" forKey:@"isClick"];
-    [arguments addValue:@"null" forKey:@"from_tk"];
+    [arguments addValue:@"null" forKey:@"form_tk"];
     [arguments addValue:name forKey:@"loginUser.user_name"];
     [arguments addValue:@"" forKey:@"nameErrorFocus"];
     [arguments addValue:password forKey:@"user.password"];
