@@ -254,13 +254,7 @@
             if (result == ORDER_PARSER_MSG_SUCCESS) {
                 [NSThread sleepForTimeInterval:0.5];
                 
-                NSDate *now = [NSDate date];
-                NSDate *a_month_ago = [NSDate dateWithTimeIntervalSinceNow: -30 * 24 * 3600];
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"yyyy-MM-dd"];
-                
-                htmlData = [[GlobalDataStorage tdbss] queryMyOrderWithFromOrderDate:[formatter stringFromDate:a_month_ago]
-                                                                               endOrderDate:[formatter stringFromDate:now]];
+                htmlData = [[GlobalDataStorage tdbss] queryMyOrder];
                 result = [self parseHTMLWithData:htmlData toList:tempList];
             }
         }

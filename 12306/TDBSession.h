@@ -54,8 +54,8 @@ typedef enum {
 
 // 获取用户的未完成（叫未支付更为贴切）订单
 - (NSData *)queryMyOrderNotComplete;
-// 获取用户一般状态的订单，传入一个订单查询的起始时间和终止时间
-- (NSData *)queryMyOrderWithFromOrderDate:(NSString *)fromOrderDate endOrderDate:(NSString *)endOrderDate;
+// 获取用户一般状态的订单
+- (NSData *)queryMyOrder;
 
 // 根据订单号，apacheToken，还有ticketToken获取一个未完成订单的支付页面
 - (NSData *)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo
