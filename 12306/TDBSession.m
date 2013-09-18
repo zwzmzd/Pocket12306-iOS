@@ -76,7 +76,7 @@
     return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 }
 
-- (NSData *)getLoginPasscode
+- (NSData *)getLoginToken
 {
     NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/dynamicJsAction.do?jsversion=%@&method=loginJs", randCode];
@@ -94,9 +94,12 @@
     return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 }
 
-- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode passkey:(NSString *)passkey passcode:(NSString *)passcode
+- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue
 {
     NSDictionary *extraInfo = [self loginAysnSuggest];
+    
+    [NSThread sleepForTimeInterval:1];
+    
     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
     [arguments addValue:[extraInfo objectForKey:@"loginRand"] forKey:@"loginRand"];
     [arguments addValue:@"N" forKey:@"refundLogin"];
@@ -109,7 +112,7 @@
     [arguments addValue:@"" forKey:@"passwordErrorFocus"];
     [arguments addValue:verifyCode forKey:@"randCode"];
     [arguments addValue:@"" forKey:@"randErrorFocus"];
-    [arguments addValue:passcode forKey:passkey];
+    [arguments addValue:tokenValue forKey:tokenKey];
     [arguments addValue:@"undefined" forKey:@"myversion"];
     
     
@@ -193,7 +196,17 @@
     return storage;
 }
 
-- (NSData *)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date
+- (NSData *)getSubmutToken
+{
+    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/dynamicJsAction.do?jsversion=%@&method=queryJs", randCode];
+    NSURL *url = [NSURL URLWithString:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+}
+
+- (NSData *)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue
 {
     NSLog(@"submutOrderRequestWithTrainInfo");
     [self assertLoggedIn];
@@ -224,6 +237,8 @@
     [argument addValue:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
     [argument addValue:[train getMMStr] forKey:@"mmStr"];
     [argument addValue:[train getLocationCode] forKey:@"locationCode"];
+    [argument addValue:tokenValue forKey:tokenKey];
+    [argument addValue:@"undefined" forKey:@"myversion"];
     
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?method=submutOrderRequest"];
@@ -467,8 +482,43 @@
     return result;
 }
 
+- (NSData *)queryMyOrder
+{
+    NSLog(@"queryMyOrder");
+    [self assertLoggedIn];
+    
+#define QDO @"queryOrderDTO."
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:@"_1" forKey:QDO @"location_code"];
+    [argument addValue:@"Y" forKey:@"leftmenu"];
+    [argument addValue:@"1" forKey:@"queryDataFlag"];
+    [argument addValue:@"" forKey:QDO @"from_order_date"];
+    [argument addValue:@"" forKey:QDO @"end_order_date"];
+    [argument addValue:@"" forKey:QDO @"sequence_no"];
+    [argument addValue:@"" forKey:QDO @"train_code"];
+    [argument addValue:@"" forKey:QDO @"name"];
+    
+#undef QDO
+    
+    
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/myOrderAction.do?method=queryMyOrder&pageIndex=0&pageSize=50"];
+    NSURL *url = [NSURL URLWithString:path];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    return result;
+}
+
 - (NSData *)queryMyOrderWithFromOrderDate:(NSString *)fromOrderDate endOrderDate:(NSString *)endOrderDate
 {
+    // 这个方法不会被使用
     NSLog(@"queryMyOrder");
     [self assertLoggedIn];
     
