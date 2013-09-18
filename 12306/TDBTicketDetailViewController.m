@@ -181,7 +181,7 @@
     [SVProgressHUD show];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
-        NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate];
+        NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate tokenKey:self.tokenKey tokenValue:self.tokenValue];
         SUBMUTORDER_MSG result = [self parseHTMLWithData:htmlData];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {

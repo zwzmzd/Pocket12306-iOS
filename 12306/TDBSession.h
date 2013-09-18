@@ -30,19 +30,20 @@ typedef enum {
 // 这个是登录页面的验证码获取
 - (NSData *)getVerifyImage;
 
-- (NSData *)getLoginPasscode;
+- (NSData *)getLoginToken;
 
 // 这个是用于购票页面验证码获取
 - (NSData *)getRandpImage;
 
 // 登录12306
-- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode passkey:(NSString *)passkey passcode:(NSString *)passcode;
+- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue;
 
 // 输入购票时间，起点站，终点站，获取余票信息
 - (NSArray *)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to;
 
+- (NSData *)getSubmutToken;
 // 在余票列表中选择一个车次后，获取订票页面
-- (NSData *)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date;
+- (NSData *)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue;
 
 // 购票第一步：验证订单信息正确性。若订单信息正确，返回nil；否则返回错误信息
 - (NSString *)checkOrderInfo:(TDBTrainInfo *)train  passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode;

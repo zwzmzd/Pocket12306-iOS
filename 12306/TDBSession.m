@@ -76,7 +76,7 @@
     return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 }
 
-- (NSData *)getLoginPasscode
+- (NSData *)getLoginToken
 {
     NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/dynamicJsAction.do?jsversion=%@&method=loginJs", randCode];
@@ -94,9 +94,12 @@
     return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 }
 
-- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode passkey:(NSString *)passkey passcode:(NSString *)passcode
+- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue
 {
     NSDictionary *extraInfo = [self loginAysnSuggest];
+    
+    [NSThread sleepForTimeInterval:1];
+    
     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
     [arguments addValue:[extraInfo objectForKey:@"loginRand"] forKey:@"loginRand"];
     [arguments addValue:@"N" forKey:@"refundLogin"];
@@ -109,7 +112,7 @@
     [arguments addValue:@"" forKey:@"passwordErrorFocus"];
     [arguments addValue:verifyCode forKey:@"randCode"];
     [arguments addValue:@"" forKey:@"randErrorFocus"];
-    [arguments addValue:passcode forKey:passkey];
+    [arguments addValue:tokenValue forKey:tokenKey];
     [arguments addValue:@"undefined" forKey:@"myversion"];
     
     
@@ -193,7 +196,17 @@
     return storage;
 }
 
-- (NSData *)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date
+- (NSData *)getSubmutToken
+{
+    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/dynamicJsAction.do?jsversion=%@&method=queryJs", randCode];
+    NSURL *url = [NSURL URLWithString:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+}
+
+- (NSData *)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue
 {
     NSLog(@"submutOrderRequestWithTrainInfo");
     [self assertLoggedIn];
@@ -224,6 +237,8 @@
     [argument addValue:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
     [argument addValue:[train getMMStr] forKey:@"mmStr"];
     [argument addValue:[train getLocationCode] forKey:@"locationCode"];
+    [argument addValue:tokenValue forKey:tokenKey];
+    [argument addValue:@"undefined" forKey:@"myversion"];
     
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?method=submutOrderRequest"];

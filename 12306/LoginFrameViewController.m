@@ -21,8 +21,8 @@
 @interface LoginFrameViewController ()
 
 @property (nonatomic, strong) TDBSession *tdbss;
-@property (nonatomic, strong) NSString *passcode;
-@property (nonatomic, strong) NSString *passkey;
+@property (nonatomic, strong) NSString *tokenValue;
+@property (nonatomic, strong) NSString *tokenKey;
 
 @end
 
@@ -99,7 +99,7 @@
         dispatch_async(downloadQueue, ^{
             LOGIN_MSG_TYPE result = [self.tdbss loginWithName:username AndPassword:password
                                                 andVerifyCode:verifyCode
-                                                      passkey:self.passkey passcode:self.passcode];
+                                                      tokenKey:self.tokenKey tokenValue:self.tokenValue];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (result == LOGIN_MSG_SUCCESS) {
                     GlobalDataStorage.tdbss = self.tdbss;
@@ -171,7 +171,7 @@
 - (void)retriveLoginPassTokenUsingGCD
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-        NSString *rawJs = [[NSString alloc] initWithData:[self.tdbss getLoginPasscode] encoding:NSUTF8StringEncoding];
+        NSString *rawJs = [[NSString alloc] initWithData:[self.tdbss getLoginToken] encoding:NSUTF8StringEncoding];
         NSString *key = nil;
         @try {
             NSRange range = [rawJs rangeOfString:@"var key='"];
@@ -180,7 +180,7 @@
             key = [rawJs substringToIndex:range.location];
         }
         @catch (NSException *exception) {
-            NSLog(@"[loginPasscode] fetchFail");
+            NSLog(@"[loginToken] fetchFail");
         }
         
         
@@ -191,9 +191,9 @@
             [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
             
             NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
-            self.passcode = [jsEngine stringByEvaluatingJavaScriptFromString:command];
-            self.passkey = key;
-            NSLog(@"%@: %@", self.passkey, self.passcode);
+            self.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
+            self.tokenKey = key;
+            NSLog(@"[loginToken] %@: %@", self.tokenKey, self.tokenValue);
         });
     });
 }

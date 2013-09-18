@@ -252,6 +252,8 @@
             result = [self parseHTMLWithData:htmlData toList:tempList];
             
             if (result == ORDER_PARSER_MSG_SUCCESS) {
+                [NSThread sleepForTimeInterval:0.5];
+                
                 NSDate *now = [NSDate date];
                 NSDate *a_month_ago = [NSDate dateWithTimeIntervalSinceNow: -30 * 24 * 3600];
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
