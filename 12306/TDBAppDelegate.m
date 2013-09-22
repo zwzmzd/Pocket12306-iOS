@@ -13,22 +13,6 @@
 
 - (void)_customGlobalUserInterface
 {
-    
-    
-    // navigationBar's background
-    id navigationBarAppearance = [UINavigationBar appearance];
-    UIImage *barBackgroundImage = [[UIImage imageNamed:@"header_bk"] resizableImageWithCapInsets:UIEdgeInsetsMake(5.f, 5.f, 5.f, 5.f)];
-    [navigationBarAppearance setBackgroundImage:barBackgroundImage forBarMetrics:UIBarMetricsDefault];
-    [navigationBarAppearance setTitleTextAttributes:@{
-                                     UITextAttributeFont:[UIFont fontWithName:@"Helvetica" size:20.f]
-     }];
-    
-    // back button
-    id backButtonAppearance = [UIBarButtonItem appearance];
-    UIImage *backButtonImageForNormalState  = [UIImage imageNamed:@"header_leftbtn_nor"];
-    UIImage *backButtonImageForHighlightedState = [UIImage imageNamed:@"header_leftbtn_press"];
-    [backButtonAppearance setBackButtonBackgroundImage:backButtonImageForNormalState forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [backButtonAppearance setBackButtonBackgroundImage:backButtonImageForHighlightedState forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
