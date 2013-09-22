@@ -11,10 +11,20 @@
 @interface TDBTrainTimetableCell()
 
 @property (nonatomic, strong) TDBTrainTimetableCellCustomView *customView;
+@property (nonatomic, strong) UIView *lineView;
 
 @end
 
 @implementation TDBTrainTimetableCell
+
+- (UIView *)lineView
+{
+    if (_lineView == nil) {
+        _lineView = [[UIView alloc] initWithFrame:CGRectZero];
+        _lineView.backgroundColor = [UIColor lightGrayColor];
+    }
+    return _lineView;
+}
 
 - (TDBTrainTimetableCellCustomView *)customView
 {
@@ -30,17 +40,21 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self.contentView addSubview:self.customView];
+        [self.contentView addSubview:self.lineView];
     }
     return self;
 }
 
+#define BOTTOM_SEPERATOR_HEIGHT 0.7
+
 - (void)layoutSubviews
 {
     CGSize size = self.frame.size;
-    self.customView.frame = CGRectMake(0.f, 0.f, size.width, size.height);
+    self.customView.frame = CGRectMake(0.f, 0.f, size.width, size.height - BOTTOM_SEPERATOR_HEIGHT);
+    self.lineView.frame = CGRectMake(10.f, size.height - BOTTOM_SEPERATOR_HEIGHT, size.width, BOTTOM_SEPERATOR_HEIGHT);
     [self.customView setNeedsDisplay];
 }
 
@@ -64,7 +78,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }

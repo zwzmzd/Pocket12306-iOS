@@ -160,10 +160,11 @@
         detail.train = [self.dataController getTrainInfoForIndex:[self.tableView indexPathForCell:sender].row];
         detail.orderDate = self.orderDate;
     } else if ([segue.identifier isEqualToString:@"TrainTimetableSegue"]) {
-        UITableViewCell *clickedCell = (UITableViewCell *)[[sender superview] superview];
-        NSIndexPath *clickedButtonPath = [self.tableView indexPathForCell:clickedCell];
+        CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+        
         TDBTrainTimetableViewController *detailVC = [segue destinationViewController];
-        detailVC.train = [self.dataController getTrainInfoForIndex:clickedButtonPath.row];
+        detailVC.train = [self.dataController getTrainInfoForIndex:indexPath.row];
         detailVC.departDate = self.dateInString;
     }
 }

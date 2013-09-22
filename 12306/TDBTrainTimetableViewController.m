@@ -35,7 +35,7 @@
 {
     [super viewDidLoad];
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
