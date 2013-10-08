@@ -53,27 +53,14 @@
         for (TFHppleElement *table in elements) {
             // every order
             TDBOrder *order = [[TDBOrder alloc] init];
-            
             NSArray *tableChildren = [table children];
-            NSUInteger count = tableChildren.count;
             
-            // table下面的每个<tr>对应一位乘客，但在table和tr之间有很多无用信息，需要先跳过
-            // 另外表格中的第1个<tr>是表格的头部信息，并无用处，一并跳过
-            // 下面是表头的下一个元素在父节点(table[@class='table_clist'])上的位置
-            NSUInteger firstPos = 0;
-            for (NSUInteger i = 0; i < count; i++) {
-                if ([[[tableChildren objectAtIndex:i] tagName] isEqualToString:@"tr"]) {
-                    firstPos = i + 1;
-                    break;
-                }
-            }
-            
-            // 在一些特别的情况下，比如出票失败，表头之后还会夹杂很多input标签，需要跳过
-            // 直到遇到一个tr
-            for (NSInteger i = firstPos; i < count; i++) {
-                if ([[[tableChildren objectAtIndex:i] tagName] isEqualToString:@"tr"]) {
-                    firstPos = i;
-                    break;
+            // table下面的每个<tr>对应一位乘客，但在tr之间有很多无用信息，需要先跳过
+            // 其中第一个tr是表头，最后一个tr是操作部分，用处不大
+            NSMutableArray *trList = [NSMutableArray new];
+            for (TFHppleElement *child in tableChildren) {
+                if ([child.tagName isEqualToString:@"tr"]) {
+                    [trList addObject:child];
                 }
             }
             
@@ -82,8 +69,8 @@
             NSMutableArray *passengerList = [NSMutableArray new];
             
             // 最后一个tr里面不是乘客的信息
-            for (NSUInteger i = firstPos; i < count - 1; i++) {
-                TFHppleElement *personTR = [tableChildren objectAtIndex:i];
+            for (NSInteger i = 1; i < trList.count - 1; i++) {
+                TFHppleElement *personTR = [trList objectAtIndex:i];
                 
                 //every person in order
                 NSMutableArray *textNodeList = [[NSMutableArray alloc] init];
@@ -136,7 +123,7 @@
                     }
                     
                     // 对于已完成的订单，订单号可以从“打印订单”按钮的JS代码中获取
-                    NSString *orderSequenceFromLastTr = [self _findOrderSequenceNoFromLastTr:[tableChildren objectAtIndex:count - 1]];
+                    NSString *orderSequenceFromLastTr = [self _findOrderSequenceNoFromLastTr:[trList lastObject]];
                     if (orderSequenceFromLastTr) {
                         order.orderSquence_no = orderSequenceFromLastTr;
                     }

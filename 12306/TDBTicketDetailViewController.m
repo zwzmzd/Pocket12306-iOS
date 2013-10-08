@@ -120,15 +120,17 @@
         
         /* 获取余票和票价 */
         {
-            NSArray *elements = [xpathParser searchWithXPathQuery:@"//form[@id='confirmPassenger']/table"];
+            NSArray *elements = [xpathParser searchWithXPathQuery:@"//form[@id='confirmPassenger']/table/tr"];
             NSMutableArray *array = [[NSMutableArray alloc] init];
             
-            elements = [[[[elements objectAtIndex:0] children] objectAtIndex:6] children];
+            elements = [[elements objectAtIndex:1] children];
             
             for (TFHppleElement *element in elements) {
-                NSString *ticket = [element.firstChild content];
-                if (ticket)
-                    [array addObject:ticket];
+                if ([element.tagName isEqualToString:@"td"]) {
+                    NSString *ticket = [element.firstChild content];
+                    if (ticket)
+                        [array addObject:ticket];
+                }
             }
             self.ticketList = [[NSArray alloc] initWithArray:array];
         }
