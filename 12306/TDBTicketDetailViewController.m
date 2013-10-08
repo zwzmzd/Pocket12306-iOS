@@ -25,6 +25,9 @@
 
 @property (nonatomic,strong) MBProgressHUD *HUD;
 
+@property (nonatomic, strong) NSString *tokenKey;
+@property (nonatomic, strong) NSString *tokenValue;
+
 @property (nonatomic, copy) NSString *html;
 @property (nonatomic, copy) NSString *leftTicketID;
 @property (nonatomic, copy) NSString *apacheToken;
@@ -117,15 +120,17 @@
         
         /* 获取余票和票价 */
         {
-            NSArray *elements = [xpathParser searchWithXPathQuery:@"//form[@id='confirmPassenger']/table"];
+            NSArray *elements = [xpathParser searchWithXPathQuery:@"//form[@id='confirmPassenger']/table/tr"];
             NSMutableArray *array = [[NSMutableArray alloc] init];
             
-            elements = [[[[elements objectAtIndex:0] children] objectAtIndex:6] children];
+            elements = [[elements objectAtIndex:1] children];
             
             for (TFHppleElement *element in elements) {
-                NSString *ticket = [element.firstChild content];
-                if (ticket)
-                    [array addObject:ticket];
+                if ([element.tagName isEqualToString:@"td"]) {
+                    NSString *ticket = [element.firstChild content];
+                    if (ticket)
+                        [array addObject:ticket];
+                }
             }
             self.ticketList = [[NSArray alloc] initWithArray:array];
         }
@@ -180,6 +185,34 @@
 {
     [SVProgressHUD show];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        {
+            NSString *rawJs = [[NSString alloc] initWithData:[[GlobalDataStorage tdbss] getSubmutToken] encoding:NSUTF8StringEncoding];
+            NSString *key = nil;
+            @try {
+                NSRange range = [rawJs rangeOfString:@"var key='"];
+                rawJs = [rawJs substringFromIndex:range.location + range.length];
+                range = [rawJs rangeOfString:@"';"];
+                key = [rawJs substringToIndex:range.location];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"[submutToken] fetchFail");
+            }
+            
+            
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"login_encode" ofType:@"js"];
+                NSString *loginJS = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+                [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
+                
+                NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
+                self.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
+                self.tokenKey = key;
+                NSLog(@"[submutToken] %@: %@", self.tokenKey, self.tokenValue);
+            });
+        }
+        
+        [NSThread sleepForTimeInterval:1.f];
         
         NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate tokenKey:self.tokenKey tokenValue:self.tokenValue];
         SUBMUTORDER_MSG result = [self parseHTMLWithData:htmlData];

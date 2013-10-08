@@ -22,9 +22,6 @@
 @property (nonatomic) TDBTrainInfoController *dataController;
 @property (nonatomic, readonly) NSString *dateInString;
 
-@property (nonatomic, strong) NSString *tokenKey;
-@property (nonatomic, strong) NSString *tokenValue;
-
 @end
 
 @implementation TDBListViewController
@@ -95,32 +92,6 @@
             [controller addTrainInfo:train];
         }
         
-        [NSThread sleepForTimeInterval:1.f];
-        NSString *rawJs = [[NSString alloc] initWithData:[[GlobalDataStorage tdbss] getSubmutToken] encoding:NSUTF8StringEncoding];
-        NSString *key = nil;
-        @try {
-            NSRange range = [rawJs rangeOfString:@"var key='"];
-            rawJs = [rawJs substringFromIndex:range.location + range.length];
-            range = [rawJs rangeOfString:@"';"];
-            key = [rawJs substringToIndex:range.location];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"[submutToken] fetchFail");
-        }
-        
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"login_encode" ofType:@"js"];
-            NSString *loginJS = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-            [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
-            
-            NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
-            self.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
-            self.tokenKey = key;
-            NSLog(@"[submutToken] %@: %@", self.tokenKey, self.tokenValue);
-        });
-        
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             self.dataController = controller;
             [self.tableView reloadData];
@@ -188,13 +159,12 @@
         TDBTicketDetailViewController *detail = [segue destinationViewController];
         detail.train = [self.dataController getTrainInfoForIndex:[self.tableView indexPathForCell:sender].row];
         detail.orderDate = self.orderDate;
-        detail.tokenKey = self.tokenKey;
-        detail.tokenValue = self.tokenValue;
     } else if ([segue.identifier isEqualToString:@"TrainTimetableSegue"]) {
-        UITableViewCell *clickedCell = (UITableViewCell *)[[sender superview] superview];
-        NSIndexPath *clickedButtonPath = [self.tableView indexPathForCell:clickedCell];
+        CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+        
         TDBTrainTimetableViewController *detailVC = [segue destinationViewController];
-        detailVC.train = [self.dataController getTrainInfoForIndex:clickedButtonPath.row];
+        detailVC.train = [self.dataController getTrainInfoForIndex:indexPath.row];
         detailVC.departDate = self.dateInString;
     }
 }

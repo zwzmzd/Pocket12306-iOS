@@ -21,6 +21,12 @@
 
 @end
 
+@interface TDBTrainTimetableCellCustomView : UIView
+
+@property (nonatomic, weak) TDBTrainTimetableCell *superCell;
+
+@end
+
 
 @interface TDBTrainTimetableSection : UIView
 
