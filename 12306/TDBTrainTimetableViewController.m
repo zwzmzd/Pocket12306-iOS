@@ -35,6 +35,8 @@
 {
     [super viewDidLoad];
     
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
@@ -58,7 +60,6 @@
                                              fromStationTelecode:train.getDepartStationTeleCode
                                                toStationTelecode:train.getArriveStationTeleCode
                                                       departDate:self.departDate];
-        
         NSUInteger i;
         for (i = 0; i < dataModel.count; i++) {
             if ([[[dataModel objectAtIndex:i] objectForKey:@"isEnabled"] boolValue]) {
@@ -120,7 +121,7 @@
     cell.start_time = [dict objectForKey:@"start_time"];
     cell.stopover_time = [dict objectForKey:@"stopover_time"];
     cell.is_enabled = [[dict objectForKey:@"isEnabled"] boolValue];
-    [cell setNeedsDisplay];
+    [cell setNeedsLayout];
     
     // Configure the cell...
     

@@ -101,11 +101,3 @@ function encode64(input) {
 	return output;
 }
 ;
-
-//
-//
-//var c = Base32.encrypt('1111', 'NTAzNzQ1NA==')
-//var d = bin216(c);
-//console.log(d);
-//var e = encode64(d);
-//console.log(e);

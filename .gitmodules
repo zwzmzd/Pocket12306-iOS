@@ -28,3 +28,6 @@
 [submodule "vendor/fmdb"]
 	path = vendor/fmdb
 	url = git@github.com:ccgus/fmdb.git
+[submodule "vendor/Hpple"]
+	path = vendor/Hpple
+	url = git@github.com:topfunky/hpple.git

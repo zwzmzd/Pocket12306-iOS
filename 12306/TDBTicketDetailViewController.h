@@ -24,8 +24,6 @@ typedef enum {
 
 @property (nonatomic, strong) TDBTrainInfo *train;
 @property (nonatomic, strong) NSDate *orderDate;
-@property (nonatomic, strong) NSString *tokenKey;
-@property (nonatomic, strong) NSString *tokenValue;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailTopLabel;
 @property (weak, nonatomic) IBOutlet UILabel *detailDepartLabel;
