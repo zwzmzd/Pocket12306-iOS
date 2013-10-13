@@ -330,6 +330,12 @@
     static NSString *CellIdentifier = @"OrderInfoCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
+    // 主要修正iOS 7下UITableViewCellAccessoryDetailDisclosureButton样式变化的问题
+    // http://stackoverflow.com/questions/18740594/in-ios7-uitableviewcellaccessorydetaildisclosurebutton-is-divided-into-two-diff
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    }
+    
     UILabel *train_no = (UILabel *)[cell viewWithTag:10];
     UILabel *from = (UILabel *)[cell viewWithTag:1];
     UILabel *to = (UILabel *)[cell viewWithTag:2];
