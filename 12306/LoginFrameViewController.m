@@ -57,12 +57,15 @@
 {
     [super viewDidLoad];
     
-    self.username.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
-    self.password.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
+    [GlobalDataStorage setTdbss:nil];
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     BOOL isOn = [ud boolForKey:REMEMEBR_PROFILE_STATE_STOREAGE_KEY];
     [self.rememberProfile setOn:isOn];
+    if (isOn) {
+        self.username.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
+        self.password.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
+    }
     
     [self retriveLoginPassTokenUsingGCD];
     double delayInSeconds = 2.f;
