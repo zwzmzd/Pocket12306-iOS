@@ -30,8 +30,6 @@
     if (self){
         _cookieManager = [NSHTTPCookieStorage sharedHTTPCookieStorage];
         _isLoggedIn = NO;
-//        [self resetCookie];
-        [self getSession];
     }
     
     return self;
@@ -54,22 +52,6 @@
     }
     
     self.isLoggedIn = NO;
-}
-
-- (void)getSession
-{
-    NSURL *url = [NSURL URLWithString:SYSURL @"/otsweb/"];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    
-    /*
-    NSArray *cookies = [self.cookieManager cookiesForURL:url];
-    NSEnumerator *enumerator = [cookies objectEnumerator];
-    NSHTTPCookie *cookie;
-    
-    while (cookie = [enumerator nextObject]) {
-        NSLog(@"Cookie{%@ = %@}", cookie.name, cookie.value);
-    }*/
 }
 
 - (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue
@@ -515,7 +497,9 @@
 {
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/loginAction.do?method=loginAysnSuggest"];
     NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    ADD_UA();
+    
     NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
     NSError *jsonErr = nil;
