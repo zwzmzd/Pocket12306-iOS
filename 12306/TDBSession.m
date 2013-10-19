@@ -26,7 +26,7 @@
     if (self){
         _cookieManager = [NSHTTPCookieStorage sharedHTTPCookieStorage];
         _isLoggedIn = NO;
-        [self resetCookie];
+//        [self resetCookie];
         [self getSession];
     }
     
@@ -66,32 +66,6 @@
     while (cookie = [enumerator nextObject]) {
         NSLog(@"Cookie{%@ = %@}", cookie.name, cookie.value);
     }*/
-}
-
-- (NSData *)getVerifyImage {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=login&rand=sjrand&0.%d%d", abs(arc4random()), abs(arc4random())];
-    NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-}
-
-- (NSData *)getLoginToken
-{
-    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/dynamicJsAction.do?jsversion=%@&method=loginJs", randCode];
-    NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-}
-
-- (NSData *)getRandpImage {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=passenger&rand=randp&0.%d%d", abs(arc4random()), abs(arc4random())];
-    NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 }
 
 - (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue
@@ -156,6 +130,7 @@
     [arguments addValue:@"QB#D#Z#T#K#QT#" forKey:@"trainClass"];
     [arguments addValue:@"00" forKey:@"includeStudent"];
     [arguments addValue:@"" forKey:@"seatTypeAndNum"];
+
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
     
@@ -189,6 +164,7 @@
     [arguments addValue:@"" forKey:@"seatTypeAndNum"];
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
+    NSLog(@"%@", path);
     
     NSURL *url = [NSURL URLWithString:path];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];

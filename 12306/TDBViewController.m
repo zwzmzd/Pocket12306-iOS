@@ -13,6 +13,7 @@
 #import "TDBStationAndDateSelector.h"
 #import "TDBKeybordNotificationManager.h"
 #import "TDBListViewController.h"
+#import "TDBHTTPClient.h"
 
 #define USER_LAST_INPUT_DEPART_STATION_NAME (@"__userLastInputDepartStationName")
 #define USER_LAST_INPUT_ARRIVE_STATION_NAME (@"__userLastInputArriveStationName")

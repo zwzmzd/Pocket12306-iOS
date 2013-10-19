@@ -19,6 +19,9 @@
 #import "UIButton+TDBAddition.h"
 #import "TDBPassengerInfoViewController.h"
 
+#import "TDBHTTPClient.h"
+#import "Macros.h"
+
 #define CONFIRM_DATE_AV 0xf00001
 
 @interface TDBTicketDetailViewController () <UIAlertViewDelegate, PassengerSelectorDelegate>
@@ -271,14 +274,19 @@
 - (void)retriveVerifyCodeUsingGCD
 {
     [SVProgressHUD show];
+    
+    WeakSelfDefine(wself);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSData *image = [[GlobalDataStorage tdbss] getRandpImage];
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            self.verifyCodeImage.image = [UIImage imageWithData:image];
-            [self.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
-            [SVProgressHUD dismiss];
-        });
+        [[TDBHTTPClient sharedClient] getRandpImage:^(NSData *image) {
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                StrongSelf(sself, wself);
+                if (sself) {
+                    sself.verifyCodeImage.image = [UIImage imageWithData:image];
+                    [sself.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
+                    [SVProgressHUD dismiss];
+                }
+            });
+        }];
     });
 }
 

@@ -12,6 +12,8 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 #import "SSKeychain.h"
+#import "TDBHTTPClient.h"
+#import "Macros.h"
 
 #define KEYCHAIN_SERVICE (@"12306_account")
 #define KEYCHAIN_USERNAME_KEY (@"12306_account_username")
@@ -67,11 +69,12 @@
         self.password.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
     }
     
+    WeakSelfDefine(wself);
     [self retriveLoginPassTokenUsingGCD];
     double delayInSeconds = 2.f;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self retriveVerifyImageUsingGCD];
+        [wself retriveVerifyImageUsingGCD];
     });
 }
 
@@ -159,47 +162,62 @@
 
 - (void)retriveVerifyImageUsingGCD
 {
+    WeakSelfDefine(wself);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-        NSData *imageRawData = [self.tdbss getVerifyImage];
-        NSData *parsedData = imageRawData;
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            UIImage *image = [UIImage imageWithData:parsedData];
-            self.verifyImage.image = image;
-            self.verifyCode.text = @"";
-        });
+        [[TDBHTTPClient sharedClient] getVerifyImage:^(NSData *imageRawData) {
+            NSData *parsedData = imageRawData;
+            
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                UIImage *image = [UIImage imageWithData:parsedData];
+                
+                StrongSelf(sself, wself);
+                if (sself) {
+                    sself.verifyImage.image = image;
+                    sself.verifyCode.text = @"";
+                }
+            });
+        }];
     });
 }
 
 - (void)retriveLoginPassTokenUsingGCD
 {
+    WeakSelfDefine(wself);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
         [NSThread sleepForTimeInterval:1.f];
+        CHECK_INSTANCE_EXIST(wself);
         
-        NSString *rawJs = [[NSString alloc] initWithData:[self.tdbss getLoginToken] encoding:NSUTF8StringEncoding];
-        NSString *key = nil;
-        @try {
-            NSRange range = [rawJs rangeOfString:@"var key='"];
-            rawJs = [rawJs substringFromIndex:range.location + range.length];
-            range = [rawJs rangeOfString:@"';"];
-            key = [rawJs substringToIndex:range.location];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"[loginToken] fetchFail");
-        }
-        
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"login_encode" ofType:@"js"];
-            NSString *loginJS = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-            [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
+        [[TDBHTTPClient sharedClient] getLoginToken:^(NSData *data) {
+            NSString *rawJs = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            NSString *key = nil;
+            @try {
+                NSRange range = [rawJs rangeOfString:@"var key='"];
+                rawJs = [rawJs substringFromIndex:range.location + range.length];
+                range = [rawJs rangeOfString:@"';"];
+                key = [rawJs substringToIndex:range.location];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"[loginToken] fetchFail");
+            }
             
-            NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
-            self.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
-            self.tokenKey = key;
-            NSLog(@"[loginToken] %@: %@", self.tokenKey, self.tokenValue);
-        });
+            CHECK_INSTANCE_EXIST(wself);
+            
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"login_encode" ofType:@"js"];
+                NSString *loginJS = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+                [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
+                
+                NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
+                
+                StrongSelf(sself, wself);
+                if (sself) {
+                    sself.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
+                    sself.tokenKey = key;
+                    NSLog(@"[loginToken] %@: %@", sself.tokenKey, sself.tokenValue);
+                }
+            });
+        }];
     });
 }
 
@@ -216,5 +234,9 @@
 - (void)viewDidUnload {
     [self setRememberProfile:nil];
     [super viewDidUnload];
+}
+
+- (void)dealloc {
+    NSLog(@"dealloc");
 }
 @end
