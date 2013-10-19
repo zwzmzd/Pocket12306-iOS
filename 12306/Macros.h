@@ -16,6 +16,9 @@
     __weak typeof(self) var = self
 
 #define StrongSelf(var, wself) \
-    typeof(wself) var = wself
+    __strong typeof(wself) var = wself
+
+#define RefRelease(var) \
+    var = nil
 
 #endif

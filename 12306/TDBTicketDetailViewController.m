@@ -187,80 +187,102 @@
 - (void)retriveEssentialInfoUsingGCD
 {
     [SVProgressHUD show];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        {
-            NSString *rawJs = [[NSString alloc] initWithData:[[GlobalDataStorage tdbss] getSubmutToken] encoding:NSUTF8StringEncoding];
-            NSString *key = nil;
-            @try {
-                NSRange range = [rawJs rangeOfString:@"var key='"];
-                rawJs = [rawJs substringFromIndex:range.location + range.length];
-                range = [rawJs rangeOfString:@"';"];
-                key = [rawJs substringToIndex:range.location];
-            }
-            @catch (NSException *exception) {
-                NSLog(@"[submutToken] fetchFail");
-            }
-            
-            
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
+    
+    WeakSelfDefine(wself);
+    [[TDBHTTPClient sharedClient] getSubmutToken:^(NSData *data) {
+        NSString *rawJs = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSString *key = nil;
+        @try {
+            NSRange range = [rawJs rangeOfString:@"var key='"];
+            rawJs = [rawJs substringFromIndex:range.location + range.length];
+            range = [rawJs rangeOfString:@"';"];
+            key = [rawJs substringToIndex:range.location];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"[submutToken] fetchFail");
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            StrongSelf(sself, wself);
+            if (sself) {
                 UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
                 NSString *filePath = [[NSBundle mainBundle] pathForResource:@"login_encode" ofType:@"js"];
                 NSString *loginJS = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
                 [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
                 
                 NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
-                self.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
-                self.tokenKey = key;
-                NSLog(@"[submutToken] %@: %@", self.tokenKey, self.tokenValue);
-            });
+                sself.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
+                sself.tokenKey = key;
+                NSLog(@"[submutToken] %@: %@", sself.tokenKey, sself.tokenValue);
+                
+                double delayInSeconds = 1.0;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [sself _retriveSeatInfoUsingGCD];
+                    [sself _retriveVerifyCodeUsingGCD];
+                });
+            }
+        });
+    }];
+}
+
+- (void)_retriveSeatInfoUsingGCD {
+    WeakSelfDefine(wself);
+    [[TDBHTTPClient sharedClient] submutOrderRequestWithTrainInfo:self.train date:self.departDate tokenKey:self.tokenKey tokenValue:self.tokenValue success:^(NSData *htmlData) {
+        SUBMUTORDER_MSG result = 0;
+        {
+            StrongSelf(sself, wself);
+            if (sself) {
+                result = [sself parseHTMLWithData:htmlData];
+            } else {
+                return;
+            }
         }
-        
-        [NSThread sleepForTimeInterval:1.f];
-        
-        NSData *htmlData = [[GlobalDataStorage tdbss] submutOrderRequestWithTrainInfo:self.train date:self.departDate tokenKey:self.tokenKey tokenValue:self.tokenValue];
-        SUBMUTORDER_MSG result = [self parseHTMLWithData:htmlData];
-        
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self retriveVerifyCodeUsingGCD];
+            [SVProgressHUD dismiss];
+            StrongSelf(sself, wself);
+            if (sself == nil) {
+                return;
+            }
             
             if (result == SUBMUTORDER_MSG_SUCCESS) {
                 
-                for (NSUInteger i = 0; i < [self.seatTypeList count]; i++) {
-                    NSString *title = [[self.seatTypeList objectAtIndex:i] objectAtIndex:1];
-                    [self.seatTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
+                for (NSUInteger i = 0; i < [sself.seatTypeList count]; i++) {
+                    NSString *title = [[sself.seatTypeList objectAtIndex:i] objectAtIndex:1];
+                    [sself.seatTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
                 }
-                self.seatTypeSelector.selectedSegmentIndex = 0;
+                sself.seatTypeSelector.selectedSegmentIndex = 0;
                 
-                for (NSUInteger i = 0; i < [self.ticketTypeList count]; i++) {
-                    NSString *title = [[self.ticketTypeList objectAtIndex:i] objectAtIndex:1];
-                    [self.ticketTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
+                for (NSUInteger i = 0; i < [sself.ticketTypeList count]; i++) {
+                    NSString *title = [[sself.ticketTypeList objectAtIndex:i] objectAtIndex:1];
+                    [sself.ticketTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
                 }
-                self.ticketTypeSelector.selectedSegmentIndex = 0;
+                sself.ticketTypeSelector.selectedSegmentIndex = 0;
                 
-                self.isLoadingFinished = YES;
+                sself.isLoadingFinished = YES;
             } else if (result == SUBMUTORDER_MSG_UNFINISHORDER_DETECTED) {
-
+                
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票"
-                                           message:@"您尚有未处理的订单，要前往查看吗"
-                                          delegate:self
-                                 cancelButtonTitle:@"暂时不用"
-                                 otherButtonTitles:@"查看", nil];
+                                                                message:@"您尚有未处理的订单，要前往查看吗"
+                                                               delegate:sself
+                                                      cancelButtonTitle:@"暂时不用"
+                                                      otherButtonTitles:@"查看", nil];
                 alert.tag = SUBMUTORDER_MSG_UNFINISHORDER_DETECTED;
                 [alert show];
-                 
+                
             } else if (result == SUBMUTORDER_MSG_OUT_OF_SERVICE) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"每天23点到次日7点是系统维护时间" delegate:self
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"每天23点到次日7点是系统维护时间" delegate:sself
                                                       cancelButtonTitle:@"好的" otherButtonTitles: nil];
                 alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
                 [alert show];
             } else if (result == SUBMUTORDER_MSG_EXPIRED) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"该车次已停止办理互联网售票业务" delegate:self
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"该车次已停止办理互联网售票业务" delegate:sself
                                                       cancelButtonTitle:@"好的" otherButtonTitles: nil];
                 alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
                 [alert show];
             } else if (result == SUBMUTORDER_MSG_ACCESS_FAILED) {
                 // 主要用于提示登录超时出现的问题
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"登录超时" message:@"请重新登录" delegate:self
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"登录超时" message:@"请重新登录" delegate:sself
                                                       cancelButtonTitle:@"好的" otherButtonTitles: nil];
                 alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
                 [alert show];
@@ -268,13 +290,11 @@
                 NSLog(@"PAGE NOT LOADING PROPERLY");
             }
         });
-    });
+    }];
 }
 
-- (void)retriveVerifyCodeUsingGCD
+- (void)_retriveVerifyCodeUsingGCD
 {
-    [SVProgressHUD show];
-    
     WeakSelfDefine(wself);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         [[TDBHTTPClient sharedClient] getRandpImage:^(NSData *image) {
@@ -283,7 +303,6 @@
                 if (sself) {
                     sself.verifyCodeImage.image = [UIImage imageWithData:image];
                     [sself.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
-                    [SVProgressHUD dismiss];
                 }
             });
         }];
@@ -322,6 +341,7 @@
 
 - (IBAction)_backPressed:(id)sender
 {
+    [SVProgressHUD dismiss];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -412,7 +432,7 @@
 }
 
 - (IBAction)refreshVerifyCode:(id)sender {
-    [self retriveVerifyCodeUsingGCD];
+    [self _retriveVerifyCodeUsingGCD];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

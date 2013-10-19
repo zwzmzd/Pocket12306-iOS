@@ -8,6 +8,9 @@
 
 #import "TDBHTTPClient.h"
 #import "DataSerializeUtility.h"
+#import "TDBTrainInfo.h"
+
+#define USER_DEFINED_POSTBODY (@"UserPostBody")
 
 @interface TDBHTTPClient()
 
@@ -39,7 +42,7 @@
     return self;
 }
 
-#pragma mark - Login
+#pragma mark - 登录部分
 - (void)getVerifyImage:(void (^)(NSData *))success {
     NSString *path = [NSString stringWithFormat:@"/otsweb/passCodeNewAction.do?module=login&rand=sjrand&0.%d%d", abs(arc4random()), abs(arc4random())];
     [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -120,18 +123,7 @@
 //    }
 }
 
-
-- (void)getRandpImage:(void (^)(NSData *))success {
-    NSString *path = [NSString stringWithFormat:@"/otsweb/passCodeNewAction.do?module=passenger&rand=randp&0.%d%d", abs(arc4random()), abs(arc4random())];
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (success) {
-            success(responseObject);
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-    }];
-}
-
+#pragma mark - 检索模块
 - (void)qt:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)())success
 {
     NSLog(@"queryLeftTicketWithDate qt");
@@ -151,7 +143,6 @@
     
     NSString *path = [NSString stringWithFormat:@"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
     [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"%@", operation.responseString);
         if (success) {
             success();
         }
@@ -208,9 +199,112 @@
     }];
 }
 
+#pragma mark - 预定模块
+
+- (void)getRandpImage:(void (^)(NSData *))success {
+    NSString *path = [NSString stringWithFormat:@"/otsweb/passCodeNewAction.do?module=passenger&rand=randp&0.%d%d", abs(arc4random()), abs(arc4random())];
+    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+- (void)getSubmutToken:(void (^)(NSData *))success {
+    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
+    NSString *path = [NSString stringWithFormat:@"/otsweb/dynamicJsAction.do?jsversion=%@&method=queryJs", randCode];
+    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+- (void)submutOrderRequestWithTrainInfo:(id)train date:(NSString *)date tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue success:(void (^)(NSData *))success {
+    NSLog(@"submutOrderRequestWithTrainInfo");
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:[train getTrainNo] forKey:@"station_train_code"];
+    [argument addValue:date forKey:@"train_date"];
+    [argument addValue:@"" forKey:@"seatstype_num"];
+    [argument addValue:[train getDepartStationTeleCode] forKey:@"from_station_telecode"];
+    [argument addValue:[train getArriveStationTeleCode] forKey:@"to_station_telecode"];
+    [argument addValue:@"00" forKey:@"include_student"];
+    [argument addValue:[train getDapartStationName] forKey:@"from_station_telecode_name"];
+    [argument addValue:[train getArriveStationName] forKey:@"to_station_telecode_name"];
+    [argument addValue:date forKey:@"round_train_date"];
+    [argument addValue:@"00:00--00:24" forKey:@"round_start_time_str"];
+    [argument addValue:@"1" forKey:@"single_round_trip"];
+    [argument addValue:@"QB" forKey:@"train_pass_type"];
+    [argument addValue:@"QB#D#Z#T#K#QT#" forKey:@"train_class_arr"];
+    [argument addValue:@"00:00--00:24" forKey:@"start_time_str"];
+    [argument addValue:[train getDuration] forKey:@"lishi"];
+    [argument addValue:[train getDepartTime] forKey:@"train_start_time"];
+    [argument addValue:[train getTrainCode] forKey:@"trainno4"];
+    [argument addValue:[train getArriveTime] forKey:@"arrive_time"];
+    [argument addValue:[train getDapartStationName] forKey:@"from_station_name"];
+    [argument addValue:[train getArriveStationName] forKey:@"to_station_name"];
+    [argument addValue:[train getDepartStationNo] forKey:@"from_station_no"];
+    [argument addValue:[train getArriveStationNo] forKey:@"to_station_no"];
+    [argument addValue:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
+    [argument addValue:[train getMMStr] forKey:@"mmStr"];
+    [argument addValue:[train getLocationCode] forKey:@"locationCode"];
+    [argument addValue:tokenValue forKey:tokenKey];
+    [argument addValue:@"undefined" forKey:@"myversion"];
+    
+    
+    NSString *path = @"/otsweb/order/querySingleAction.do?method=submutOrderRequest";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+#pragma mark - 辅助模块
+
+- (void)getPassengersWithIndex:(NSUInteger)index size:(NSUInteger)size success:(void (^)(NSDictionary *))success {
+    NSLog(@"getPassengers");
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:[NSString stringWithFormat:@"%u", index] forKey:@"pageIndex"];
+    [argument addValue:[NSString stringWithFormat:@"%u", size] forKey:@"pageSize"];
+    [argument addValue:@"" forKey:@"passenger_name"];
+    
+    NSString *path = @"/otsweb/passengerAction.do?method=getPagePassengerAll";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            NSError *jsonErr = nil;
+            NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+            success(jsonErr ? nil : dict);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+#pragma mark - AFHTTPClient functions overwirte
+
 - (NSMutableURLRequest *)requestWithMethod:(NSString *)method path:(NSString *)path parameters:(NSDictionary *)parameters {
-    NSMutableURLRequest *request = [super requestWithMethod:method path:path parameters:parameters];
-//    NSLog(@"%@", request);
+    NSMutableURLRequest *request;
+    NSData *postBody = [parameters objectForKey:USER_DEFINED_POSTBODY];
+    
+    // 有的时候，我们需要自己构造数据提交
+    if (postBody != nil) {
+        request = [super requestWithMethod:method path:path parameters:nil];
+        request.HTTPMethod = @"POST";
+        request.HTTPBody = postBody;
+    } else {
+        request = [super requestWithMethod:method path:path parameters:parameters];
+    }
     return request;
 }
 
