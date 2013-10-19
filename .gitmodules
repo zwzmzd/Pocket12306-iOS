@@ -31,3 +31,6 @@
 [submodule "vendor/Hpple"]
 	path = vendor/Hpple
 	url = git@github.com:topfunky/hpple.git
+[submodule "vendor/AFNetworking"]
+	path = vendor/AFNetworking
+	url = git@github.com:AFNetworking/AFNetworking.git
