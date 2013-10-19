@@ -9,7 +9,11 @@
 #import "TDBSession.h"
 #import "DataSerializeUtility.h"
 #import "TDBTrainInfo.h"
-#include "PassengerInfo.h"
+#import "PassengerInfo.h"
+#import "Macros.h"
+
+#define ADD_UA() \
+    [request setValue:USER_AGENT_STR forHTTPHeaderField:@"User-Agent"]
 
 @interface TDBSession()
 
@@ -98,6 +102,7 @@
     
     [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
     [request setValue:SYSURL @"/otsweb/loginAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    ADD_UA();
     
     NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *result = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
@@ -168,6 +173,7 @@
     
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
@@ -233,6 +239,7 @@
     [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
@@ -315,6 +322,7 @@
     [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
@@ -368,6 +376,7 @@
     
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
@@ -395,6 +404,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
@@ -427,6 +437,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -462,6 +473,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -489,6 +501,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -529,6 +542,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
     NSError *jsonErr = nil;
@@ -557,6 +571,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/order/myOrderAction.do?method=queryMyOrderNotComplete&leftmenu=Y" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];

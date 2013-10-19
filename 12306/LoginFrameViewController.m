@@ -69,7 +69,7 @@
         self.password.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
     }
     
-    WeakSelfDefine(wself);
+    WeakSelf(wself, self);
     [self retriveLoginPassTokenUsingGCD];
     double delayInSeconds = 2.f;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -162,7 +162,7 @@
 
 - (void)retriveVerifyImageUsingGCD
 {
-    WeakSelfDefine(wself);
+    WeakSelf(wself, self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
         [[TDBHTTPClient sharedClient] getVerifyImage:^(NSData *imageRawData) {
             NSData *parsedData = imageRawData;
@@ -237,6 +237,6 @@
 }
 
 - (void)dealloc {
-    NSLog(@"dealloc");
+    NSLog(@"dealloc %@", [self class]);
 }
 @end

@@ -12,13 +12,19 @@
 #define CHECK_INSTANCE_EXIST(var) \
     if (var == nil) { NSLog(@"not exist"); return; }
 
+// 这个函数不要使用，尽量使用下面的显式形式
 #define WeakSelfDefine(var) \
     __weak typeof(self) var = self
+
+#define WeakSelf(var, sself) \
+    __weak typeof(sself) var = sself
 
 #define StrongSelf(var, wself) \
     __strong typeof(wself) var = wself
 
 #define RefRelease(var) \
     var = nil
+
+#define USER_AGENT_STR (@"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36")
 
 #endif

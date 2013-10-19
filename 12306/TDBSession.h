@@ -47,13 +47,8 @@ typedef enum {
                              apacheToken:(NSString *)apacheToken
                                ticketKey:(NSString *)ticketKey;
 
-- (NSArray *)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to;
-
 // 取消一个未完成订单
 - (NSData *)cancleMyOrderNotComplete:(NSString *)sequenceNo apacheToken:(NSString *)apacheToken;
-
-// 获取联系人
-- (NSDictionary *)getPassengersWithIndex:(NSUInteger)index size:(NSUInteger)size;
 
 - (void)restartSession;
 

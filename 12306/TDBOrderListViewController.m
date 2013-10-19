@@ -16,6 +16,7 @@
 #import "SVProgressHUD.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SVPullToRefresh.h"
+#import "Macros.h"
 
 @interface TDBOrderListViewController ()
 
@@ -230,19 +231,22 @@
     // 这个属性就用来判断是否正在拉取
     self.refreshProcessEnable = NO;
     
+    WeakSelf(wself, self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         ORDER_PARSER_MSG result;
         NSMutableArray *tempList = [NSMutableArray new];
         
         @try {
             NSData *htmlData = [[GlobalDataStorage tdbss] queryMyOrderNotComplete];
-            result = [self parseHTMLWithData:htmlData toList:tempList];
+            result = [wself parseHTMLWithData:htmlData toList:tempList];
+            
+            CHECK_INSTANCE_EXIST(wself);
             
             if (result == ORDER_PARSER_MSG_SUCCESS) {
                 [NSThread sleepForTimeInterval:0.5];
                 
                 htmlData = [[GlobalDataStorage tdbss] queryMyOrder];
-                result = [self parseHTMLWithData:htmlData toList:tempList];
+                result = [wself parseHTMLWithData:htmlData toList:tempList];
             }
         }
         @catch (NSException *exception) {
@@ -250,28 +254,38 @@
             result = ORDER_PARSER_MSG_ERR;
         }
         
+        CHECK_INSTANCE_EXIST(wself);
+        
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (result == ORDER_PARSER_MSG_SUCCESS) {
-                self.orderList = tempList;
-                [self.tableView reloadData];
+                StrongSelf(sself, wself);
+                if (sself) {
+                    sself.orderList = tempList;
+                    [sself.tableView reloadData];
+                }
             } else {
                 [SVProgressHUD showErrorWithStatus:@"获取列表信息失败，请重试"];
             }
             
-            // 防止刷新过速，每次刷新之后延迟2秒再启用refreshBtn
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
-                sleep(2);
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    self.refreshProcessEnable = YES;
+            StrongSelf(sself, wself);
+            if (sself) {
+                // 防止刷新过速，每次刷新之后延迟2秒再启用refreshBtn
+                double delayInSeconds = 2.0;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    StrongSelf(sself, wself);
+                    if (sself) {
+                        sself.refreshProcessEnable = YES;
+                    }
                 });
-            });
-            
-            NSDate *date = [NSDate date];
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"上次更新： MM-dd HH:mm"];
+                
+                NSDate *date = [NSDate date];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"上次更新： MM-dd HH:mm"];
 
-            [self.tableView.pullToRefreshView setSubtitle:[formatter stringFromDate:date] forState:SVPullToRefreshStateAll];
-            [self.tableView.pullToRefreshView stopAnimating];
+                [sself.tableView.pullToRefreshView setSubtitle:[formatter stringFromDate:date] forState:SVPullToRefreshStateAll];
+                [sself.tableView.pullToRefreshView stopAnimating];
+            }
         });
     });
 }
@@ -434,5 +448,9 @@
     } else {
         [self.tableView.pullToRefreshView stopAnimating];
     }
+}
+
+- (void)dealloc {
+    NSLog(@"dealloc %@", [self class]);
 }
 @end

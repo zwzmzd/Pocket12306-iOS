@@ -59,6 +59,7 @@
 
 - (IBAction)_backPressed:(id)sender
 {
+    [SVProgressHUD dismiss];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

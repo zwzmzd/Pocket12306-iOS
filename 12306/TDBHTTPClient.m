@@ -9,6 +9,7 @@
 #import "TDBHTTPClient.h"
 #import "DataSerializeUtility.h"
 #import "TDBTrainInfo.h"
+#import "Macros.h"
 
 #define USER_DEFINED_POSTBODY (@"UserPostBody")
 
@@ -33,7 +34,7 @@
     NSURL *base = [NSURL URLWithString:@"http://dynamic.12306.cn/otsweb/"];
     
     if (self = [super initWithBaseURL:base]) {
-        [self setDefaultHeader:@"User-Agent" value:@"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36"];
+        [self setDefaultHeader:@"User-Agent" value:USER_AGENT_STR];
         [self setDefaultHeader:@"Referer" value:[self.baseURL absoluteString]];
         [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
         
