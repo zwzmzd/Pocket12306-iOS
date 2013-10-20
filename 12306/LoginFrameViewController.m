@@ -84,6 +84,8 @@
 }
 
 - (IBAction)iWantCancle:(id)sender {
+    [SVProgressHUD dismiss];
+    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
