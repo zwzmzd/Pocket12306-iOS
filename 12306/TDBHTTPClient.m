@@ -39,6 +39,7 @@
         [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
         
         _callbackQueue = dispatch_queue_create("com.enjoy-what.app.12306assistant.network-callback-queue", 0);
+        [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     }
     return self;
 }
@@ -259,6 +260,29 @@
     
     
     NSString *path = @"/otsweb/order/querySingleAction.do?method=submutOrderRequest";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+#pragma mark - 支付模块
+- (void)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo apacheToken:(NSString *)apacheToken ticketKey:(NSString *)ticketKey success:(void (^)(NSData *))success {
+    NSLog(@"laterEpay");
+    
+#define QDO @"queryOrderDTO."
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
+    [argument addValue:@"" forKey:QDO @"from_order_date"];
+    [argument addValue:@"" forKey:QDO @"to_order_date"];
+    [argument addValue:[NSString stringWithFormat:@"%@;", ticketKey] forKey:@"ticket_key"];
+#undef QDO
+    
+    NSString *path = [NSString stringWithFormat:@"/otsweb/order/myOrderAction.do?method=laterEpay&orderSequence_no=%@&con_pay_type=epay", orderSequenceNo];
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
     [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {

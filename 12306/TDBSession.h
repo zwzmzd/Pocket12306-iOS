@@ -39,11 +39,6 @@ typedef enum {
 // 获取用户一般状态的订单
 - (NSData *)queryMyOrder;
 
-// 根据订单号，apacheToken，还有ticketToken获取一个未完成订单的支付页面
-- (NSData *)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo
-                             apacheToken:(NSString *)apacheToken
-                               ticketKey:(NSString *)ticketKey;
-
 // 取消一个未完成订单
 - (NSData *)cancleMyOrderNotComplete:(NSString *)sequenceNo apacheToken:(NSString *)apacheToken;
 

@@ -54,6 +54,8 @@
 
 - (IBAction)_backPressed:(id)sender
 {
+    [SVProgressHUD dismiss];
+    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
