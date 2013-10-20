@@ -13,6 +13,9 @@
 #import "UIButton+TDBAddition.h"
 #import "SVProgressHUD.h"
 
+#import "Macros.h"
+#import "TDBHTTPClient.h"
+
 @interface TDBEPayEntryViewController () <UIWebViewDelegate>
 
 @end
@@ -46,6 +49,8 @@
 
 - (IBAction)_backPressed:(id)sender
 {
+    [SVProgressHUD dismiss];
+    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -98,40 +103,48 @@
 - (void)retriveEssentialInfoUsingGCD
 {
     [SVProgressHUD show];
-    dispatch_queue_t EpayQueue = dispatch_queue_create("12306 Epay", NULL);
-    dispatch_async(EpayQueue, ^(void) {
-        
-        NSData *htmlData = [[GlobalDataStorage tdbss] laterEpayWithOrderSequenceNo:self.orderSequenceNo apacheToken:self.apacheToken ticketKey:self.ticketKey];
-        NSString *html = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
-        
-        TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
-        NSString *leaseTimeJS = [self _parseLeaseTime:html];
-        NSString *epayCode = [self _parseHTMLWithData:xpathParser];
-        NSString *boxWrapper = [self _retriveBoxWrapHtml:xpathParser];
-        NSString *orderHtml = [self _retriveOrderTableHtml:xpathParser];
-        
-        NSString *styleSheet = @"";
-        
-        if (epayCode && orderHtml) { // 防止订单正好超时，导致result为空造成系统崩溃问题
-            NSRange range = NSMakeRange(0, epayCode.length - @"</form>".length);
-            epayCode = [epayCode substringWithRange:range];
-
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"epay" ofType:@"html"];
-            NSString *templateHtml = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *htmlCode = [NSString stringWithFormat:templateHtml, styleSheet, leaseTimeJS, boxWrapper, orderHtml, epayCode];
+    
+    WeakSelf(wself, self);
+    [[TDBHTTPClient sharedClient] laterEpayWithOrderSequenceNo:self.orderSequenceNo apacheToken:self.apacheToken ticketKey:self.ticketKey
+        success:^(NSData *htmlData) {
+            CHECK_INSTANCE_EXIST(wself);
             
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                NSURL *baseURL = [NSURL URLWithString:@"http://dynamic.12306.cn/otsweb/order/myOrderAction.do"];
-                [self.webView loadHTMLString:htmlCode baseURL:baseURL];
-            });
-        } else {
+            NSString *html = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
+            
+            TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+            NSString *leaseTimeJS = [wself _parseLeaseTime:html];
+            NSString *epayCode = [wself _parseHTMLWithData:xpathParser];
+            NSString *boxWrapper = [wself _retriveBoxWrapHtml:xpathParser];
+            NSString *orderHtml = [wself _retriveOrderTableHtml:xpathParser];
+            
+            NSString *styleSheet = @"";
+            
+            CHECK_INSTANCE_EXIST(wself);
+            
+            if (epayCode && orderHtml) { // 防止订单正好超时，导致result为空造成系统崩溃问题
+                NSRange range = NSMakeRange(0, epayCode.length - @"</form>".length);
+                epayCode = [epayCode substringWithRange:range];
+                
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"epay" ofType:@"html"];
+                NSString *templateHtml = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+                NSString *htmlCode = [NSString stringWithFormat:templateHtml, styleSheet, leaseTimeJS, boxWrapper, orderHtml, epayCode];
+                
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    StrongSelf(sself, wself);
+                    if (sself) {
+                        NSURL *baseURL = [NSURL URLWithString:@"http://dynamic.12306.cn/otsweb/order/myOrderAction.do"];
+                        [sself.webView loadHTMLString:htmlCode baseURL:baseURL];
+                    }
+                });
+            } else {
 #warning 订单支付时发现超时或已被取消的提示
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [SVProgressHUD showErrorWithStatus:@"网络异常，请重新进入"];
-                NSLog(@"网络异常，请重新进入");
-            });
-        }
-    });
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    [SVProgressHUD showErrorWithStatus:@"网络异常，请重新进入"];
+                    NSLog(@"网络异常，请重新进入");
+                });
+            }
+
+        }];
 }
 
 - (void)didReceiveMemoryWarning

@@ -13,6 +13,7 @@
 #import "TDBStationAndDateSelector.h"
 #import "TDBKeybordNotificationManager.h"
 #import "TDBListViewController.h"
+#import "TDBHTTPClient.h"
 
 #define USER_LAST_INPUT_DEPART_STATION_NAME (@"__userLastInputDepartStationName")
 #define USER_LAST_INPUT_ARRIVE_STATION_NAME (@"__userLastInputArriveStationName")
@@ -36,35 +37,35 @@
 {
     [super viewWillAppear:animated];
     
-//    static UIBarButtonItem *buyTicket = nil;
-//    if ([GlobalDataStorage tdbss]) {
-//        self.navigationItem.leftBarButtonItem.title = @"注销/更换账户";
-//        self.title = @"车票查询";
-//        
-//        if (buyTicket)
-//            self.navigationItem.rightBarButtonItem = buyTicket;
-//        
-//        
-//    } else {
-//        if (self.navigationItem.rightBarButtonItem)
-//            buyTicket = self.navigationItem.rightBarButtonItem;
-//        self.navigationItem.rightBarButtonItem = nil;
-//    }
-    
-    if (_selectorView == nil) {
-        TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
+    static UIBarButtonItem *buyTicket = nil;
+    if ([GlobalDataStorage tdbss]) {
+        self.navigationItem.leftBarButtonItem.title = @"更换账户";
+        self.title = @"车票查询";
         
-        [self.view addSubview:customView];
-        /*
-         这个方法结束后，self.view会被设置，所以只要好好实现viewDidLayoutSubviews，这里不需要
-         设置customView.fram
-         */
-        self.selectorView = customView;
+        if (buyTicket)
+            self.navigationItem.rightBarButtonItem = buyTicket;
         
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-        self.selectorView.departStationField.text = [ud stringForKey:USER_LAST_INPUT_DEPART_STATION_NAME];
-        self.selectorView.arriveStationField.text = [ud stringForKey:USER_LAST_INPUT_ARRIVE_STATION_NAME];
-        [self.selectorView.stationNameExactlyMatch setOn:[ud boolForKey:USER_SELECT_STATION_NAME_EXACTLY_MATCH]];
+        // 加载主购票界面
+        if (_selectorView == nil) {
+            TDBStationAndDateSelector *customView = [[TDBStationAndDateSelector alloc] initWithDelegate:self];
+            
+            [self.view addSubview:customView];
+            /*
+             这个方法结束后，self.view会被设置，所以只要好好实现viewDidLayoutSubviews，这里不需要
+             设置customView.fram
+             */
+            self.selectorView = customView;
+            
+            NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+            self.selectorView.departStationField.text = [ud stringForKey:USER_LAST_INPUT_DEPART_STATION_NAME];
+            self.selectorView.arriveStationField.text = [ud stringForKey:USER_LAST_INPUT_ARRIVE_STATION_NAME];
+            [self.selectorView.stationNameExactlyMatch setOn:[ud boolForKey:USER_SELECT_STATION_NAME_EXACTLY_MATCH]];
+        }
+    } else {
+        self.navigationItem.leftBarButtonItem.title = @"请登录";
+        if (self.navigationItem.rightBarButtonItem)
+            buyTicket = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.rightBarButtonItem = nil;
     }
     
     [self initStationNameControllerUsingGCD];

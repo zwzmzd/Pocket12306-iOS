@@ -13,6 +13,8 @@
 #import "GlobalDataStorage.h"
 #import "TDBSession.h"
 #import "UIButton+TDBAddition.h"
+#import "Macros.h"
+#import "TDBHTTPClient.h"
 
 @interface TDBTrainTimetableViewController ()
 
@@ -45,38 +47,56 @@
     [self retriveEssentialDataUsingGCD];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [SVProgressHUD dismiss];
+}
+
 - (IBAction)_backPressed:(id)sender
 {
+    [SVProgressHUD dismiss];
+    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)retriveEssentialDataUsingGCD
 {
     [SVProgressHUD show];
+    WeakSelfDefine(wself);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        TDBSession *tdbss = [GlobalDataStorage tdbss];
-        TDBTrainInfo *train = self.train;
-        NSArray *dataModel = [tdbss queryaTrainStopTimeByTrainNo:train.getTrainCode
-                                             fromStationTelecode:train.getDepartStationTeleCode
-                                               toStationTelecode:train.getArriveStationTeleCode
-                                                      departDate:self.departDate];
-        NSUInteger i;
-        for (i = 0; i < dataModel.count; i++) {
-            if ([[[dataModel objectAtIndex:i] objectForKey:@"isEnabled"] boolValue]) {
-                break;
-            }
-        }
+        CHECK_INSTANCE_EXIST(wself);
+        TDBTrainInfo *train = wself.train;
+        NSString *departData = wself.departDate;
+        [[TDBHTTPClient sharedClient] queryaTrainStopTimeByTrainNo:train.getTrainCode
+                                               fromStationTelecode:train.getDepartStationTeleCode
+                                                 toStationTelecode:train.getArriveStationTeleCode
+                                                        departDate:departData
+                                                           success:^(NSArray *dataModel) {
+                                                               CHECK_INSTANCE_EXIST(wself);
+                                                               
+                                                               NSUInteger i;
+                                                               for (i = 0; i < dataModel.count; i++) {
+                                                                   if ([[[dataModel objectAtIndex:i] objectForKey:@"isEnabled"] boolValue]) {
+                                                                       break;
+                                                                   }
+                                                               }
+                                                               
+                                                               dispatch_async(dispatch_get_main_queue(), ^(void) {
+                                                                   StrongSelf(sself, wself);
+                                                                   if (sself) {
+                                                                       sself.dataModel = dataModel;
+                                                                       [sself.tableView reloadData];
+                                                                       [SVProgressHUD dismiss];
+                                                                       
+                                                                       NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                                                                       [sself.tableView scrollToRowAtIndexPath:indexPath
+                                                                                             atScrollPosition:UITableViewScrollPositionTop
+                                                                                                     animated:NO];
+                                                                   }
+                                                               });
 
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            self.dataModel = dataModel;
-            [self.tableView reloadData];
-            [SVProgressHUD dismiss];
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
-            [self.tableView scrollToRowAtIndexPath:indexPath
-                                  atScrollPosition:UITableViewScrollPositionTop
-                                          animated:NO];
-        });
+                                                           }];
+        
     });
 }
 

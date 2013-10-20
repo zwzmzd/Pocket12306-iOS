@@ -13,6 +13,9 @@
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
 
+#import "TDBHTTPClient.h"
+#import "Macros.h"
+
 #define SQL_TABLE_NAME @"passenger"
 
 @interface TDBPassengerInfoViewController ()
@@ -56,6 +59,8 @@
 
 - (IBAction)_backPressed:(id)sender
 {
+    [SVProgressHUD dismiss];
+    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -97,29 +102,30 @@
 {
     [SVProgressHUD show];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        TDBSession *tdbss = [GlobalDataStorage tdbss];
-        NSDictionary *dict = [tdbss getPassengersWithIndex:0 size:100];
-        
-        NSString *dbPath = [self.class databasePath];
-        FMDatabase* db = [FMDatabase databaseWithPath:dbPath];
-        
-        [db open];
-        [db executeUpdate:@"drop table " SQL_TABLE_NAME];
-        [db executeUpdate:@"create table " SQL_TABLE_NAME @" (name text, mobile_no text, passenger_id_no text, first_letter text)"];
-        NSArray *rows = [dict objectForKey:@"rows"];
-        for (NSDictionary *row in rows) {
-            BOOL result = [db executeUpdate:@"insert into " SQL_TABLE_NAME " (name, mobile_no, passenger_id_no, first_letter) values (?, ?, ?, ?)", [row objectForKey:@"passenger_name"], [row objectForKey:@"mobile_no"], [row objectForKey:@"passenger_id_no"], [row objectForKey:@"first_letter"]];
-            if (!result) {
-                NSLog(@"[warning] FMDB not inserted");
+    WeakSelfDefine(wself);
+    [[TDBHTTPClient sharedClient] getPassengersWithIndex:0 size:100 success:^(NSDictionary *dict) {
+        StrongSelf(sself, wself);
+        if (sself) {
+            NSString *dbPath = [sself.class databasePath];
+            FMDatabase* db = [FMDatabase databaseWithPath:dbPath];
+            
+            [db open];
+            [db executeUpdate:@"drop table " SQL_TABLE_NAME];
+            [db executeUpdate:@"create table " SQL_TABLE_NAME @" (name text, mobile_no text, passenger_id_no text, first_letter text)"];
+            NSArray *rows = [dict objectForKey:@"rows"];
+            for (NSDictionary *row in rows) {
+                BOOL result = [db executeUpdate:@"insert into " SQL_TABLE_NAME " (name, mobile_no, passenger_id_no, first_letter) values (?, ?, ?, ?)", [row objectForKey:@"passenger_name"], [row objectForKey:@"mobile_no"], [row objectForKey:@"passenger_id_no"], [row objectForKey:@"first_letter"]];
+                if (!result) {
+                    NSLog(@"[warning] FMDB not inserted");
+                }
             }
+            [db close];
+            
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [sself getInformationFromDatabaseUsingGCD];
+            });
         }
-        [db close];
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self getInformationFromDatabaseUsingGCD];
-        });
-    });
+    }];
 }
 
 - (void)didReceiveMemoryWarning

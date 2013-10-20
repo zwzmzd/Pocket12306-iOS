@@ -9,7 +9,11 @@
 #import "TDBSession.h"
 #import "DataSerializeUtility.h"
 #import "TDBTrainInfo.h"
-#include "PassengerInfo.h"
+#import "PassengerInfo.h"
+#import "Macros.h"
+
+#define ADD_UA() \
+    [request setValue:USER_AGENT_STR forHTTPHeaderField:@"User-Agent"]
 
 @interface TDBSession()
 
@@ -26,8 +30,6 @@
     if (self){
         _cookieManager = [NSHTTPCookieStorage sharedHTTPCookieStorage];
         _isLoggedIn = NO;
-        [self resetCookie];
-        [self getSession];
     }
     
     return self;
@@ -50,48 +52,6 @@
     }
     
     self.isLoggedIn = NO;
-}
-
-- (void)getSession
-{
-    NSURL *url = [NSURL URLWithString:SYSURL @"/otsweb/"];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    
-    /*
-    NSArray *cookies = [self.cookieManager cookiesForURL:url];
-    NSEnumerator *enumerator = [cookies objectEnumerator];
-    NSHTTPCookie *cookie;
-    
-    while (cookie = [enumerator nextObject]) {
-        NSLog(@"Cookie{%@ = %@}", cookie.name, cookie.value);
-    }*/
-}
-
-- (NSData *)getVerifyImage {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=login&rand=sjrand&0.%d%d", abs(arc4random()), abs(arc4random())];
-    NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-}
-
-- (NSData *)getLoginToken
-{
-    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/dynamicJsAction.do?jsversion=%@&method=loginJs", randCode];
-    NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-}
-
-- (NSData *)getRandpImage {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passCodeNewAction.do?module=passenger&rand=randp&0.%d%d", abs(arc4random()), abs(arc4random())];
-    NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 }
 
 - (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue
@@ -124,6 +84,7 @@
     
     [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
     [request setValue:SYSURL @"/otsweb/loginAction.do?method=init" forHTTPHeaderField:@"Referer"];
+    ADD_UA();
     
     NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *result = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
@@ -139,92 +100,6 @@
         } else
             return LOGIN_MSG_UNEXPECTED;
     }
-}
-
-- (void)qt:(NSString *)date from:(NSString *)from to:(NSString *)to
-{
-    NSLog(@"queryLeftTicketWithDate qt");
-    [self assertLoggedIn];
-    
-    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-    [arguments addValue:@"qt" forKey:@"method"];
-    [arguments addValue:date forKey:@"orderRequest.train_date"];
-    [arguments addValue:from forKey:@"orderRequest.from_station_telecode"];
-    [arguments addValue:to forKey:@"orderRequest.to_station_telecode"];
-    [arguments addValue:@"" forKey:@"orderRequest.train_no"];
-    [arguments addValue:@"QB" forKey:@"trainPassType"];
-    [arguments addValue:@"QB#D#Z#T#K#QT#" forKey:@"trainClass"];
-    [arguments addValue:@"00" forKey:@"includeStudent"];
-    [arguments addValue:@"" forKey:@"seatTypeAndNum"];
-    
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
-    
-    NSURL *url = [NSURL URLWithString:path];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
-    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
-    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
-    
-    [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-}
-
-
-- (NSArray *)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to
-{
-    NSLog(@"queryLeftTicketWithDate");
-    [self assertLoggedIn];
-    
-    [self qt:date from:from to:to];
-    [NSThread sleepForTimeInterval:1.f];
-
-    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-    [arguments addValue:@"queryLeftTicket" forKey:@"method"];
-    [arguments addValue:date forKey:@"orderRequest.train_date"];
-    [arguments addValue:from forKey:@"orderRequest.from_station_telecode"];
-    [arguments addValue:to forKey:@"orderRequest.to_station_telecode"];
-    [arguments addValue:@"" forKey:@"orderRequest.train_no"];
-    [arguments addValue:@"QB" forKey:@"trainPassType"];
-    [arguments addValue:@"QB#D#Z#T#K#QT#" forKey:@"trainClass"];
-    [arguments addValue:@"00" forKey:@"includeStudent"];
-    [arguments addValue:@"" forKey:@"seatTypeAndNum"];
-    
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
-    
-    NSURL *url = [NSURL URLWithString:path];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
-    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
-    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
-    
-    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
-    NSArray *split = [html componentsSeparatedByString:@","];
-    
-    // 获取正常返回0
-    // 不存在符合条件的列车返回空html页面
-    if (html.length > 0 && ![[split objectAtIndex:0] isEqualToString:@"0"])
-        return nil;
-    
-    NSUInteger count = [split count];
-    NSUInteger i = 1;
-    NSMutableArray *storage = [[NSMutableArray alloc] init];
-    for (; i < count; i += 16) {
-        NSString *string = [DataSerializeUtility parseOrderKey:[split objectAtIndex:(i + 15)]];
-        
-                
-        if (string != nil) {
-            NSMutableArray *leftTicket = [[NSMutableArray alloc] init];
-            [leftTicket addObject:string];
-            
-            for (NSUInteger j = 0; j < 11; j++) {
-                [leftTicket addObject:[DataSerializeUtility parseLeftTicket:[split objectAtIndex:(i + 4 + j)]]];
-            }
-            
-            [storage addObject:[[NSArray alloc] initWithArray:leftTicket]];
-        }
-    }
-    //NSLog(@"TrainCount %d %@ %@", [storage count], [storage objectAtIndex:0], [storage objectAtIndex:1]);
-    return storage;
 }
 
 - (NSData *)getSubmutToken
@@ -280,6 +155,7 @@
     
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
@@ -345,6 +221,7 @@
     [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
@@ -427,6 +304,7 @@
     [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
@@ -480,6 +358,7 @@
     
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
@@ -507,6 +386,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
@@ -539,6 +419,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -574,6 +455,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -581,40 +463,14 @@
     
     return result;
 }
-
-- (NSData *)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo apacheToken:(NSString *)apacheToken ticketKey:(NSString *)ticketKey
-{
-    NSLog(@"laterEpay");
-    [self assertLoggedIn];
-
-#define QDO @"queryOrderDTO."
-    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
-    [argument addValue:@"" forKey:QDO @"from_order_date"];
-    [argument addValue:@"" forKey:QDO @"to_order_date"];
-    [argument addValue:[NSString stringWithFormat:@"%@;", ticketKey] forKey:@"ticket_key"];
-#undef QDO
-    
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/myOrderAction.do?method=laterEpay&orderSequence_no=%@&con_pay_type=epay", orderSequenceNo];
-    NSURL *url = [NSURL URLWithString:path];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
-    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
-    
-    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    
-    return result;
-}
-
 
 - (NSDictionary *)loginAysnSuggest
 {
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/loginAction.do?method=loginAysnSuggest"];
     NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    ADD_UA();
+    
     NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
     NSError *jsonErr = nil;
@@ -641,6 +497,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/querySingleAction.do?method=init" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
     NSError *jsonErr = nil;
@@ -669,42 +526,13 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:SYSURL @"/otsweb/order/myOrderAction.do?method=queryMyOrderNotComplete&leftmenu=Y" forHTTPHeaderField:@"Referer"];
     [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+    ADD_UA();
     
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
     NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 
     return result;
-}
-
-- (NSDictionary *)getPassengersWithIndex:(NSUInteger)index size:(NSUInteger)size
-{
-    NSLog(@"getPassengers");
-    
-    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:[NSString stringWithFormat:@"%u", index] forKey:@"pageIndex"];
-    [argument addValue:[NSString stringWithFormat:@"%u", size] forKey:@"pageSize"];
-    [argument addValue:@"" forKey:@"passenger_name"];
-    
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/passengerAction.do?method=getPagePassengerAll"];
-    NSURL *url = [NSURL URLWithString:path];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setValue:SYSURL @"/otsweb/passengerAction.do?method=initUsualPassenger12306" forHTTPHeaderField:@"Referer"];
-    [request setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
-    
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
-    NSData *result = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    
-    NSError *jsonErr = nil;
-    NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:result options:0 error:&jsonErr];
-    
-    if (jsonErr) {
-        return nil;
-    } else {
-        return dict;
-    }
 }
 
 - (void)assertLoggedIn
