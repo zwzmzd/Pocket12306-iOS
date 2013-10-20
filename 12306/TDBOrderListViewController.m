@@ -424,18 +424,23 @@
 {
     // 这个方法是给完成订单支付或者取消订单后调用的，由于TDB处理有一定的延迟，所以这边延迟一段时间后再刷新
     [SVProgressHUD showWithStatus:@"正在处理"];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
-        sleep(3.f);
+    
+    WeakSelf(wself, self);
+    double delayInSeconds = 3.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [SVProgressHUD dismiss];
         
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [SVProgressHUD dismiss];
-            self.refreshProcessEnable = YES;
-            [self.tableView triggerPullToRefresh];
-        });
+        StrongSelf(sself, wself);
+        if (sself) {
+            sself.refreshProcessEnable = YES;
+            [sself.tableView triggerPullToRefresh];
+        }
     });
 }
 
 - (IBAction)iWantReturn:(id)sender {
+    [SVProgressHUD dismiss];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 

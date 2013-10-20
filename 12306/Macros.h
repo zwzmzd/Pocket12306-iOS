@@ -10,7 +10,7 @@
 #define _2306_Macros_h
 
 #define CHECK_INSTANCE_EXIST(var) \
-    if (var == nil) { NSLog(@"not exist"); return; }
+    if (var == nil) { NSLog(@"%s: line %d in %s, not exist", __func__, __LINE__, __FILE__); return; }
 
 // 这个函数不要使用，尽量使用下面的显式形式
 // 仍然保留是因为迁移成本太大
