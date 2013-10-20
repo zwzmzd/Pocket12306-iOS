@@ -13,14 +13,15 @@
     if (var == nil) { NSLog(@"not exist"); return; }
 
 // 这个函数不要使用，尽量使用下面的显式形式
+// 仍然保留是因为迁移成本太大
 #define WeakSelfDefine(var) \
-    __weak typeof(self) var = self
+    typeof(self) __weak var = self
 
 #define WeakSelf(var, sself) \
-    __weak typeof(sself) var = sself
+    typeof(sself) __weak var = sself
 
 #define StrongSelf(var, wself) \
-    __strong typeof(wself) var = wself
+    typeof(wself) __strong var = wself
 
 #define RefRelease(var) \
     var = nil
