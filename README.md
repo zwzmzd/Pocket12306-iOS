@@ -63,3 +63,14 @@ $ git clone git@github.com:zwzmzd/Pocket12306-iOS.git
 $ cd Pocket12306-iOS/
 $ git submodule update --init --recursive
 ```
+
+无法成功pull的处理
+---------
+
+有时工程会更改子模块地址，导致不能正常拉取，使用以下命令修复
+
+```bash
+$ cd Pocket12306-iOS/
+$ git submodule sync
+$ git submodule update
+```
