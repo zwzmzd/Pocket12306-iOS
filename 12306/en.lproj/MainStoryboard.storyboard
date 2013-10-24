@@ -135,12 +135,12 @@
             <objects>
                 <tableViewController id="ccV-o0-mT7" customClass="TDBOrderListViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="95" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q99-9b-FLC">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="detailButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OrderInfoCell" rowHeight="99" id="xTZ-TH-9Lc">
-                                <rect key="frame" x="0.0" y="22" width="320" height="99"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="99"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xTZ-TH-9Lc" id="vVS-oE-y0u">
                                     <rect key="frame" x="0.0" y="0.0" width="273" height="98"/>
@@ -206,7 +206,6 @@
                             <outlet property="delegate" destination="ccV-o0-mT7" id="1xs-D8-1GB"/>
                         </connections>
                     </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="订单查看" id="MQJ-bU-0XW">
                         <barButtonItem key="rightBarButtonItem" title="完成" style="done" id="kmA-nP-fIg">
                             <connections>
