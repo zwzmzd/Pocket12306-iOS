@@ -297,9 +297,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="1HA-xc-aif" kind="push" identifier="SeatDetail" id="ILn-be-9TY"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -470,6 +467,7 @@
                         <outlet property="ticketTypeSelector" destination="gAc-ex-LbJ" id="1P9-aV-47n"/>
                         <outlet property="verifyCode" destination="5T2-5a-nCf" id="bw7-md-DmR"/>
                         <segue destination="mrA-xv-3bf" kind="push" identifier="SelectPassenger" id="vbY-8I-143"/>
+                        <segue destination="1HA-xc-aif" kind="push" identifier="SeatDetail" id="nhw-Ue-ezh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5c3-np-uL5" userLabel="First Responder" sceneMemberID="firstResponder"/>

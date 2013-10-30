@@ -447,7 +447,18 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:@"SelectPassenger" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+    if (self.isLoadingFinished) {
+        [self performSegueWithIdentifier:@"SelectPassenger" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.isLoadingFinished) {
+        // 显示票价和余票
+        if (indexPath.section == 0 && indexPath.row == 3) {
+            [self performSegueWithIdentifier:@"SeatDetail" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+        }
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
