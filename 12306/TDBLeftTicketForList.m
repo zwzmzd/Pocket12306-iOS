@@ -43,6 +43,12 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
+    static UIColor *greenColor;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        greenColor = [UIColor colorWithRed:34.f / 255 green:139.f / 255 blue:34.f / 255 alpha:1];
+    });
+    
     CGSize size = self.frame.size;
     
     if (size.width > 180.f) { //横屏模式下，自左向右，上下两列显示
@@ -55,7 +61,7 @@
                 NSString *seatNameFull = [[GlobalDataStorage seatNameFull] objectAtIndex:i];
                 
                 if ([info isEqualToString:@"有"]) {
-                    [[UIColor blueColor] set];
+                    [greenColor set];
                 } else if ([info isEqualToString:@"无"]) {
                     [[UIColor grayColor] set];
                 } else {
@@ -80,7 +86,7 @@
                 NSString *seatNameAbbr = [[GlobalDataStorage seatNameAbbr] objectAtIndex:i];
                 
                 if ([info isEqualToString:@"有"]) {
-                    [[UIColor blueColor] set];
+                    [greenColor set];
                 } else if ([info isEqualToString:@"无"]) {
                     [[UIColor grayColor] set];
                 } else {
