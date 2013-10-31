@@ -44,9 +44,11 @@
 - (void)drawRect:(CGRect)rect
 {
     static UIColor *greenColor;
+    static UIColor *greyColor;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        greenColor = [UIColor colorWithRed:34.f / 255 green:139.f / 255 blue:34.f / 255 alpha:1];
+        greenColor = [UIColor colorWithRed:34.f/255 green:139.f/255 blue:34.f/255 alpha:1];
+        greyColor = [UIColor colorWithRed:192.f/255 green:192.f/255 blue:192.f/255 alpha:1];
     });
     
     CGSize size = self.frame.size;
@@ -63,7 +65,7 @@
                 if ([info isEqualToString:@"有"]) {
                     [greenColor set];
                 } else if ([info isEqualToString:@"无"]) {
-                    [[UIColor grayColor] set];
+                    [greyColor set];
                 } else {
                     [[UIColor orangeColor] set];
                 }
@@ -88,7 +90,7 @@
                 if ([info isEqualToString:@"有"]) {
                     [greenColor set];
                 } else if ([info isEqualToString:@"无"]) {
-                    [[UIColor grayColor] set];
+                    [greyColor set];
                 } else {
                     [[UIColor orangeColor] set];
                 }
