@@ -43,6 +43,12 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
+    static UIColor *greenColor;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        greenColor = [UIColor colorWithRed:34.f / 255 green:139.f / 255 blue:34.f / 255 alpha:1];
+    });
+    
     CGSize size = self.frame.size;
     
     if (size.width > 180.f) { //横屏模式下，自左向右，上下两列显示
@@ -54,7 +60,17 @@
             if (![info isEqualToString:@"--"]) {
                 NSString *seatNameFull = [[GlobalDataStorage seatNameFull] objectAtIndex:i];
                 
-                [info drawAtPoint:CGPointMake(size.width / 5 * pos + 13, size.height - 20) withFont:[UIFont systemFontOfSize:14]];
+                if ([info isEqualToString:@"有"]) {
+                    [greenColor set];
+                } else if ([info isEqualToString:@"无"]) {
+                    [[UIColor grayColor] set];
+                } else {
+                    [[UIColor orangeColor] set];
+                }
+                
+                [info drawAtPoint:CGPointMake(size.width / 5 * pos + 13, size.height - 20) withFont:[UIFont boldSystemFontOfSize:12.f]];
+                
+                [[UIColor blackColor] set];
                 [seatNameFull drawAtPoint:CGPointMake(size.width / 5 * pos + 10, size.height - 40) withFont:[UIFont systemFontOfSize:14]];
                 
                 pos += 1;
@@ -69,8 +85,18 @@
             if (![info isEqualToString:@"--"]) {
                 NSString *seatNameAbbr = [[GlobalDataStorage seatNameAbbr] objectAtIndex:i];
                 
-                [info drawAtPoint:CGPointMake(size.width - 30, size.height / 5 * pos) withFont:[UIFont systemFontOfSize:12]];
-                [seatNameAbbr drawAtPoint:CGPointMake(20, size.height / 5 * pos) withFont:[UIFont systemFontOfSize:12]];
+                if ([info isEqualToString:@"有"]) {
+                    [greenColor set];
+                } else if ([info isEqualToString:@"无"]) {
+                    [[UIColor grayColor] set];
+                } else {
+                    [[UIColor orangeColor] set];
+                }
+                
+                [info drawAtPoint:CGPointMake(size.width - 30, size.height / 5 * pos) withFont:[UIFont boldSystemFontOfSize:12.f]];
+                
+                [[UIColor blackColor] set];
+                [seatNameAbbr drawAtPoint:CGPointMake(20, size.height / 5 * pos) withFont:[UIFont systemFontOfSize:12.f]];
                 
                 pos -= 1;
             }

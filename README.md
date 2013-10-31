@@ -16,7 +16,6 @@ TODO:
 * __增加一次性购买多张车票的功能__
 * __已完成订单的退票功能__
 * __车票改签__
-* weak-strong dance
 
 Update 13-08-31:
 * 在前往支付页前提供更详细的指导，提供剩余时间的显示
@@ -62,4 +61,15 @@ Update 13-07-27:
 $ git clone git@github.com:zwzmzd/Pocket12306-iOS.git
 $ cd Pocket12306-iOS/
 $ git submodule update --init --recursive
+```
+
+子模块修复
+---------
+
+有时工程会更改子模块地址，导致不能正常拉取，使用以下命令修复
+
+```bash
+$ cd Pocket12306-iOS/
+$ git submodule sync
+$ git submodule update
 ```

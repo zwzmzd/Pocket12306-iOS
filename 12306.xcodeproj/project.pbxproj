@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */; };
+		FA0FD81F18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0FD81D18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png */; };
+		FA0FD82018215E7C00899B10 /* iOS7-splash-screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0FD81E18215E7C00899B10 /* iOS7-splash-screen@2x.png */; };
 		FA1091B817C53CF600FB24B3 /* header_bk.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B017C53CF600FB24B3 /* header_bk.png */; };
 		FA1091B917C53CF600FB24B3 /* header_bk@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B117C53CF600FB24B3 /* header_bk@2x.png */; };
 		FA1091BA17C53CF600FB24B3 /* header_leftbtn_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B217C53CF600FB24B3 /* header_leftbtn_nor.png */; };
@@ -96,6 +98,8 @@
 /* Begin PBXFileReference section */
 		FA0311A317B3704C0024FB55 /* MTStatusBarOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStatusBarOverlay.h; path = vendor/MTStatusBarOverlay/MTStatusBarOverlay.h; sourceTree = SOURCE_ROOT; };
 		FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTStatusBarOverlay.m; path = vendor/MTStatusBarOverlay/MTStatusBarOverlay.m; sourceTree = SOURCE_ROOT; };
+		FA0FD81D18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS7-splash-screen-568h@2x.png"; sourceTree = "<group>"; };
+		FA0FD81E18215E7C00899B10 /* iOS7-splash-screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS7-splash-screen@2x.png"; sourceTree = "<group>"; };
 		FA1091B017C53CF600FB24B3 /* header_bk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_bk.png; sourceTree = "<group>"; };
 		FA1091B117C53CF600FB24B3 /* header_bk@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header_bk@2x.png"; sourceTree = "<group>"; };
 		FA1091B217C53CF600FB24B3 /* header_leftbtn_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_leftbtn_nor.png; sourceTree = "<group>"; };
@@ -372,6 +376,8 @@
 		FA320A2B17966A0800F2E282 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FA0FD81D18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png */,
+				FA0FD81E18215E7C00899B10 /* iOS7-splash-screen@2x.png */,
 				FA4776E817A76C59004F6A74 /* dropbox-1.png */,
 				FA320A2C17966A0800F2E282 /* 12306-Info.plist */,
 				FA320A2D17966A0800F2E282 /* InfoPlist.strings */,
@@ -719,9 +725,11 @@
 				FA1091BD17C53CF600FB24B3 /* header_leftbtn_press@2x.png in Resources */,
 				FA1091BE17C53CF600FB24B3 /* login_leftbtn_press.png in Resources */,
 				FA1091BF17C53CF600FB24B3 /* login_leftbtn_press@2x.png in Resources */,
+				FA0FD81F18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png in Resources */,
 				FAF902A417C6816A0080A5CC /* left_arrow.png in Resources */,
 				FAF902A517C6816A0080A5CC /* left_arrow@2x.png in Resources */,
 				FAF902A617C6816A0080A5CC /* right_arrow.png in Resources */,
+				FA0FD82018215E7C00899B10 /* iOS7-splash-screen@2x.png in Resources */,
 				FAF902A717C6816A0080A5CC /* right_arrow@2x.png in Resources */,
 				FA4F7B5617D2221300DF19A0 /* epay.html in Resources */,
 			);

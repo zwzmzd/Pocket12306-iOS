@@ -24,6 +24,7 @@
 @property (nonatomic, copy) NSString *apacheToken;
 
 @property (nonatomic) BOOL refreshProcessEnable;
+@property (nonatomic) BOOL isFirstScene;
 
 @end
 
@@ -305,19 +306,28 @@
     [super viewDidLoad];
     
     _refreshProcessEnable = YES;
+    _isFirstScene = YES;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
-    // 防止循环引用
-    __weak typeof(self) weakSelf = self;
-    [self.tableView addPullToRefreshWithActionHandler:^{
-        typeof(self) mySelf = weakSelf;
-        if (mySelf) {
-            [mySelf iWantRefresh:nil];
-        }
-    }];
-    [self.tableView.pullToRefreshView setTitle:@"正在载入" forState:SVPullToRefreshStateLoading];
-    [self.tableView.pullToRefreshView setTitle:@"松开后刷新订单" forState:SVPullToRefreshStateTriggered];
-    [self.tableView.pullToRefreshView setTitle:@"下拉刷新订单" forState:SVPullToRefreshStateStopped];
-    [self.tableView triggerPullToRefresh];
+    if (self.isFirstScene) {
+        self.isFirstScene = NO;
+        
+        // 防止循环引用
+        __weak typeof(self) weakSelf = self;
+        [self.tableView addPullToRefreshWithActionHandler:^{
+            typeof(self) mySelf = weakSelf;
+            if (mySelf) {
+                [mySelf iWantRefresh:nil];
+            }
+        }];
+        [self.tableView.pullToRefreshView setTitle:@"正在载入" forState:SVPullToRefreshStateLoading];
+        [self.tableView.pullToRefreshView setTitle:@"松开后刷新订单" forState:SVPullToRefreshStateTriggered];
+        [self.tableView.pullToRefreshView setTitle:@"下拉刷新订单" forState:SVPullToRefreshStateStopped];
+        [self.tableView triggerPullToRefresh];
+    }
 }
 
 - (void)didReceiveMemoryWarning
