@@ -16,6 +16,7 @@
 #import "TDBLeftTicketForList.h"
 #import "TDBTrainTimetableViewController.h"
 #import "UIButton+TDBAddition.h"
+#import "MobClick.h"
 
 #import "TDBHTTPClient.h"
 #import "Macros.h"
@@ -49,6 +50,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"ListViewControllerLoad"];
     
     self.title = [NSString stringWithFormat:@"%@车票", self.dateInString];
     [self retriveTrainInfoListUsingGCD];

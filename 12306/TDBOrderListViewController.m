@@ -17,6 +17,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SVPullToRefresh.h"
 #import "Macros.h"
+#import "MobClick.h"
 
 @interface TDBOrderListViewController ()
 
@@ -304,6 +305,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"OrderList"];
     
     _refreshProcessEnable = YES;
     _isFirstScene = YES;

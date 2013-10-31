@@ -14,6 +14,7 @@
 #import "TDBKeybordNotificationManager.h"
 #import "TDBListViewController.h"
 #import "TDBHTTPClient.h"
+#import "MobClick.h"
 
 #define USER_LAST_INPUT_DEPART_STATION_NAME (@"__userLastInputDepartStationName")
 #define USER_LAST_INPUT_ARRIVE_STATION_NAME (@"__userLastInputArriveStationName")
@@ -31,6 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"MainViewControllerLoad"];
 }
 
 - (void)viewWillAppear:(BOOL)animated

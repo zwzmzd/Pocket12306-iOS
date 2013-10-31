@@ -12,6 +12,7 @@
 #import "TFHpple.h"
 #import "UIButton+TDBAddition.h"
 #import "SVProgressHUD.h"
+#import "MobClick.h"
 
 #import "Macros.h"
 #import "TDBHTTPClient.h"
@@ -34,6 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"EPayEntry"];
 	// Do any additional setup after loading the view.
     
     // 进入后，用户总览全局

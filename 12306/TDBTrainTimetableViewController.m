@@ -13,6 +13,8 @@
 #import "GlobalDataStorage.h"
 #import "TDBSession.h"
 #import "UIButton+TDBAddition.h"
+#import "MobClick.h"
+
 #import "Macros.h"
 #import "TDBHTTPClient.h"
 
@@ -36,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"train timetable query"];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     

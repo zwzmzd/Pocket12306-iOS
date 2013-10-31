@@ -18,6 +18,7 @@
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
 #import "TDBPassengerInfoViewController.h"
+#import "MobClick.h"
 
 #import "TDBHTTPClient.h"
 #import "Macros.h"
@@ -573,6 +574,7 @@
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
                             self.progressView.progress = 1;
+                            [MobClick event:@"ticket order successfully"];
                             [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:2.f animated:YES];
                             self.navigationItem.rightBarButtonItem = nil;
                         });

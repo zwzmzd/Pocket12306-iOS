@@ -12,6 +12,7 @@
 #import "FMDatabase.h"
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
+#import "MobClick.h"
 
 #import "TDBHTTPClient.h"
 #import "Macros.h"
@@ -49,6 +50,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"PassengerInfo"];
      
     [self getInformationFromDatabaseUsingGCD];
     
@@ -122,6 +124,7 @@
             [db close];
             
             dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [MobClick event:@"PassengerInfoRefreshed"];
                 [sself getInformationFromDatabaseUsingGCD];
             });
         }

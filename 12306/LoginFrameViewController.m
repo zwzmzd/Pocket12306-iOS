@@ -14,6 +14,7 @@
 #import "SSKeychain.h"
 #import "TDBHTTPClient.h"
 #import "Macros.h"
+#import "MobClick.h"
 
 #define KEYCHAIN_SERVICE (@"12306_account")
 #define KEYCHAIN_USERNAME_KEY (@"12306_account_username")
@@ -58,6 +59,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"LoginFrameViewControllerViewDidLoad"];
     
     [GlobalDataStorage setTdbss:nil];
     

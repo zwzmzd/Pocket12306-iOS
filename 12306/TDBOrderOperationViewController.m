@@ -13,6 +13,7 @@
 #import "TDBEPayEntryViewController.h"
 #import "TDBOrderListViewController.h"
 #import "UIButton+TDBAddition.h"
+#import "MobClick.h"
 
 typedef enum {
     TAGLIST_BEFORE_CANCLE = 1,
@@ -102,6 +103,7 @@ typedef enum {
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 UIAlertView *alert;
                 if (success) {
+                    [MobClick event:@"CancleUnfinishedOrderSuccess"];
                     alert = [[UIAlertView alloc] initWithTitle:@"取消成功" message:@"您已成功取消订单" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 } else {
                     alert = [[UIAlertView alloc] initWithTitle:@"取消失败" message:@"无法取消订单" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
