@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */; };
-		FA0FD81F18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0FD81D18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png */; };
-		FA0FD82018215E7C00899B10 /* iOS7-splash-screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0FD81E18215E7C00899B10 /* iOS7-splash-screen@2x.png */; };
 		FA1091B817C53CF600FB24B3 /* header_bk.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B017C53CF600FB24B3 /* header_bk.png */; };
 		FA1091B917C53CF600FB24B3 /* header_bk@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B117C53CF600FB24B3 /* header_bk@2x.png */; };
 		FA1091BA17C53CF600FB24B3 /* header_leftbtn_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B217C53CF600FB24B3 /* header_leftbtn_nor.png */; };
@@ -30,9 +28,6 @@
 		FA320A2F17966A0800F2E282 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA320A2D17966A0800F2E282 /* InfoPlist.strings */; };
 		FA320A3117966A0800F2E282 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA320A3017966A0800F2E282 /* main.m */; };
 		FA320A3517966A0800F2E282 /* TDBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA320A3417966A0800F2E282 /* TDBAppDelegate.m */; };
-		FA320A3717966A0800F2E282 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = FA320A3617966A0800F2E282 /* Default.png */; };
-		FA320A3917966A0800F2E282 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA320A3817966A0800F2E282 /* Default@2x.png */; };
-		FA320A3B17966A0800F2E282 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA320A3A17966A0800F2E282 /* Default-568h@2x.png */; };
 		FA320A3E17966A0800F2E282 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA320A3C17966A0800F2E282 /* MainStoryboard.storyboard */; };
 		FA320A4117966A0800F2E282 /* TDBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA320A4017966A0800F2E282 /* TDBViewController.m */; };
 		FA320A4F1796715600F2E282 /* LoginFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA320A4E1796715600F2E282 /* LoginFrameViewController.m */; };
@@ -49,11 +44,31 @@
 		FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA117A4F25600D535BC /* TDBOrder.m */; };
 		FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */; };
 		FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */; };
-		FA4776E917A76C59004F6A74 /* dropbox-1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4776E817A76C59004F6A74 /* dropbox-1.png */; };
 		FA4F7B5617D2221300DF19A0 /* epay.html in Resources */ = {isa = PBXBuildFile; fileRef = FA4F7B5517D2221300DF19A0 /* epay.html */; };
 		FA50E16B181258A500992940 /* TDBHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FA50E16A181258A500992940 /* TDBHTTPClient.m */; };
 		FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */; };
 		FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */; };
+		FA6A9CCA1825666D00FFCAC2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CC31825666D00FFCAC2 /* Default-568h@2x.png */; };
+		FA6A9CCB1825666D00FFCAC2 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CC41825666D00FFCAC2 /* Default.png */; };
+		FA6A9CCC1825666D00FFCAC2 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CC51825666D00FFCAC2 /* Default@2x.png */; };
+		FA6A9CCD1825666D00FFCAC2 /* iOS7-splash-screen-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CC61825666D00FFCAC2 /* iOS7-splash-screen-568h@2x.png */; };
+		FA6A9CCE1825666D00FFCAC2 /* iOS7-splash-screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CC71825666D00FFCAC2 /* iOS7-splash-screen@2x.png */; };
+		FA6A9D0A1825690000FFCAC2 /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CEA1825690000FFCAC2 /* Icon-40.png */; };
+		FA6A9D0B1825690000FFCAC2 /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CEB1825690000FFCAC2 /* Icon-40@2x.png */; };
+		FA6A9D0C1825690000FFCAC2 /* Icon-60.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CEC1825690000FFCAC2 /* Icon-60.png */; };
+		FA6A9D0D1825690000FFCAC2 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CED1825690000FFCAC2 /* Icon-60@2x.png */; };
+		FA6A9D0E1825690000FFCAC2 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CEE1825690000FFCAC2 /* Icon-72.png */; };
+		FA6A9D0F1825690000FFCAC2 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CEF1825690000FFCAC2 /* Icon-72@2x.png */; };
+		FA6A9D101825690000FFCAC2 /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF01825690000FFCAC2 /* Icon-76.png */; };
+		FA6A9D111825690000FFCAC2 /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF11825690000FFCAC2 /* Icon-76@2x.png */; };
+		FA6A9D121825690000FFCAC2 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF21825690000FFCAC2 /* Icon-Small-50.png */; };
+		FA6A9D131825690000FFCAC2 /* Icon-Small-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF31825690000FFCAC2 /* Icon-Small-50@2x.png */; };
+		FA6A9D141825690000FFCAC2 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF41825690000FFCAC2 /* Icon-Small.png */; };
+		FA6A9D151825690000FFCAC2 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF51825690000FFCAC2 /* Icon-Small@2x.png */; };
+		FA6A9D161825690000FFCAC2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF61825690000FFCAC2 /* Icon.png */; };
+		FA6A9D171825690000FFCAC2 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF71825690000FFCAC2 /* Icon@2x.png */; };
+		FA6A9D181825690000FFCAC2 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF81825690000FFCAC2 /* iTunesArtwork.png */; };
+		FA6A9D191825690000FFCAC2 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF91825690000FFCAC2 /* iTunesArtwork@2x.png */; };
 		FA77E04117E8181F009308BF /* login_encode.js in Sources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FA77E04217E81C7C009308BF /* login_encode.js in Resources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FA77E0F017EED7C3009308BF /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = FA77E0EB17EED7C3009308BF /* TFHpple.m */; };
@@ -101,8 +116,6 @@
 /* Begin PBXFileReference section */
 		FA0311A317B3704C0024FB55 /* MTStatusBarOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStatusBarOverlay.h; path = vendor/MTStatusBarOverlay/MTStatusBarOverlay.h; sourceTree = SOURCE_ROOT; };
 		FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTStatusBarOverlay.m; path = vendor/MTStatusBarOverlay/MTStatusBarOverlay.m; sourceTree = SOURCE_ROOT; };
-		FA0FD81D18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS7-splash-screen-568h@2x.png"; sourceTree = "<group>"; };
-		FA0FD81E18215E7C00899B10 /* iOS7-splash-screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS7-splash-screen@2x.png"; sourceTree = "<group>"; };
 		FA1091B017C53CF600FB24B3 /* header_bk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_bk.png; sourceTree = "<group>"; };
 		FA1091B117C53CF600FB24B3 /* header_bk@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header_bk@2x.png"; sourceTree = "<group>"; };
 		FA1091B217C53CF600FB24B3 /* header_leftbtn_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_leftbtn_nor.png; sourceTree = "<group>"; };
@@ -131,9 +144,6 @@
 		FA320A3217966A0800F2E282 /* 12306-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "12306-Prefix.pch"; sourceTree = "<group>"; };
 		FA320A3317966A0800F2E282 /* TDBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDBAppDelegate.h; sourceTree = "<group>"; };
 		FA320A3417966A0800F2E282 /* TDBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDBAppDelegate.m; sourceTree = "<group>"; };
-		FA320A3617966A0800F2E282 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		FA320A3817966A0800F2E282 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		FA320A3A17966A0800F2E282 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		FA320A3D17966A0800F2E282 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		FA320A3F17966A0800F2E282 /* TDBViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDBViewController.h; sourceTree = "<group>"; };
 		FA320A4017966A0800F2E282 /* TDBViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDBViewController.m; sourceTree = "<group>"; };
@@ -164,7 +174,6 @@
 		FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBOrderDetailViewController.m; sourceTree = "<group>"; };
 		FA3BACA617A54FEE00D535BC /* TDBEPayEntryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBEPayEntryViewController.h; sourceTree = "<group>"; };
 		FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBEPayEntryViewController.m; sourceTree = "<group>"; };
-		FA4776E817A76C59004F6A74 /* dropbox-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dropbox-1.png"; path = "../dropbox-1.png"; sourceTree = "<group>"; };
 		FA4C1CE717AA6297003AB59A /* ODRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ODRefreshControl.h; path = vendor/ORDRefreshControl/ODRefreshControl/ODRefreshControl.h; sourceTree = SOURCE_ROOT; };
 		FA4C1CE817AA6297003AB59A /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ODRefreshControl.m; path = vendor/ORDRefreshControl/ODRefreshControl/ODRefreshControl.m; sourceTree = SOURCE_ROOT; };
 		FA4F7B5517D2221300DF19A0 /* epay.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = epay.html; path = template/epay.html; sourceTree = "<group>"; };
@@ -176,6 +185,27 @@
 		FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
 		FA683F1B17AB7921003D32FB /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
 		FA683F1C17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
+		FA6A9CC31825666D00FFCAC2 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		FA6A9CC41825666D00FFCAC2 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		FA6A9CC51825666D00FFCAC2 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		FA6A9CC61825666D00FFCAC2 /* iOS7-splash-screen-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS7-splash-screen-568h@2x.png"; sourceTree = "<group>"; };
+		FA6A9CC71825666D00FFCAC2 /* iOS7-splash-screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS7-splash-screen@2x.png"; sourceTree = "<group>"; };
+		FA6A9CEA1825690000FFCAC2 /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40.png"; sourceTree = "<group>"; };
+		FA6A9CEB1825690000FFCAC2 /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
+		FA6A9CEC1825690000FFCAC2 /* Icon-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60.png"; sourceTree = "<group>"; };
+		FA6A9CED1825690000FFCAC2 /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
+		FA6A9CEE1825690000FFCAC2 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		FA6A9CEF1825690000FFCAC2 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
+		FA6A9CF01825690000FFCAC2 /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
+		FA6A9CF11825690000FFCAC2 /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
+		FA6A9CF21825690000FFCAC2 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
+		FA6A9CF31825690000FFCAC2 /* Icon-Small-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50@2x.png"; sourceTree = "<group>"; };
+		FA6A9CF41825690000FFCAC2 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
+		FA6A9CF51825690000FFCAC2 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
+		FA6A9CF61825690000FFCAC2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		FA6A9CF71825690000FFCAC2 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		FA6A9CF81825690000FFCAC2 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
+		FA6A9CF91825690000FFCAC2 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
 		FA77E04017E8181F009308BF /* login_encode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = login_encode.js; sourceTree = "<group>"; };
 		FA77E0EA17EED7C3009308BF /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = vendor/Hpple/TFHpple.h; sourceTree = SOURCE_ROOT; };
 		FA77E0EB17EED7C3009308BF /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = vendor/Hpple/TFHpple.m; sourceTree = SOURCE_ROOT; };
@@ -286,6 +316,7 @@
 		FA1091AE17C53CF600FB24B3 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				FA6A9CC21825666D00FFCAC2 /* app */,
 				FA4F7B5417D221D600DF19A0 /* web */,
 				FA1091AF17C53CF600FB24B3 /* theme */,
 			);
@@ -397,16 +428,10 @@
 		FA320A2B17966A0800F2E282 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				FA0FD81D18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png */,
-				FA0FD81E18215E7C00899B10 /* iOS7-splash-screen@2x.png */,
-				FA4776E817A76C59004F6A74 /* dropbox-1.png */,
 				FA320A2C17966A0800F2E282 /* 12306-Info.plist */,
 				FA320A2D17966A0800F2E282 /* InfoPlist.strings */,
 				FA320A3017966A0800F2E282 /* main.m */,
 				FA320A3217966A0800F2E282 /* 12306-Prefix.pch */,
-				FA320A3617966A0800F2E282 /* Default.png */,
-				FA320A3817966A0800F2E282 /* Default@2x.png */,
-				FA320A3A17966A0800F2E282 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -451,6 +476,50 @@
 			name = SVPullToRefresh;
 			path = vendor/SVPullToRefresh/SVPullToRefresh;
 			sourceTree = SOURCE_ROOT;
+		};
+		FA6A9CC21825666D00FFCAC2 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				FA6A9CD11825690000FFCAC2 /* icon */,
+				FA6A9CC31825666D00FFCAC2 /* Default-568h@2x.png */,
+				FA6A9CC41825666D00FFCAC2 /* Default.png */,
+				FA6A9CC51825666D00FFCAC2 /* Default@2x.png */,
+				FA6A9CC61825666D00FFCAC2 /* iOS7-splash-screen-568h@2x.png */,
+				FA6A9CC71825666D00FFCAC2 /* iOS7-splash-screen@2x.png */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
+		FA6A9CD11825690000FFCAC2 /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				FA6A9CE91825690000FFCAC2 /* ios7 */,
+			);
+			path = icon;
+			sourceTree = "<group>";
+		};
+		FA6A9CE91825690000FFCAC2 /* ios7 */ = {
+			isa = PBXGroup;
+			children = (
+				FA6A9CEA1825690000FFCAC2 /* Icon-40.png */,
+				FA6A9CEB1825690000FFCAC2 /* Icon-40@2x.png */,
+				FA6A9CEC1825690000FFCAC2 /* Icon-60.png */,
+				FA6A9CED1825690000FFCAC2 /* Icon-60@2x.png */,
+				FA6A9CEE1825690000FFCAC2 /* Icon-72.png */,
+				FA6A9CEF1825690000FFCAC2 /* Icon-72@2x.png */,
+				FA6A9CF01825690000FFCAC2 /* Icon-76.png */,
+				FA6A9CF11825690000FFCAC2 /* Icon-76@2x.png */,
+				FA6A9CF21825690000FFCAC2 /* Icon-Small-50.png */,
+				FA6A9CF31825690000FFCAC2 /* Icon-Small-50@2x.png */,
+				FA6A9CF41825690000FFCAC2 /* Icon-Small.png */,
+				FA6A9CF51825690000FFCAC2 /* Icon-Small@2x.png */,
+				FA6A9CF61825690000FFCAC2 /* Icon.png */,
+				FA6A9CF71825690000FFCAC2 /* Icon@2x.png */,
+				FA6A9CF81825690000FFCAC2 /* iTunesArtwork.png */,
+				FA6A9CF91825690000FFCAC2 /* iTunesArtwork@2x.png */,
+			);
+			path = ios7;
+			sourceTree = "<group>";
 		};
 		FA77E0E917EED78F009308BF /* Hpple */ = {
 			isa = PBXGroup;
@@ -734,25 +803,40 @@
 			files = (
 				FA77E04217E81C7C009308BF /* login_encode.js in Resources */,
 				FA320A2F17966A0800F2E282 /* InfoPlist.strings in Resources */,
-				FA320A3717966A0800F2E282 /* Default.png in Resources */,
-				FA320A3917966A0800F2E282 /* Default@2x.png in Resources */,
-				FA320A3B17966A0800F2E282 /* Default-568h@2x.png in Resources */,
 				FA320A3E17966A0800F2E282 /* MainStoryboard.storyboard in Resources */,
-				FA4776E917A76C59004F6A74 /* dropbox-1.png in Resources */,
+				FA6A9D181825690000FFCAC2 /* iTunesArtwork.png in Resources */,
 				FA1091B817C53CF600FB24B3 /* header_bk.png in Resources */,
+				FA6A9D161825690000FFCAC2 /* Icon.png in Resources */,
 				FA1091B917C53CF600FB24B3 /* header_bk@2x.png in Resources */,
 				FA1091BA17C53CF600FB24B3 /* header_leftbtn_nor.png in Resources */,
 				FA1091BB17C53CF600FB24B3 /* header_leftbtn_nor@2x.png in Resources */,
 				FA1091BC17C53CF600FB24B3 /* header_leftbtn_press.png in Resources */,
+				FA6A9CCC1825666D00FFCAC2 /* Default@2x.png in Resources */,
 				FA1091BD17C53CF600FB24B3 /* header_leftbtn_press@2x.png in Resources */,
+				FA6A9D131825690000FFCAC2 /* Icon-Small-50@2x.png in Resources */,
+				FA6A9D0A1825690000FFCAC2 /* Icon-40.png in Resources */,
+				FA6A9D121825690000FFCAC2 /* Icon-Small-50.png in Resources */,
+				FA6A9D0F1825690000FFCAC2 /* Icon-72@2x.png in Resources */,
+				FA6A9CCD1825666D00FFCAC2 /* iOS7-splash-screen-568h@2x.png in Resources */,
+				FA6A9D191825690000FFCAC2 /* iTunesArtwork@2x.png in Resources */,
 				FA1091BE17C53CF600FB24B3 /* login_leftbtn_press.png in Resources */,
 				FA1091BF17C53CF600FB24B3 /* login_leftbtn_press@2x.png in Resources */,
-				FA0FD81F18215E7C00899B10 /* iOS7-splash-screen-568h@2x.png in Resources */,
+				FA6A9D0E1825690000FFCAC2 /* Icon-72.png in Resources */,
+				FA6A9D171825690000FFCAC2 /* Icon@2x.png in Resources */,
+				FA6A9CCE1825666D00FFCAC2 /* iOS7-splash-screen@2x.png in Resources */,
+				FA6A9D0D1825690000FFCAC2 /* Icon-60@2x.png in Resources */,
 				FAF902A417C6816A0080A5CC /* left_arrow.png in Resources */,
+				FA6A9CCA1825666D00FFCAC2 /* Default-568h@2x.png in Resources */,
+				FA6A9D0C1825690000FFCAC2 /* Icon-60.png in Resources */,
+				FA6A9D111825690000FFCAC2 /* Icon-76@2x.png in Resources */,
+				FA6A9D151825690000FFCAC2 /* Icon-Small@2x.png in Resources */,
 				FAF902A517C6816A0080A5CC /* left_arrow@2x.png in Resources */,
+				FA6A9D141825690000FFCAC2 /* Icon-Small.png in Resources */,
+				FA6A9CCB1825666D00FFCAC2 /* Default.png in Resources */,
 				FAF902A617C6816A0080A5CC /* right_arrow.png in Resources */,
-				FA0FD82018215E7C00899B10 /* iOS7-splash-screen@2x.png in Resources */,
+				FA6A9D0B1825690000FFCAC2 /* Icon-40@2x.png in Resources */,
 				FAF902A717C6816A0080A5CC /* right_arrow@2x.png in Resources */,
+				FA6A9D101825690000FFCAC2 /* Icon-76.png in Resources */,
 				FA4F7B5617D2221300DF19A0 /* epay.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
