@@ -302,7 +302,6 @@
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 StrongSelf(sself, wself);
                 if (sself) {
-                    sself.verifyCodeImage.image = [UIImage imageWithData:image];
                     [sself.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
                 }
             });

@@ -29,7 +29,6 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UILabel *detailDepartLabel;
 @property (weak, nonatomic) IBOutlet UILabel *detailArriveLabel;
 
-@property (weak, nonatomic) IBOutlet UIImageView *verifyCodeImage;
 @property (weak, nonatomic) IBOutlet UITextField *name;
 @property (weak, nonatomic) IBOutlet UITextField *idCardNo;
 @property (weak, nonatomic) IBOutlet UITextField *mobileno;

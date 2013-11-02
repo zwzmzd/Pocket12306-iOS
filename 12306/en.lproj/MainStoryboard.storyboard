@@ -832,10 +832,22 @@
                                                         <outlet property="delegate" destination="M5t-TF-cDA" id="eDf-zd-nhN"/>
                                                     </connections>
                                                 </textField>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="999" id="B8P-OF-8hr">
-                                                    <rect key="frame" x="20" y="5" width="88" height="33"/>
-                                                    <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" id="im2-mX-j3r">
+                                                    <rect key="frame" x="20" y="4" width="97" height="35"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="iWantToRetriveVerifyCode:" destination="M5t-TF-cDA" eventType="touchUpInside" id="KxA-ax-RYb"/>
+                                                    </connections>
+                                                </button>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" id="RCd-CA-83p">
+                                                    <rect key="frame" x="50" y="3" width="37" height="37"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="color" red="0.39620396320000001" green="0.49881186039999997" blue="0.65768494899999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -865,61 +877,6 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection id="b3e-2q-NIo">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="IGS-hY-qVC">
-                                        <rect key="frame" x="0.0" y="295" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IGS-hY-qVC" id="9RG-5V-qZD">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" id="wFk-yx-8dc">
-                                                    <rect key="frame" x="0.0" y="-1" width="320" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <state key="normal" title="重新获取验证码">
-                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <state key="highlighted">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="iWantToRetriveVerifyCode:" destination="M5t-TF-cDA" eventType="touchUpInside" id="tXk-or-krj"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ZgJ-yU-k5d">
-                                        <rect key="frame" x="0.0" y="339" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZgJ-yU-k5d" id="gId-ga-6x3">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" id="lrt-ml-4FM">
-                                                    <rect key="frame" x="0.0" y="1" width="320" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <state key="normal" title="重置网络">
-                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <state key="highlighted">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="iWantResetSession:" destination="M5t-TF-cDA" eventType="touchUpInside" id="x6L-gI-es6"/>
-                                                        <action selector="iWantToRetriveVerifyCode:" destination="M5t-TF-cDA" eventType="touchUpInside" id="tcX-vh-pL6"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="M5t-TF-cDA" id="GIU-Qn-Mcs"/>
@@ -942,10 +899,10 @@
                         <outlet property="doneButton" destination="MRp-ix-H77" id="QQu-aO-x5X"/>
                         <outlet property="password" destination="RWh-7U-44h" id="DGY-PG-alC"/>
                         <outlet property="rememberProfile" destination="pMN-Gm-bYg" id="RE1-qZ-Muo"/>
-                        <outlet property="retriveVerifyCodeButton" destination="wFk-yx-8dc" id="iOJ-1w-Tht"/>
+                        <outlet property="retriveVerifyActivityIndicator" destination="RCd-CA-83p" id="7F3-5v-TQ7"/>
+                        <outlet property="retriveVerifyCodeButton" destination="im2-mX-j3r" id="QCG-t4-js2"/>
                         <outlet property="username" destination="4lR-hM-5Bk" id="b5Y-gc-g7X"/>
                         <outlet property="verifyCode" destination="bE4-p0-2Mj" id="MxB-G5-jky"/>
-                        <outlet property="verifyImage" destination="B8P-OF-8hr" id="xnG-30-aFe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U17-fN-0fc" userLabel="First Responder" sceneMemberID="firstResponder"/>
