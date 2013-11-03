@@ -34,6 +34,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UITextField *mobileno;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *seatTypeSelector;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *ticketTypeSelector;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *verifyCodeActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *refreshVerifyCodeBtn;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 

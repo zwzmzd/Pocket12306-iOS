@@ -188,6 +188,7 @@
 - (void)retriveEssentialInfoUsingGCD
 {
     [SVProgressHUD show];
+    [self.verifyCodeActivityIndicator startAnimating];
     
     WeakSelfDefine(wself);
     [[TDBHTTPClient sharedClient] getSubmutToken:^(NSData *data) {
@@ -216,12 +217,14 @@
                 sself.tokenKey = key;
                 NSLog(@"[submutToken] %@: %@", sself.tokenKey, sself.tokenValue);
                 
-                double delayInSeconds = 1.0;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [sself _retriveSeatInfoUsingGCD];
-                    [sself _retriveVerifyCodeUsingGCD];
-                });
+                {
+                    double delayInSeconds = 1.0;
+                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                        CHECK_INSTANCE_EXIST(wself);
+                        [wself _retriveSeatInfoUsingGCD];
+                    });
+                }
             }
         });
     }];
@@ -247,6 +250,14 @@
             }
             
             if (result == SUBMUTORDER_MSG_SUCCESS) {
+                {
+                    double delayInSeconds = 1.f;
+                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                        CHECK_INSTANCE_EXIST(wself);
+                        [wself _retriveVerifyCodeUsingGCD];
+                    });
+                }
                 
                 for (NSUInteger i = 0; i < [sself.seatTypeList count]; i++) {
                     NSString *title = [[sself.seatTypeList objectAtIndex:i] objectAtIndex:1];
@@ -259,8 +270,6 @@
                     [sself.ticketTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
                 }
                 sself.ticketTypeSelector.selectedSegmentIndex = 0;
-                
-                sself.isLoadingFinished = YES;
             } else if (result == SUBMUTORDER_MSG_UNFINISHORDER_DETECTED) {
                 
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票"
@@ -296,6 +305,7 @@
 
 - (void)_retriveVerifyCodeUsingGCD
 {
+    [self.verifyCodeActivityIndicator startAnimating];
     WeakSelfDefine(wself);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         [[TDBHTTPClient sharedClient] getRandpImage:^(NSData *image) {
@@ -303,6 +313,8 @@
                 StrongSelf(sself, wself);
                 if (sself) {
                     [sself.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
+                    [sself.verifyCodeActivityIndicator stopAnimating];
+                    sself.isLoadingFinished = YES;
                 }
             });
         }];
@@ -585,6 +597,10 @@
             break;
         }
     }
+}
+
+- (void)dealloc {
+    NSLog(@"dealloc %@", [self class]);
 }
 
 @end
