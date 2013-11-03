@@ -16,8 +16,6 @@
 			<array>
 				<string>Icon-60</string>
 				<string>Icon</string>
-				<string>iPhoneIcon_Small</string>
-				<string>dropbox-1.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
