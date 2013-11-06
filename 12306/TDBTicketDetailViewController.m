@@ -243,7 +243,6 @@
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [SVProgressHUD dismiss];
             StrongSelf(sself, wself);
             if (sself == nil) {
                 return;
@@ -310,6 +309,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         [[TDBHTTPClient sharedClient] getRandpImage:^(NSData *image) {
             dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [SVProgressHUD dismiss];
                 StrongSelf(sself, wself);
                 if (sself) {
                     [sself.refreshVerifyCodeBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
