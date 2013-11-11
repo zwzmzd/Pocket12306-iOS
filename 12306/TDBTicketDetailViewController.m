@@ -248,6 +248,10 @@
                 return;
             }
             
+            if (result != SUBMUTORDER_MSG_SUCCESS) {
+                [SVProgressHUD dismiss];
+            }
+            
             if (result == SUBMUTORDER_MSG_SUCCESS) {
                 {
                     double delayInSeconds = 1.f;
