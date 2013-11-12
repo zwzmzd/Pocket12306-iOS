@@ -42,6 +42,7 @@
 @property (nonatomic, readonly) NSString *departDate;
 @property (nonatomic, readonly) NSString *weekday;
 
+@property (nonatomic) BOOL doNotBack;
 @property (nonatomic) BOOL isLoadingFinished;
 
 @end
@@ -247,9 +248,12 @@
             if (sself == nil) {
                 return;
             }
+            sself.doNotBack = YES;
             
             if (result != SUBMUTORDER_MSG_SUCCESS) {
                 [SVProgressHUD dismiss];
+            } else {
+                sself.doNotBack = NO;
             }
             
             if (result == SUBMUTORDER_MSG_SUCCESS) {
@@ -346,6 +350,7 @@
 {
     [super viewDidLoad];
 
+    self.doNotBack = NO;
     self.isLoadingFinished = NO;
     [self configureView];
     [self retriveEssentialInfoUsingGCD];
@@ -357,9 +362,12 @@
 
 - (IBAction)_backPressed:(id)sender
 {
-    [SVProgressHUD dismiss];
-    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
-    [self.navigationController popViewControllerAnimated:YES];
+    // UIAlertView存在临界区问题，所以使用这个变量标记
+    if (!self.doNotBack) {
+        [SVProgressHUD dismiss];
+        [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -503,6 +511,8 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    self.doNotBack = NO;
+    
     switch (alertView.tag) {
         case SUBMUTORDER_MSG_UNFINISHORDER_DETECTED: {
             [self.navigationController popViewControllerAnimated:YES];
