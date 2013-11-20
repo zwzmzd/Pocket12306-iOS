@@ -11,6 +11,7 @@
 #import "TDBTrainInfo.h"
 #import "PassengerInfo.h"
 #import "Macros.h"
+#import "MobClick.h"
 
 #define ADD_UA() \
     [request setValue:USER_AGENT_STR forHTTPHeaderField:@"User-Agent"]
@@ -23,6 +24,21 @@
 @end
 
 @implementation TDBSession
+
++ (void)resetSession
+{
+    NSHTTPCookieStorage *cookieMgr = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    NSURL *url = [NSURL URLWithString:SYSURL @"/otsweb/"];
+    NSArray *cookies = [cookieMgr cookiesForURL:url];
+    NSEnumerator *enumerator = [cookies objectEnumerator];
+    NSHTTPCookie *cookie;
+    while (cookie = [enumerator nextObject]) {
+        //NSLog(@"Del Cookie{%@ %@}", cookie.name, cookie.value);
+        [cookieMgr deleteCookie:cookie];
+    }
+    NSLog(@"session reseted");
+    [MobClick event:@"session restarted"];
+}
 
 - (id)init
 {
@@ -38,20 +54,6 @@
 - (void)restartSession
 {
     
-}
-
-- (void)resetCookie
-{
-    NSURL *url = [NSURL URLWithString:SYSURL @"/otsweb/"];
-    NSArray *cookies = [self.cookieManager cookiesForURL:url];
-    NSEnumerator *enumerator = [cookies objectEnumerator];
-    NSHTTPCookie *cookie;
-    while (cookie = [enumerator nextObject]) {
-        //NSLog(@"Del Cookie{%@ %@}", cookie.name, cookie.value);
-        [self.cookieManager deleteCookie:cookie];
-    }
-    
-    self.isLoggedIn = NO;
 }
 
 - (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue

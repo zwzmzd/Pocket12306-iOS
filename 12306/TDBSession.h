@@ -24,6 +24,8 @@ typedef enum {
 
 @property (nonatomic, copy) NSData *image;
 
++ (void)resetSession;
+
 // 登录12306
 - (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue;
 

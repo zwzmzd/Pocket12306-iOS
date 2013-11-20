@@ -61,6 +61,7 @@
     [super viewDidLoad];
     [MobClick event:@"LoginFrameViewControllerViewDidLoad"];
     
+    [TDBSession resetSession];
     [GlobalDataStorage setTdbss:nil];
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];

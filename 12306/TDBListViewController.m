@@ -52,6 +52,14 @@
     [super viewDidLoad];
     [MobClick event:@"ListViewControllerLoad"];
     
+    // 为了App Store，由于外国人可能不会输入中文，所以如果发现值为空
+    // 那么就加上一个默认的效果，并且需要把stationNameExactlyMatch关闭
+    if (self.departStationTelecode == nil || self.arriveStationTelecode == nil) {
+        self.departStationTelecode = @"WXH";
+        self.arriveStationTelecode = @"NJH";
+        self.stationNameExactlyMatch = NO;
+    }
+    
     self.title = [NSString stringWithFormat:@"%@车票", self.dateInString];
     [self retriveTrainInfoListUsingGCD];
     

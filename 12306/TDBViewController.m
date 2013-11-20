@@ -153,6 +153,7 @@
         lv.stationNameExactlyMatch = stationNameExactlyMatch;
         
         NSLog(@"%@ %@", lv.departStationTelecode, lv.arriveStationTelecode);
+        [MobClick event:@"userQueryTicket" attributes:@{@"from": self.selectorView.departStationField.text, @"to": self.selectorView.arriveStationField.text, @"date": lv.orderDate}];
     }
 }
 
