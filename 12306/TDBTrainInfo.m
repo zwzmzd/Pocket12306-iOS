@@ -10,86 +10,78 @@
 
 @implementation TDBTrainInfo
 
-- (id)initWithArray:(NSArray *)original
-{
-    self = [super init];
-    if (self) {
-        _original = original;
-        NSString *s = (NSString *)[_original objectAtIndex:0];
-        _keySplitted = [s componentsSeparatedByString:@"#"];
-    }
-    
-    return self;
+- (id)initWithDict:(NSDictionary *)original {
+    _original = original;
 }
 
 - (NSString *)getTrainNo
 {
-    return [self.keySplitted objectAtIndex:0];
+    return [self.original objectForKey:@"train_no"];
 }
 
 - (NSString *)getDuration
 {
-    return [self.keySplitted objectAtIndex:1];
+    return [self.original objectForKey:@"lishi"];
 }
 
 - (NSString *)getDepartTime
 {
-    return [self.keySplitted objectAtIndex:2];
+    return [self.original objectForKey:@"start_time"];
 }
 
 - (NSString *)getTrainCode
 {
-    return [self.keySplitted objectAtIndex:3];
+    return [self.original objectForKey:@"station_train_code"];
 }
 
 - (NSString *)getDepartStationTeleCode
 {
-    return [self.keySplitted objectAtIndex:4];
+    return [self.original objectForKey:@"from_station_telecode"];
 }
 
 - (NSString *)getArriveStationTeleCode
 {
-    return [self.keySplitted objectAtIndex:5];
+    return [self.original objectForKey:@"to_station_telecode"];
 }
 
 - (NSString *)getArriveTime
 {
-    return [self.keySplitted objectAtIndex:6];
+    return [self.original objectForKey:@"arrive_time"];
 }
 
 - (NSString *)getDapartStationName
 {
-    return [self.keySplitted objectAtIndex:7];
+    return [self.original objectForKey:@"from_station_name"];
 }
 
 - (NSString *)getArriveStationName
 {
-    return [self.keySplitted objectAtIndex:8];
+    return [self.original objectForKey:@"to_station_name"];
 }
 
 - (NSString *)getDepartStationNo
 {
-    return [self.keySplitted objectAtIndex:9];
+    return [self.original objectForKey:@"from_station_no"];
 }
 
 - (NSString *)getArriveStationNo
 {
-    return [self.keySplitted objectAtIndex:10];
+    return [self.original objectForKey:@"to_station_no"];
 }
 
 - (NSString *)getYPInfoDetail
 {
-    return [self.keySplitted objectAtIndex:11];
+    return [self.original objectForKey:@"yp_info"];
 }
 
 - (NSString *)getMMStr
 {
-    return [self.keySplitted objectAtIndex:12];
+    return [self.original objectForKey:@"secretStr"];
 }
 
 - (NSString *)getLocationCode
 {
-    return [self.keySplitted objectAtIndex:13];
+    return @"";
 }
 
 @end

@@ -138,8 +138,15 @@
     }
     
     NSDictionary *dict = [self.dataModel objectAtIndex:indexPath.row];
-    cell.station_no = [dict objectForKey:@"station_no"];
-    cell.station_name = [dict objectForKey:@"station_name"];
+    
+    NSString *start_station_name = [dict objectForKey:@"start_station_name"];
+    if (start_station_name) {
+        cell.station_no = @"01";
+        cell.station_name = start_station_name;
+    } else {
+        cell.station_no = [dict objectForKey:@"station_no"];
+        cell.station_name = [dict objectForKey:@"station_name"];
+    }
     cell.arrive_time = [dict objectForKey:@"arrive_time"];
     cell.start_time = [dict objectForKey:@"start_time"];
     cell.stopover_time = [dict objectForKey:@"stopover_time"];

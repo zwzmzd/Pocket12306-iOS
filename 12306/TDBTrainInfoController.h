@@ -14,8 +14,6 @@
 
 - (void)addTrainInfo:(TDBTrainInfo *)train;
 
-- (void)addTrainInfoWithDataArray:(NSArray *)array;
-
 - (NSUInteger)count;
 
 - (TDBTrainInfo *)getTrainInfoForIndex:(NSUInteger)index;

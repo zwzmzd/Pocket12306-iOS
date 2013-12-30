@@ -105,19 +105,14 @@
 - (void)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)(NSData *))success {
     NSLog(@"queryLeftTicketWithDate");
     
-    // 二逼tdb，必须按顺序提交
     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-    [arguments addValue:@"queryLeftTicket" forKey:@"method"];
-    [arguments addValue:date forKey:@"orderRequest.train_date"];
-    [arguments addValue:from forKey:@"orderRequest.from_station_telecode"];
-    [arguments addValue:to forKey:@"orderRequest.to_station_telecode"];
-    [arguments addValue:@"" forKey:@"orderRequest.train_no"];
-    [arguments addValue:@"QB" forKey:@"trainPassType"];
-    [arguments addValue:@"QB#D#Z#T#K#QT#" forKey:@"trainClass"];
-    [arguments addValue:@"00" forKey:@"includeStudent"];
-    [arguments addValue:@"" forKey:@"seatTypeAndNum"];
+    [arguments addValue:date forKey:@"leftTicketDTO.train_date"];
+    [arguments addValue:from forKey:@"leftTicketDTO.from_station"];
+    [arguments addValue:to forKey:@"leftTicketDTO.to_station"];
+    [arguments addValue:@"ADULT" forKey:@"purpose_codes"];
     
-    NSString *path = [NSString stringWithFormat:@"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
+    
+    NSString *path = [NSString stringWithFormat:@"/otn/leftTicket/query?%@", [arguments getFinalData]];
     [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(responseObject);
@@ -129,21 +124,22 @@
 }
 
 - (void)queryaTrainStopTimeByTrainNo:(NSString *)trainNo fromStationTelecode:(NSString *)fromStationTelecode toStationTelecode:(NSString *)toStationTelecode departDate:(NSString *)departDate success:(void (^)(NSArray *))success {
-    NSLog(@"queryaTrainStopTimeByTrainNo");
+    NSLog(@"queryByTrainNo");
     
     NSMutableDictionary *argument = [NSMutableDictionary new];
-    [argument setObject:@"queryaTrainStopTimeByTrainNo" forKey:@"method"];
     [argument setObject:trainNo forKey:@"train_no"];
     [argument setObject:fromStationTelecode forKey:@"from_station_telecode"];
     [argument setObject:toStationTelecode forKey:@"to_station_telecode"];
     [argument setObject:departDate forKey:@"depart_date"];
     
-    NSString *path = [NSString stringWithFormat:@"/otsweb/order/querySingleAction.do"];
+    NSString *path = [NSString stringWithFormat:@"/otn/czxx/queryByTrainNo"];
     [self getPath:path parameters:argument success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             NSError *jsonErr = nil;
-            NSArray *result = (NSArray *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
-            success(jsonErr ? nil : result);
+            NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+            if (result) {
+                success([[result objectForKey:@"data"] objectForKey:@"data"]);
+            }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         

@@ -33,12 +33,6 @@
     [self.list addObject:train];
 }
 
-- (void)addTrainInfoWithDataArray:(NSArray *)array
-{
-    TDBTrainInfo *train = [[TDBTrainInfo alloc] initWithArray:array];
-    [self addTrainInfo:train];
-}
-
 - (NSUInteger)count
 {
     return [self.list count];

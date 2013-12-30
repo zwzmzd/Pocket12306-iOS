@@ -10,10 +10,9 @@
 
 @interface TDBTrainInfo : NSObject
 
-@property (nonatomic, strong) NSArray *keySplitted;
-@property (nonatomic, strong) NSArray *original;
+@property (nonatomic, strong) NSDictionary *original;
 
-- (id)initWithArray: (NSArray *)original;
+- (id)initWithDict: (NSDictionary *)original;
 
 - (NSString *)getTrainNo;
 

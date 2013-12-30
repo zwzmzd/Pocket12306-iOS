@@ -21,7 +21,7 @@
 
 - (BOOL)fetchStationNameRawTextFromNet
 {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/js/common/station_name.js"];
+    NSString *path = [NSString stringWithFormat:SYSURL @"/otn/resources/js/framework/station_name.js"];
     NSURL *url = [NSURL URLWithString:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
