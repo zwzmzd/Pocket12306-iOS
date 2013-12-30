@@ -56,54 +56,6 @@
     
 }
 
-- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue
-{
-    NSDictionary *extraInfo = [self loginAysnSuggest];
-    
-    [NSThread sleepForTimeInterval:1];
-    
-    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-    [arguments addValue:[extraInfo objectForKey:@"loginRand"] forKey:@"loginRand"];
-    [arguments addValue:@"N" forKey:@"refundLogin"];
-    [arguments addValue:@"Y" forKey:@"refundFlag"];
-    [arguments addValue:@"" forKey:@"isClick"];
-    [arguments addValue:@"null" forKey:@"form_tk"];
-    [arguments addValue:name forKey:@"loginUser.user_name"];
-    [arguments addValue:@"" forKey:@"nameErrorFocus"];
-    [arguments addValue:password forKey:@"user.password"];
-    [arguments addValue:@"" forKey:@"passwordErrorFocus"];
-    [arguments addValue:verifyCode forKey:@"randCode"];
-    [arguments addValue:@"" forKey:@"randErrorFocus"];
-    [arguments addValue:tokenValue forKey:tokenKey];
-    [arguments addValue:@"undefined" forKey:@"myversion"];
-    
-    
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/loginAction.do?method=login"];
-    NSURL *url = [NSURL URLWithString:path];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [[arguments getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
-    
-    [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
-    [request setValue:SYSURL @"/otsweb/loginAction.do?method=init" forHTTPHeaderField:@"Referer"];
-    ADD_UA();
-    
-    NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *result = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
-    NSRange range = [result rangeOfString:@"系统消息"];
-    
-    if (range.length > 0) {
-        self.isLoggedIn = YES;
-        return LOGIN_MSG_SUCCESS;
-    } else {
-        NSRange range = [result rangeOfString:@"系统维护中"];
-        if (range.length > 0) {
-            return LOGIN_MSG_OUTOFSERVICE;
-        } else
-            return LOGIN_MSG_UNEXPECTED;
-    }
-}
-
 - (NSData *)getSubmutToken
 {
     NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];

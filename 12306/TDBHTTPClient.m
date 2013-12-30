@@ -31,7 +31,7 @@
 }
 
 - (id)init {
-    NSURL *base = [NSURL URLWithString:@"http://dynamic.12306.cn/otsweb/"];
+    NSURL *base = [NSURL URLWithString:@"http://dynamic.12306.cn/otn/"];
     
     if (self = [super initWithBaseURL:base]) {
         [self setDefaultHeader:@"User-Agent" value:USER_AGENT_STR];
@@ -46,7 +46,7 @@
 
 #pragma mark - 登录部分
 - (void)getVerifyImage:(void (^)(NSData *))success {
-    NSString *path = [NSString stringWithFormat:@"/otsweb/passCodeNewAction.do?module=login&rand=sjrand&0.%d%d", abs(arc4random()), abs(arc4random())];
+    NSString *path = [NSString stringWithFormat:@"/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand"];
     [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(responseObject);
@@ -56,73 +56,22 @@
     }];
 }
 
-- (void)getLoginToken:(void (^)(NSData *))success {
-    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
-    NSString *path = [NSString stringWithFormat:@"/otsweb/dynamicJsAction.do?jsversion=%@&method=loginJs", randCode];
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (success) {
-            success(responseObject);
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-    }];
-}
-
-- (void)loginAysnSuggest:(void (^)(NSDictionary *))success {
-    NSString *path = @"/otsweb/loginAction.do?method=loginAysnSuggest";
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSError *jsonErr = nil;
-        NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
-        if (success) {
-            success(result);
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    }];
-}
-
-- (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode loginRand:(NSString *)loginRand tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue success:(void (^)())success {
-//    NSDictionary *extraInfo = [self loginAysnSuggest];
+- (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode success:(void (^)(NSDictionary *))success {
+    NSString *path = @"/otn/login/loginAysnSuggest";
     
     NSMutableDictionary *arguments = [NSMutableDictionary new];
-    [arguments setObject:loginRand forKey:@"loginRand"];
-    [arguments setObject:@"N" forKey:@"refundLogin"];
-    [arguments setObject:@"Y" forKey:@"refundFlag"];
-    [arguments setObject:@"" forKey:@"isClick"];
-    [arguments setObject:@"null" forKey:@"form_tk"];
-    [arguments setObject:name forKey:@"loginUser.user_name"];
-    [arguments setObject:@"" forKey:@"nameErrorFocus"];
-    [arguments setObject:password forKey:@"user.password"];
-    [arguments setObject:@"" forKey:@"passwordErrorFocus"];
+    [arguments setObject:name forKey:@"loginUserDTO.user_name"];
+    [arguments setObject:password forKey:@"userDTO.password"];
     [arguments setObject:verifyCode forKey:@"randCode"];
-    [arguments setObject:@"" forKey:@"randErrorFocus"];
-    [arguments setObject:tokenValue forKey:tokenKey];
-    [arguments setObject:@"undefined" forKey:@"myversion"];
     
-    
-    
-//    NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/loginAction.do?method=login"];
-//    NSURL *url = [NSURL URLWithString:path];
-//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-//    request.HTTPMethod = @"POST";
-//    request.HTTPBody = [[arguments getFinalData] dataUsingEncoding:NSUTF8StringEncoding];
-//    
-//    [request setValue:SYSURL forHTTPHeaderField:@"Origin"];
-//    [request setValue:SYSURL @"/otsweb/loginAction.do?method=init" forHTTPHeaderField:@"Referer"];
-//    
-//    NSData *json = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-//    NSString *result = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
-//    NSRange range = [result rangeOfString:@"系统消息"];
-//    
-//    if (range.length > 0) {
-//        self.isLoggedIn = YES;
-//        return LOGIN_MSG_SUCCESS;
-//    } else {
-//        NSRange range = [result rangeOfString:@"系统维护中"];
-//        if (range.length > 0) {
-//            return LOGIN_MSG_OUTOFSERVICE;
-//        } else
-//        return LOGIN_MSG_UNEXPECTED;
-//    }
+    [self postPath:path parameters:arguments success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            NSError *jsonErr = nil;
+            NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+            success(jsonErr ? nil : result);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
 }
 
 #pragma mark - 检索模块

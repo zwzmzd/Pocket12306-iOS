@@ -16,10 +16,7 @@
 
 // 登录模块
 - (void)getVerifyImage:(void (^)(NSData *))success;
-- (void)getLoginToken:(void (^)(NSData *))success;
-- (void)loginAysnSuggest:(void (^)(NSDictionary *))success;
-- (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode loginRand:(NSString *)loginRand tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue success:(void (^)())success;
-
+- (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode success:(void (^)(NSDictionary *))success;
 // 查询可用车票
 // 预操作
 - (void)qt:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)())success;

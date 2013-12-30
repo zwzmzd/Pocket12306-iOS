@@ -24,8 +24,6 @@
 @interface LoginFrameViewController ()
 
 @property (nonatomic, strong) TDBSession *tdbss;
-@property (nonatomic, strong) NSString *tokenValue;
-@property (nonatomic, strong) NSString *tokenKey;
 
 @end
 
@@ -73,10 +71,9 @@
     }
     
     WeakSelf(wself, self);
-    [self retriveLoginPassTokenUsingGCD];
     
     [self.retriveVerifyActivityIndicator startAnimating];
-    double delayInSeconds = 2.f;
+    double delayInSeconds = 1.f;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [wself retriveVerifyImageUsingGCD];
@@ -108,13 +105,10 @@
         NSString *password = [self.password.text copy];
         NSString *verifyCode = [self.verifyCode.text copy];
         
-        dispatch_queue_t downloadQueue = dispatch_queue_create("12306 Login", NULL);
-        dispatch_async(downloadQueue, ^{
-            LOGIN_MSG_TYPE result = [self.tdbss loginWithName:username AndPassword:password
-                                                andVerifyCode:verifyCode
-                                                      tokenKey:self.tokenKey tokenValue:self.tokenValue];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (result == LOGIN_MSG_SUCCESS) {
+        [[TDBHTTPClient sharedClient] loginWithName:username AndPassword:password andVerifyCode:verifyCode success:^(NSDictionary *result) {
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                BOOL loginSucceed = result && [[[result objectForKey:@"data"] objectForKey:@"loginCheck"] isEqualToString:@"Y"];
+                if (loginSucceed) {
                     GlobalDataStorage.tdbss = self.tdbss;
                     
                     if (self.rememberProfile.isOn) {
@@ -124,28 +118,28 @@
                     
                     [self dismissViewControllerAnimated:YES completion:NULL];
                 } else {
-                    float latency;
+                    NSString *message = nil;
+                    if (result) {
+                        NSArray *list = [result objectForKey:@"messages"];
+                        if ([list count] > 0) {
+                            message = [list objectAtIndex:0];
+                        }
+                    }
+                    
                     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                     hud.mode = MBProgressHUDModeText;
                     hud.removeFromSuperViewOnHide = YES;
-                    if (result == LOGIN_MSG_OUTOFSERVICE) {
-                        hud.labelText = @"系统维护中";
-                        hud.detailsLabelText = @"每日23点-7点是维护时间";
-                        latency = 3;
-                    } else {
+                    if (message != nil) {
                         hud.labelText = @"登录失败";
-                        hud.detailsLabelText = @"请检查";
-                        latency = 2;
+                        hud.detailsLabelText = message;
                     }
                     self.navigationItem.rightBarButtonItem = sender;
                     
-                    
-                    [hud hide:YES afterDelay:latency];
-                    
+                    [hud hide:YES afterDelay:2];
                     [self iWantToRetriveVerifyCode:sender];
                 }
             });
-        });
+        }];
     } else {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -189,47 +183,6 @@
     });
 }
 
-- (void)retriveLoginPassTokenUsingGCD
-{
-    WeakSelfDefine(wself);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-        [NSThread sleepForTimeInterval:1.f];
-        CHECK_INSTANCE_EXIST(wself);
-        
-        [[TDBHTTPClient sharedClient] getLoginToken:^(NSData *data) {
-            NSString *rawJs = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSString *key = nil;
-            @try {
-                NSRange range = [rawJs rangeOfString:@"var key='"];
-                rawJs = [rawJs substringFromIndex:range.location + range.length];
-                range = [rawJs rangeOfString:@"';"];
-                key = [rawJs substringToIndex:range.location];
-            }
-            @catch (NSException *exception) {
-                NSLog(@"[loginToken] fetchFail");
-            }
-            
-            CHECK_INSTANCE_EXIST(wself);
-            
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
-                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"login_encode" ofType:@"js"];
-                NSString *loginJS = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-                [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
-                
-                NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
-                
-                StrongSelf(sself, wself);
-                if (sself) {
-                    sself.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
-                    sself.tokenKey = key;
-                    NSLog(@"[loginToken] %@: %@", sself.tokenKey, sself.tokenValue);
-                }
-            });
-        }];
-    });
-}
-
 - (IBAction)iWantToRetriveVerifyCode:(id)sender {
     [self retriveVerifyImageUsingGCD];
 }
@@ -238,7 +191,6 @@
     //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.tdbss = [[TDBSession alloc] init];
     [self iWantToRetriveVerifyCode:sender];
-    [self retriveLoginPassTokenUsingGCD];
 }
 - (void)viewDidUnload {
     [self setRememberProfile:nil];

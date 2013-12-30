@@ -26,9 +26,6 @@ typedef enum {
 
 + (void)resetSession;
 
-// 登录12306
-- (LOGIN_MSG_TYPE)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue;
-
 // 购票第一步：验证订单信息正确性。若订单信息正确，返回nil；否则返回错误信息
 - (NSString *)checkOrderInfo:(TDBTrainInfo *)train  passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode;
 // 购票第二步，照抄即可
