@@ -88,7 +88,7 @@
     return (NSString *)CFBridgingRelease(newString);
 }
 
-- (void)addValue:(NSString *)value forKey:(NSString *)key
+- (void)setObject:(NSString *)value forKey:(NSString *)key
 {
     [self.array addObject:[NSString stringWithFormat:@"%@=%@",
                            [self encodeURL:key],

@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) NSDictionary *original;
 
-- (id)initWithDict: (NSDictionary *)original;
+- (id)initWithOriginal: (NSDictionary *)original;
 
 - (NSString *)getTrainNo;
 
@@ -41,5 +41,7 @@
 - (NSString *)getMMStr;
 
 - (NSString *)getLocationCode;
+
+- (NSArray *)getLeftTicketStatistics;
 
 @end

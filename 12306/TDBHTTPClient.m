@@ -31,7 +31,7 @@
 }
 
 - (id)init {
-    NSURL *base = [NSURL URLWithString:@"http://dynamic.12306.cn/otn/"];
+    NSURL *base = [NSURL URLWithString:@"http://kyfw.12306.cn/otn/"];
     
     if (self = [super initWithBaseURL:base]) {
         [self setDefaultHeader:@"User-Agent" value:USER_AGENT_STR];
@@ -81,15 +81,15 @@
     
     // 二逼tdb，必须按顺序提交
     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-    [arguments addValue:@"qt" forKey:@"method"];
-    [arguments addValue:date forKey:@"orderRequest.train_date"];
-    [arguments addValue:from forKey:@"orderRequest.from_station_telecode"];
-    [arguments addValue:to forKey:@"orderRequest.to_station_telecode"];
-    [arguments addValue:@"" forKey:@"orderRequest.train_no"];
-    [arguments addValue:@"QB" forKey:@"trainPassType"];
-    [arguments addValue:@"QB#D#Z#T#K#QT#" forKey:@"trainClass"];
-    [arguments addValue:@"00" forKey:@"includeStudent"];
-    [arguments addValue:@"" forKey:@"seatTypeAndNum"];
+    [arguments setObject:@"qt" forKey:@"method"];
+    [arguments setObject:date forKey:@"orderRequest.train_date"];
+    [arguments setObject:from forKey:@"orderRequest.from_station_telecode"];
+    [arguments setObject:to forKey:@"orderRequest.to_station_telecode"];
+    [arguments setObject:@"" forKey:@"orderRequest.train_no"];
+    [arguments setObject:@"QB" forKey:@"trainPassType"];
+    [arguments setObject:@"QB#D#Z#T#K#QT#" forKey:@"trainClass"];
+    [arguments setObject:@"00" forKey:@"includeStudent"];
+    [arguments setObject:@"" forKey:@"seatTypeAndNum"];
     
     
     NSString *path = [NSString stringWithFormat:@"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
@@ -106,10 +106,10 @@
     NSLog(@"queryLeftTicketWithDate");
     
     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-    [arguments addValue:date forKey:@"leftTicketDTO.train_date"];
-    [arguments addValue:from forKey:@"leftTicketDTO.from_station"];
-    [arguments addValue:to forKey:@"leftTicketDTO.to_station"];
-    [arguments addValue:@"ADULT" forKey:@"purpose_codes"];
+    [arguments setObject:date forKey:@"leftTicketDTO.train_date"];
+    [arguments setObject:from forKey:@"leftTicketDTO.from_station"];
+    [arguments setObject:to forKey:@"leftTicketDTO.to_station"];
+    [arguments setObject:@"ADULT" forKey:@"purpose_codes"];
     
     
     NSString *path = [NSString stringWithFormat:@"/otn/leftTicket/query?%@", [arguments getFinalData]];
@@ -126,14 +126,14 @@
 - (void)queryaTrainStopTimeByTrainNo:(NSString *)trainNo fromStationTelecode:(NSString *)fromStationTelecode toStationTelecode:(NSString *)toStationTelecode departDate:(NSString *)departDate success:(void (^)(NSArray *))success {
     NSLog(@"queryByTrainNo");
     
-    NSMutableDictionary *argument = [NSMutableDictionary new];
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
     [argument setObject:trainNo forKey:@"train_no"];
     [argument setObject:fromStationTelecode forKey:@"from_station_telecode"];
     [argument setObject:toStationTelecode forKey:@"to_station_telecode"];
     [argument setObject:departDate forKey:@"depart_date"];
     
-    NSString *path = [NSString stringWithFormat:@"/otn/czxx/queryByTrainNo"];
-    [self getPath:path parameters:argument success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *path = [NSString stringWithFormat:@"/otn/czxx/queryByTrainNo?%@", [argument getFinalData]];
+    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             NSError *jsonErr = nil;
             NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
@@ -175,33 +175,33 @@
     NSLog(@"submutOrderRequestWithTrainInfo");
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:[train getTrainNo] forKey:@"station_train_code"];
-    [argument addValue:date forKey:@"train_date"];
-    [argument addValue:@"" forKey:@"seatstype_num"];
-    [argument addValue:[train getDepartStationTeleCode] forKey:@"from_station_telecode"];
-    [argument addValue:[train getArriveStationTeleCode] forKey:@"to_station_telecode"];
-    [argument addValue:@"00" forKey:@"include_student"];
-    [argument addValue:[train getDapartStationName] forKey:@"from_station_telecode_name"];
-    [argument addValue:[train getArriveStationName] forKey:@"to_station_telecode_name"];
-    [argument addValue:date forKey:@"round_train_date"];
-    [argument addValue:@"00:00--00:24" forKey:@"round_start_time_str"];
-    [argument addValue:@"1" forKey:@"single_round_trip"];
-    [argument addValue:@"QB" forKey:@"train_pass_type"];
-    [argument addValue:@"QB#D#Z#T#K#QT#" forKey:@"train_class_arr"];
-    [argument addValue:@"00:00--00:24" forKey:@"start_time_str"];
-    [argument addValue:[train getDuration] forKey:@"lishi"];
-    [argument addValue:[train getDepartTime] forKey:@"train_start_time"];
-    [argument addValue:[train getTrainCode] forKey:@"trainno4"];
-    [argument addValue:[train getArriveTime] forKey:@"arrive_time"];
-    [argument addValue:[train getDapartStationName] forKey:@"from_station_name"];
-    [argument addValue:[train getArriveStationName] forKey:@"to_station_name"];
-    [argument addValue:[train getDepartStationNo] forKey:@"from_station_no"];
-    [argument addValue:[train getArriveStationNo] forKey:@"to_station_no"];
-    [argument addValue:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
-    [argument addValue:[train getMMStr] forKey:@"mmStr"];
-    [argument addValue:[train getLocationCode] forKey:@"locationCode"];
-    [argument addValue:tokenValue forKey:tokenKey];
-    [argument addValue:@"undefined" forKey:@"myversion"];
+    [argument setObject:[train getTrainNo] forKey:@"station_train_code"];
+    [argument setObject:date forKey:@"train_date"];
+    [argument setObject:@"" forKey:@"seatstype_num"];
+    [argument setObject:[train getDepartStationTeleCode] forKey:@"from_station_telecode"];
+    [argument setObject:[train getArriveStationTeleCode] forKey:@"to_station_telecode"];
+    [argument setObject:@"00" forKey:@"include_student"];
+    [argument setObject:[train getDapartStationName] forKey:@"from_station_telecode_name"];
+    [argument setObject:[train getArriveStationName] forKey:@"to_station_telecode_name"];
+    [argument setObject:date forKey:@"round_train_date"];
+    [argument setObject:@"00:00--00:24" forKey:@"round_start_time_str"];
+    [argument setObject:@"1" forKey:@"single_round_trip"];
+    [argument setObject:@"QB" forKey:@"train_pass_type"];
+    [argument setObject:@"QB#D#Z#T#K#QT#" forKey:@"train_class_arr"];
+    [argument setObject:@"00:00--00:24" forKey:@"start_time_str"];
+    [argument setObject:[train getDuration] forKey:@"lishi"];
+    [argument setObject:[train getDepartTime] forKey:@"train_start_time"];
+    [argument setObject:[train getTrainCode] forKey:@"trainno4"];
+    [argument setObject:[train getArriveTime] forKey:@"arrive_time"];
+    [argument setObject:[train getDapartStationName] forKey:@"from_station_name"];
+    [argument setObject:[train getArriveStationName] forKey:@"to_station_name"];
+    [argument setObject:[train getDepartStationNo] forKey:@"from_station_no"];
+    [argument setObject:[train getArriveStationNo] forKey:@"to_station_no"];
+    [argument setObject:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
+    [argument setObject:[train getMMStr] forKey:@"mmStr"];
+    [argument setObject:[train getLocationCode] forKey:@"locationCode"];
+    [argument setObject:tokenValue forKey:tokenKey];
+    [argument setObject:@"undefined" forKey:@"myversion"];
     
     
     NSString *path = @"/otsweb/order/querySingleAction.do?method=submutOrderRequest";
@@ -221,10 +221,10 @@
     
 #define QDO @"queryOrderDTO."
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
-    [argument addValue:@"" forKey:QDO @"from_order_date"];
-    [argument addValue:@"" forKey:QDO @"to_order_date"];
-    [argument addValue:[NSString stringWithFormat:@"%@;", ticketKey] forKey:@"ticket_key"];
+    [argument setObject:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
+    [argument setObject:@"" forKey:QDO @"from_order_date"];
+    [argument setObject:@"" forKey:QDO @"to_order_date"];
+    [argument setObject:[NSString stringWithFormat:@"%@;", ticketKey] forKey:@"ticket_key"];
 #undef QDO
     
     NSString *path = [NSString stringWithFormat:@"/otsweb/order/myOrderAction.do?method=laterEpay&orderSequence_no=%@&con_pay_type=epay", orderSequenceNo];
@@ -244,9 +244,9 @@
     NSLog(@"getPassengers");
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:[NSString stringWithFormat:@"%u", index] forKey:@"pageIndex"];
-    [argument addValue:[NSString stringWithFormat:@"%u", size] forKey:@"pageSize"];
-    [argument addValue:@"" forKey:@"passenger_name"];
+    [argument setObject:[NSString stringWithFormat:@"%u", index] forKey:@"pageIndex"];
+    [argument setObject:[NSString stringWithFormat:@"%u", size] forKey:@"pageSize"];
+    [argument setObject:@"" forKey:@"passenger_name"];
     
     NSString *path = @"/otsweb/passengerAction.do?method=getPagePassengerAll";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};

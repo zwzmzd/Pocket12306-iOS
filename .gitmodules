@@ -34,3 +34,6 @@ url=git@github.com:zwzmzd/SVPullToRefresh.git
 [submodule "vendor/AFNetworking"]
 	path = vendor/AFNetworking
 	url = git@github.com:AFNetworking/AFNetworking.git
+[submodule "vendor/OLImageView"]
+	path = vendor/OLImageView
+	url = git@github.com:ondalabs/OLImageView.git

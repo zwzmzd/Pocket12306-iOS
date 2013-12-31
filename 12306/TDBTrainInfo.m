@@ -10,13 +10,17 @@
 
 @implementation TDBTrainInfo
 
-- (id)initWithDict:(NSDictionary *)original {
-    _original = original;
+- (id)initWithOriginal:(NSDictionary *)original {
+    self = [super init];
+    if (self) {
+        _original = original;
+    }
+    return self;
 }
 
 - (NSString *)getTrainNo
 {
-    return [self.original objectForKey:@"train_no"];
+    return [self.original objectForKey:@"station_train_code"];
 }
 
 - (NSString *)getDuration
@@ -31,7 +35,7 @@
 
 - (NSString *)getTrainCode
 {
-    return [self.original objectForKey:@"station_train_code"];
+    return [self.original objectForKey:@"train_no"];
 }
 
 - (NSString *)getDepartStationTeleCode
@@ -82,6 +86,18 @@
 - (NSString *)getLocationCode
 {
     return @"";
+}
+
+- (NSArray *)getLeftTicketStatistics {
+    //    @"商务", @"特等", @"一等", @"二等", @"高软", @"软卧", @"硬卧", @"软座", @"硬座", @"无坐", @"其它"
+    NSArray *keys = [[NSArray alloc] initWithObjects:@"swz", @"tz", @"zy", @"ze", @"gr", @"rw", @"yw", @"rz", @"yz", @"wz", @"qt", nil];
+    NSMutableArray *leftTickets = [NSMutableArray new];
+    
+    for (NSString *key in keys) {
+        NSString *absoluteKey = [NSString stringWithFormat:@"%@_num", key];
+        [leftTickets addObject:[_original objectForKey:absoluteKey]];
+    };
+    return leftTickets;
 }
 
 @end

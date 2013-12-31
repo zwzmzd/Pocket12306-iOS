@@ -24,7 +24,7 @@
 
 @interface POSTDataConstructor : NSObject
 
-- (void)addValue:(NSString *)value forKey:(NSString *)key;
+- (void)setObject:(NSString *)value forKey:(NSString *)key;
 
 - (NSString *)getFinalData;
 

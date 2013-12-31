@@ -112,14 +112,14 @@
             TDBTrainInfoController *controller = [[TDBTrainInfoController alloc] init];
             NSUInteger count = [array count];
             for (NSUInteger i = 0; i < count; i++) {
-                TDBTrainInfo *train = [[TDBTrainInfo alloc] initWithDict:[array objectAtIndex:i]];
+                TDBTrainInfo *tt = [[TDBTrainInfo alloc] initWithOriginal:[[array objectAtIndex:i] objectForKey:@"queryLeftNewDTO"]];
                 
-                if (sself.stationNameExactlyMatch && (![userInputArriveStationName isEqualToString:[train getArriveStationName]]
-                                                      || ![userInputDepartStationName isEqualToString:[train getDapartStationName]])) {
+                if (sself.stationNameExactlyMatch && (![userInputArriveStationName isEqualToString:[tt getArriveStationName]]
+                                                      || ![userInputDepartStationName isEqualToString:[tt getDapartStationName]])) {
                     continue;
                 }
                 
-                [controller addTrainInfo:train];
+                [controller addTrainInfo:tt];
             }
             
             dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -182,8 +182,7 @@
     
     time_duration.text = [train getDuration];
     
-#warning 修复这个位置
-    leftTicketView.dataModel = nil;
+    leftTicketView.dataModel = [train getLeftTicketStatistics];
     
     return cell;
 }

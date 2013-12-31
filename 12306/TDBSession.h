@@ -10,7 +10,7 @@
 
 @class TDBTrainInfo;
 @class PassengerInfo;
-#define SYSURL @"http://dynamic.12306.cn"
+#define SYSURL @"http://kyfw.12306.cn"
 
 typedef enum {
     LOGIN_MSG_SUCCESS = 0,

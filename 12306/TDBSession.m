@@ -72,33 +72,33 @@
     [self assertLoggedIn];
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:[train getTrainNo] forKey:@"station_train_code"];
-    [argument addValue:date forKey:@"train_date"];
-    [argument addValue:@"" forKey:@"seatstype_num"];
-    [argument addValue:[train getDepartStationTeleCode] forKey:@"from_station_telecode"];
-    [argument addValue:[train getArriveStationTeleCode] forKey:@"to_station_telecode"];
-    [argument addValue:@"00" forKey:@"include_student"];
-    [argument addValue:[train getDapartStationName] forKey:@"from_station_telecode_name"];
-    [argument addValue:[train getArriveStationName] forKey:@"to_station_telecode_name"];
-    [argument addValue:date forKey:@"round_train_date"];
-    [argument addValue:@"00:00--00:24" forKey:@"round_start_time_str"];
-    [argument addValue:@"1" forKey:@"single_round_trip"];
-    [argument addValue:@"QB" forKey:@"train_pass_type"];
-    [argument addValue:@"QB#D#Z#T#K#QT#" forKey:@"train_class_arr"];
-    [argument addValue:@"00:00--00:24" forKey:@"start_time_str"];
-    [argument addValue:[train getDuration] forKey:@"lishi"];
-    [argument addValue:[train getDepartTime] forKey:@"train_start_time"];
-    [argument addValue:[train getTrainCode] forKey:@"trainno4"];
-    [argument addValue:[train getArriveTime] forKey:@"arrive_time"];
-    [argument addValue:[train getDapartStationName] forKey:@"from_station_name"];
-    [argument addValue:[train getArriveStationName] forKey:@"to_station_name"];
-    [argument addValue:[train getDepartStationNo] forKey:@"from_station_no"];
-    [argument addValue:[train getArriveStationNo] forKey:@"to_station_no"];
-    [argument addValue:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
-    [argument addValue:[train getMMStr] forKey:@"mmStr"];
-    [argument addValue:[train getLocationCode] forKey:@"locationCode"];
-    [argument addValue:tokenValue forKey:tokenKey];
-    [argument addValue:@"undefined" forKey:@"myversion"];
+    [argument setObject:[train getTrainNo] forKey:@"station_train_code"];
+    [argument setObject:date forKey:@"train_date"];
+    [argument setObject:@"" forKey:@"seatstype_num"];
+    [argument setObject:[train getDepartStationTeleCode] forKey:@"from_station_telecode"];
+    [argument setObject:[train getArriveStationTeleCode] forKey:@"to_station_telecode"];
+    [argument setObject:@"00" forKey:@"include_student"];
+    [argument setObject:[train getDapartStationName] forKey:@"from_station_telecode_name"];
+    [argument setObject:[train getArriveStationName] forKey:@"to_station_telecode_name"];
+    [argument setObject:date forKey:@"round_train_date"];
+    [argument setObject:@"00:00--00:24" forKey:@"round_start_time_str"];
+    [argument setObject:@"1" forKey:@"single_round_trip"];
+    [argument setObject:@"QB" forKey:@"train_pass_type"];
+    [argument setObject:@"QB#D#Z#T#K#QT#" forKey:@"train_class_arr"];
+    [argument setObject:@"00:00--00:24" forKey:@"start_time_str"];
+    [argument setObject:[train getDuration] forKey:@"lishi"];
+    [argument setObject:[train getDepartTime] forKey:@"train_start_time"];
+    [argument setObject:[train getTrainCode] forKey:@"trainno4"];
+    [argument setObject:[train getArriveTime] forKey:@"arrive_time"];
+    [argument setObject:[train getDapartStationName] forKey:@"from_station_name"];
+    [argument setObject:[train getArriveStationName] forKey:@"to_station_name"];
+    [argument setObject:[train getDepartStationNo] forKey:@"from_station_no"];
+    [argument setObject:[train getArriveStationNo] forKey:@"to_station_no"];
+    [argument setObject:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
+    [argument setObject:[train getMMStr] forKey:@"mmStr"];
+    [argument setObject:[train getLocationCode] forKey:@"locationCode"];
+    [argument setObject:tokenValue forKey:tokenKey];
+    [argument setObject:@"undefined" forKey:@"myversion"];
     
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?method=submutOrderRequest"];
@@ -126,44 +126,44 @@
 #define ORD @"orderRequest."
 #define PAS @"passenger_1_"
     
-    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
-    [argument addValue:leftTicketStr forKey:@"leftTicketStr"];
-    [argument addValue:@"中文或拼音首字母" forKey:@"textfield"];
-    [argument addValue:date forKey:ORD @"train_date"];
-    [argument addValue:[train getTrainCode] forKey:ORD @"train_no"];
-    [argument addValue:[train getTrainNo] forKey:ORD @"station_train_code"];
-    [argument addValue:[train getDepartStationTeleCode] forKey:ORD @"from_station_telecode"];
-    [argument addValue:[train getArriveStationTeleCode] forKey:ORD @"to_station_telecode"];
-    [argument addValue:@"" forKey:ORD @"seat_type_code"];
-    [argument addValue:@"" forKey:ORD @"ticket_type_order_num"];
-    [argument addValue:@"000000000000000000000000000000" forKey:ORD @"bed_level_order_num"];
-    [argument addValue:[train getDepartTime] forKey:ORD @"start_time"];
-    [argument addValue:[train getArriveTime] forKey:ORD @"end_time"];
-    [argument addValue:[train getDapartStationName] forKey:ORD @"from_station_name"];
-    [argument addValue:[train getArriveStationName] forKey:ORD @"to_station_name"];
-    [argument addValue:@"1" forKey:ORD @"cancle_flag"];
-    [argument addValue:@"Y" forKey:ORD @"id_mode"];
-    [argument addValue:[passenger generateTicketString] forKey:@"passengerTickets"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:passenger.seat forKey:PAS @"seat"];
-    [argument addValue:passenger.ticket forKey:PAS @"ticket"];
-    [argument addValue:passenger.name forKey:PAS @"name"];
-    [argument addValue:passenger.id_cardtype forKey:PAS @"cardtype"];
-    [argument addValue:passenger.id_cardno forKey:PAS "cardno"];
-    [argument addValue:passenger.mobileno forKey:PAS @"mobileno"];
+    [argument setObject:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
+    [argument setObject:leftTicketStr forKey:@"leftTicketStr"];
+    [argument setObject:@"中文或拼音首字母" forKey:@"textfield"];
+    [argument setObject:date forKey:ORD @"train_date"];
+    [argument setObject:[train getTrainCode] forKey:ORD @"train_no"];
+    [argument setObject:[train getTrainNo] forKey:ORD @"station_train_code"];
+    [argument setObject:[train getDepartStationTeleCode] forKey:ORD @"from_station_telecode"];
+    [argument setObject:[train getArriveStationTeleCode] forKey:ORD @"to_station_telecode"];
+    [argument setObject:@"" forKey:ORD @"seat_type_code"];
+    [argument setObject:@"" forKey:ORD @"ticket_type_order_num"];
+    [argument setObject:@"000000000000000000000000000000" forKey:ORD @"bed_level_order_num"];
+    [argument setObject:[train getDepartTime] forKey:ORD @"start_time"];
+    [argument setObject:[train getArriveTime] forKey:ORD @"end_time"];
+    [argument setObject:[train getDapartStationName] forKey:ORD @"from_station_name"];
+    [argument setObject:[train getArriveStationName] forKey:ORD @"to_station_name"];
+    [argument setObject:@"1" forKey:ORD @"cancle_flag"];
+    [argument setObject:@"Y" forKey:ORD @"id_mode"];
+    [argument setObject:[passenger generateTicketString] forKey:@"passengerTickets"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:passenger.seat forKey:PAS @"seat"];
+    [argument setObject:passenger.ticket forKey:PAS @"ticket"];
+    [argument setObject:passenger.name forKey:PAS @"name"];
+    [argument setObject:passenger.id_cardtype forKey:PAS @"cardtype"];
+    [argument setObject:passenger.id_cardno forKey:PAS "cardno"];
+    [argument setObject:passenger.mobileno forKey:PAS @"mobileno"];
     
-    [argument addValue:@"Y" forKey:@"checkbox9"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:@"Y" forKey:@"checkbox9"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:@"Y" forKey:@"checkbox9"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:@"Y" forKey:@"checkbox9"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
     
-    [argument addValue:randCode forKey:@"randCode"];
-    [argument addValue:@"A" forKey:ORD @"reserve_flag"];
+    [argument setObject:randCode forKey:@"randCode"];
+    [argument setObject:@"A" forKey:ORD @"reserve_flag"];
     
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueue"];
@@ -207,47 +207,47 @@
 #define ORD @"orderRequest."
 #define PAS @"passenger_1_"
     
-    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
-    [argument addValue:leftTicketStr forKey:@"leftTicketStr"];
+    [argument setObject:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
+    [argument setObject:leftTicketStr forKey:@"leftTicketStr"];
     
     NSLog(@"leftTicketStr=%@", leftTicketStr);
-    [argument addValue:@"中文或拼音首字母" forKey:@"textfield"];
-    [argument addValue:date forKey:ORD @"train_date"];
-    [argument addValue:[train getTrainCode] forKey:ORD @"train_no"];
-    [argument addValue:[train getTrainNo] forKey:ORD @"station_train_code"];
-    [argument addValue:[train getDepartStationTeleCode] forKey:ORD @"from_station_telecode"];
-    [argument addValue:[train getArriveStationTeleCode] forKey:ORD @"to_station_telecode"];
-    [argument addValue:@"" forKey:ORD @"seat_type_code"];
-    [argument addValue:@"" forKey:ORD @"ticket_type_order_num"];
-    [argument addValue:@"000000000000000000000000000000" forKey:ORD @"bed_level_order_num"];
-    [argument addValue:[train getDepartTime] forKey:ORD @"start_time"];
-    [argument addValue:[train getArriveTime] forKey:ORD @"end_time"];
-    [argument addValue:[train getDapartStationName] forKey:ORD @"from_station_name"];
-    [argument addValue:[train getArriveStationName] forKey:ORD @"to_station_name"];
-    [argument addValue:@"1" forKey:ORD @"cancle_flag"];
-    [argument addValue:@"Y" forKey:ORD @"id_mode"];
-    [argument addValue:[passenger generateTicketString] forKey:@"passengerTickets"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:passenger.seat forKey:PAS @"seat"];
-    [argument addValue:passenger.ticket forKey:PAS @"ticket"];
-    [argument addValue:passenger.name forKey:PAS @"name"];
-    [argument addValue:passenger.id_cardtype forKey:PAS @"cardtype"];
-    [argument addValue:passenger.id_cardno forKey:PAS "cardno"];
-    [argument addValue:passenger.mobileno forKey:PAS @"mobileno"];
+    [argument setObject:@"中文或拼音首字母" forKey:@"textfield"];
+    [argument setObject:date forKey:ORD @"train_date"];
+    [argument setObject:[train getTrainCode] forKey:ORD @"train_no"];
+    [argument setObject:[train getTrainNo] forKey:ORD @"station_train_code"];
+    [argument setObject:[train getDepartStationTeleCode] forKey:ORD @"from_station_telecode"];
+    [argument setObject:[train getArriveStationTeleCode] forKey:ORD @"to_station_telecode"];
+    [argument setObject:@"" forKey:ORD @"seat_type_code"];
+    [argument setObject:@"" forKey:ORD @"ticket_type_order_num"];
+    [argument setObject:@"000000000000000000000000000000" forKey:ORD @"bed_level_order_num"];
+    [argument setObject:[train getDepartTime] forKey:ORD @"start_time"];
+    [argument setObject:[train getArriveTime] forKey:ORD @"end_time"];
+    [argument setObject:[train getDapartStationName] forKey:ORD @"from_station_name"];
+    [argument setObject:[train getArriveStationName] forKey:ORD @"to_station_name"];
+    [argument setObject:@"1" forKey:ORD @"cancle_flag"];
+    [argument setObject:@"Y" forKey:ORD @"id_mode"];
+    [argument setObject:[passenger generateTicketString] forKey:@"passengerTickets"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:passenger.seat forKey:PAS @"seat"];
+    [argument setObject:passenger.ticket forKey:PAS @"ticket"];
+    [argument setObject:passenger.name forKey:PAS @"name"];
+    [argument setObject:passenger.id_cardtype forKey:PAS @"cardtype"];
+    [argument setObject:passenger.id_cardno forKey:PAS "cardno"];
+    [argument setObject:passenger.mobileno forKey:PAS @"mobileno"];
     
-    [argument addValue:@"Y" forKey:@"checkbox9"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:@"Y" forKey:@"checkbox9"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:@"Y" forKey:@"checkbox9"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:@"Y" forKey:@"checkbox9"];
-    [argument addValue:@"" forKey:@"oldPassengers"];
-    [argument addValue:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
+    [argument setObject:@"" forKey:@"oldPassengers"];
+    [argument setObject:@"Y" forKey:@"checkbox9"];
     
-    [argument addValue:randCode forKey:@"randCode"];
-    [argument addValue:@"A" forKey:ORD @"reserve_flag"];
-    [argument addValue:@"dc" forKey:@"tFlag"];
+    [argument setObject:randCode forKey:@"randCode"];
+    [argument setObject:@"A" forKey:ORD @"reserve_flag"];
+    [argument setObject:@"dc" forKey:@"tFlag"];
 
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/confirmPassengerAction.do?method=checkOrderInfo&rand=%@", randCode];
     NSURL *url = [NSURL URLWithString:path];
@@ -296,14 +296,14 @@
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
     
-    [argument addValue:@"getQueueCount" forKey:@"method"];
-    [argument addValue:date forKey:@"train_date"];
-    [argument addValue:[train getTrainCode] forKey:@"train_no"];
-    [argument addValue:[train getTrainNo] forKey:@"station"];
-    [argument addValue:passenger.seat forKey:@"seat"];
-    [argument addValue:[train getDepartStationTeleCode] forKey:@"from"];
-    [argument addValue:[train getArriveStationTeleCode] forKey:@"to"];
-    [argument addValue:leftTicketID forKey:@"ticket"];
+    [argument setObject:@"getQueueCount" forKey:@"method"];
+    [argument setObject:date forKey:@"train_date"];
+    [argument setObject:[train getTrainCode] forKey:@"train_no"];
+    [argument setObject:[train getTrainNo] forKey:@"station"];
+    [argument setObject:passenger.seat forKey:@"seat"];
+    [argument setObject:[train getDepartStationTeleCode] forKey:@"from"];
+    [argument setObject:[train getArriveStationTeleCode] forKey:@"to"];
+    [argument setObject:leftTicketID forKey:@"ticket"];
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/confirmPassengerAction.do?%@", [argument getFinalData]];
     NSURL *url = [NSURL URLWithString:path];
@@ -355,14 +355,14 @@
 #define QDO @"queryOrderDTO."
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:@"_1" forKey:QDO @"location_code"];
-    [argument addValue:@"Y" forKey:@"leftmenu"];
-    [argument addValue:@"1" forKey:@"queryDataFlag"];
-    [argument addValue:@"" forKey:QDO @"from_order_date"];
-    [argument addValue:@"" forKey:QDO @"end_order_date"];
-    [argument addValue:@"" forKey:QDO @"sequence_no"];
-    [argument addValue:@"" forKey:QDO @"train_code"];
-    [argument addValue:@"" forKey:QDO @"name"];
+    [argument setObject:@"_1" forKey:QDO @"location_code"];
+    [argument setObject:@"Y" forKey:@"leftmenu"];
+    [argument setObject:@"1" forKey:@"queryDataFlag"];
+    [argument setObject:@"" forKey:QDO @"from_order_date"];
+    [argument setObject:@"" forKey:QDO @"end_order_date"];
+    [argument setObject:@"" forKey:QDO @"sequence_no"];
+    [argument setObject:@"" forKey:QDO @"train_code"];
+    [argument setObject:@"" forKey:QDO @"name"];
     
 #undef QDO
     
@@ -391,14 +391,14 @@
 #define QDO @"queryOrderDTO."
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:@"_1" forKey:QDO @"location_code"];
-    [argument addValue:@"Y" forKey:@"leftmenu"];
-    [argument addValue:@"1" forKey:@"queryDataFlag"];
-    [argument addValue:fromOrderDate forKey:QDO @"from_order_date"];
-    [argument addValue:endOrderDate forKey:QDO @"end_order_date"];
-    [argument addValue:@"" forKey:QDO @"sequence_no"];
-    [argument addValue:@"" forKey:QDO @"train_code"];
-    [argument addValue:@"" forKey:QDO @"name"];
+    [argument setObject:@"_1" forKey:QDO @"location_code"];
+    [argument setObject:@"Y" forKey:@"leftmenu"];
+    [argument setObject:@"1" forKey:@"queryDataFlag"];
+    [argument setObject:fromOrderDate forKey:QDO @"from_order_date"];
+    [argument setObject:endOrderDate forKey:QDO @"end_order_date"];
+    [argument setObject:@"" forKey:QDO @"sequence_no"];
+    [argument setObject:@"" forKey:QDO @"train_code"];
+    [argument setObject:@"" forKey:QDO @"name"];
     
 #undef QDO
     
@@ -439,11 +439,11 @@
     [self assertLoggedIn];
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:@"queryaTrainStopTimeByTrainNo" forKey:@"method"];
-    [argument addValue:trainNo forKey:@"train_no"];
-    [argument addValue:fromStationTelecode forKey:@"from_station_telecode"];
-    [argument addValue:toStationTelecode forKey:@"to_station_telecode"];
-    [argument addValue:departDate forKey:@"depart_date"];
+    [argument setObject:@"queryaTrainStopTimeByTrainNo" forKey:@"method"];
+    [argument setObject:trainNo forKey:@"train_no"];
+    [argument setObject:fromStationTelecode forKey:@"from_station_telecode"];
+    [argument setObject:toStationTelecode forKey:@"to_station_telecode"];
+    [argument setObject:departDate forKey:@"depart_date"];
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/querySingleAction.do?%@", [argument getFinalData]];
     NSURL *url = [NSURL URLWithString:path];
@@ -470,9 +470,9 @@
     [self assertLoggedIn];
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument addValue:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
-    [argument addValue:sequenceNo forKey:@"sequence_no"];
-    [argument addValue:@"" forKey:@"orderRequest.tour_flag"];
+    [argument setObject:apacheToken forKey:@"org.apache.struts.taglib.html.TOKEN"];
+    [argument setObject:sequenceNo forKey:@"sequence_no"];
+    [argument setObject:@"" forKey:@"orderRequest.tour_flag"];
     
     NSString *path = [NSString stringWithFormat:SYSURL @"/otsweb/order/orderAction.do?method=cancelMyOrderNotComplete"];
     NSURL *url = [NSURL URLWithString:path];
