@@ -13,6 +13,8 @@
 #import "SVProgressHUD.h"
 #import "SSKeychain.h"
 #import "TDBHTTPClient.h"
+#import "OLImageView.h"
+#import "OLImage.h"
 #import "Macros.h"
 #import "MobClick.h"
 
@@ -170,11 +172,10 @@
             NSData *parsedData = imageRawData;
             
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                UIImage *image = [UIImage imageWithData:parsedData];
-                
+                UIImage *image = [OLImage imageWithData:parsedData];
                 StrongSelf(sself, wself);
                 if (sself) {
-                    [sself.retriveVerifyCodeButton setImage:image forState:UIControlStateNormal];
+                    sself.imageView.image = image;
                     sself.verifyCode.text = @"";
                     [sself.retriveVerifyActivityIndicator stopAnimating];
                 }
