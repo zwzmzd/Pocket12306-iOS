@@ -62,5 +62,15 @@ static NSString *_userInputArriveStation = nil;
     _userInputArriveStation = userInputArriveStation;
 }
 
++ (NSString *)dateInString:(NSDate *)date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    return [formatter stringFromDate:date];
+}
++ (NSString *)getTodayDateInString {
+    NSDate *today = [NSDate date];
+    return [self dateInString:today];
+}
 
 @end

@@ -14,6 +14,7 @@
 #import "TDBOrderDetailViewController.h"
 #import "TDBOrderOperationViewController.h"
 #import "SVProgressHUD.h"
+#import "TDBHTTPClient.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SVPullToRefresh.h"
 #import "Macros.h"
@@ -461,7 +462,8 @@
         // 由于这个方法还被ODRefreshControl调用，所以先判断一下是否正在执行
         
         // 不要在这里就self.orderList = nil了。因为对于下拉刷新来说，还可能因为滚动的原因导致Cell复用，中途会获取数组中的内容，容易出现异常
-        [self retriveEssentialInfoUsingGCD];
+//        [self retriveEssentialInfoUsingGCD];
+        [[TDBHTTPClient sharedClient] queryMyOrder:nil];
     } else {
         [self.tableView.pullToRefreshView stopAnimating];
     }

@@ -8,6 +8,7 @@
 
 #import "TDBHTTPClient.h"
 #import "DataSerializeUtility.h"
+#import "GlobalDataStorage.h"
 #import "TDBTrainInfo.h"
 #import "Macros.h"
 
@@ -212,6 +213,30 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
+    }];
+}
+
+- (void)queryMyOrder:(void (^)(NSArray *))success {
+    NSDate *fromDate = [NSDate dateWithTimeIntervalSinceNow:-3600*24*60];
+    NSString *fromDateString = [GlobalDataStorage dateInString:fromDate];
+    NSString *todayString = [GlobalDataStorage getTodayDateInString];
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument setObject:@"1" forKey:@"queryType"];
+    [argument setObject:fromDateString forKey:@"queryStartDate"];
+    [argument setObject:todayString forKey:@"queryEndDate"];
+    [argument setObject:@"my_flag" forKey:@"come_from_flag"];
+    [argument setObject:@"100" forKey:@"pageSize"];
+    [argument setObject:@"0" forKey:@"pageIndex"];
+    [argument setObject:@"" forKey:@"sequence_train_name"];
+    
+    NSString *path = @"/otn/queryOrder/queryMyOrder";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        NSLog(@"%@", dict);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
 }
 

@@ -36,6 +36,7 @@
 - (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue success:(void (^)(NSData *))success;
 - (void)getRandpImage:(void (^)(NSData *))success;
 
+- (void)queryMyOrder:(void (^)(NSArray *))success;
 //支付
 
 // 根据订单号，apacheToken，还有ticketToken获取一个未完成订单的支付页面

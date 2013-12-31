@@ -24,4 +24,7 @@
 + (NSString *)userInputArriveStation;
 + (void)setUserInputArriveStation:(NSString *)userInputArriveStation;
 
++ (NSString *)getTodayDateInString;
++ (NSString *)dateInString:(NSDate *)date;
+
 @end
