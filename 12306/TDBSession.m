@@ -28,7 +28,7 @@
 + (void)resetSession
 {
     NSHTTPCookieStorage *cookieMgr = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    NSURL *url = [NSURL URLWithString:SYSURL @"/otsweb/"];
+    NSURL *url = [NSURL URLWithString:SYSURL @"/otn/"];
     NSArray *cookies = [cookieMgr cookiesForURL:url];
     NSEnumerator *enumerator = [cookies objectEnumerator];
     NSHTTPCookie *cookie;

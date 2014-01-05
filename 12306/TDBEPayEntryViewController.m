@@ -37,16 +37,19 @@
     [super viewDidLoad];
     [MobClick event:@"EPayEntry"];
 	// Do any additional setup after loading the view.
-    
-    // 进入后，用户总览全局
-    self.webView.scalesPageToFit = YES;
-    self.webView.delegate = self;
-    
-    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
-    
-    [self retriveEssentialInfoUsingGCD];
+//    
+//    // 进入后，用户总览全局
+//    self.webView.scalesPageToFit = YES;
+//    self.webView.delegate = self;
+//    
+//    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+//    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+//    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+//    
+//    [self retriveEssentialInfoUsingGCD];
+    [[TDBHTTPClient sharedClient] payOrderInit:^(NSData *data) {
+        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    }];
 }
 
 - (IBAction)_backPressed:(id)sender

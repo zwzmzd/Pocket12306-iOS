@@ -38,6 +38,7 @@
         [self setDefaultHeader:@"User-Agent" value:USER_AGENT_STR];
         [self setDefaultHeader:@"Referer" value:[self.baseURL absoluteString]];
         [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
+        [self setDefaultHeader:@"Host" value:[self.baseURL host]];
         
         _callbackQueue = dispatch_queue_create("com.enjoy-what.app.12306assistant.network-callback-queue", 0);
         [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
@@ -268,6 +269,21 @@
 }
 
 #pragma mark - 支付模块
+
+- (void)payOrderInit:(void (^)(NSData *))success {
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument setObject:@"" forKey:@"_json_att"];
+    
+    NSString *path = @"/otn/payOrder/init";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+}
+
 - (void)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo apacheToken:(NSString *)apacheToken ticketKey:(NSString *)ticketKey success:(void (^)(NSData *))success {
     NSLog(@"laterEpay");
     
