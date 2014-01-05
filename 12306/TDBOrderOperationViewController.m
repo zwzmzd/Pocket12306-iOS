@@ -40,6 +40,7 @@ typedef enum {
     [super viewDidLoad];
     
     self.orderSquenceNo.text = self.order.orderSquence_no;
+    self.orderPrice.text = self.order.totalPrice;
     
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];

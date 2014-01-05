@@ -16,6 +16,7 @@
 - (IBAction)iWantToCancleOrder:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UILabel *orderSquenceNo;
+@property (weak, nonatomic) IBOutlet UILabel *orderPrice;
 
 @property (nonatomic) NSString *apacheToken;
 @property (nonatomic) TDBOrder *order;
