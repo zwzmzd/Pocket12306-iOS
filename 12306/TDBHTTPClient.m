@@ -235,7 +235,13 @@
     [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
-        NSLog(@"%@", dict);
+        if (success) {
+            if ([[dict objectForKey:@"status"] boolValue]) {
+                success([[dict objectForKey:@"data"] objectForKey:@"OrderDTODataList"]);
+            } else {
+                success(nil);
+            }
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
 }

@@ -23,22 +23,27 @@ typedef enum {
 @property (nonatomic, copy) NSString *price;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *idcardType;
+@property (nonatomic, copy) NSString *idcardNo;
+@property (nonatomic, copy) NSString *status;
 
 @end
 
 @interface TDBOrder : NSObject
 
 @property (nonatomic, copy) NSString *date;
+@property (nonatomic, copy) NSString *orderDate;
 @property (nonatomic, copy) NSString *trainNo;
 @property (nonatomic, copy) NSString *departStationName;
 @property (nonatomic, copy) NSString *arriveStationName;
 @property (nonatomic, copy) NSString *departTime;
 @property (nonatomic, copy) NSString *statusDescription;
+@property (nonatomic, copy) NSString *totalPrice;
 @property (nonatomic) ORDER_STATUS status;
 
 @property (nonatomic, copy) NSString *orderSquence_no;
 @property (nonatomic, copy) NSString *ticketKey;
 
-@property (nonatomic) NSArray *passengers;
+@property (nonatomic, strong) NSArray *names;
+@property (nonatomic, strong) NSArray *passengers;
 
 @end
