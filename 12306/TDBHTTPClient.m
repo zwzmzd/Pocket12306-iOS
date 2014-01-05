@@ -246,6 +246,27 @@
     }];
 }
 
+- (void)queryMyOrderNoComplete:(void (^)(NSArray *))success {
+    
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument setObject:@"" forKey:@"_json_att"];
+    
+    NSString *path = @"/otn/queryOrder/queryMyOrderNoComplete";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        if (success) {
+            if ([[dict objectForKey:@"status"] boolValue]) {
+                success([[dict objectForKey:@"data"] objectForKey:@"orderDBList"]);
+            } else {
+                success(nil);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+}
+
 #pragma mark - 支付模块
 - (void)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo apacheToken:(NSString *)apacheToken ticketKey:(NSString *)ticketKey success:(void (^)(NSData *))success {
     NSLog(@"laterEpay");

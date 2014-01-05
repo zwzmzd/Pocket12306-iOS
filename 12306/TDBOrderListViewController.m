@@ -77,7 +77,7 @@
         
         order.status = ORDER_STATUS_PAID;
         order.statusDescription = @"已支付";
-        BOOL b = NO, c = NO, d = NO;
+        BOOL b = NO, c = NO, d = NO, i = NO;
         for (NSString *code in statusCode) {
             if ([code isEqualToString:@"b"]) {
                 b = YES;
@@ -85,6 +85,8 @@
                 c = YES;
             } else if ([code isEqualToString:@"d"]) {
                 d = YES;
+            } else if ([code isEqualToString:@"i"]) {
+                i = YES;
             }
         }
         if (b) {
@@ -96,6 +98,9 @@
         } else if (c) {
             order.status = ORDER_STATUS_OTHER;
             order.statusDescription = @"已退票";
+        } else if (i) {
+            order.status = ORDER_STATUS_UNFINISHED;
+            order.statusDescription = @"待支付";
         }
         
         order.passengers = passengers;
@@ -111,45 +116,63 @@
     self.refreshProcessEnable = NO;
     
     WeakSelf(wself, self);
-    [[TDBHTTPClient sharedClient] queryMyOrder:^(NSArray *data) {
-        ORDER_PARSER_MSG result;
+    [[TDBHTTPClient sharedClient] queryMyOrderNoComplete:^(NSArray *data) {
+        CHECK_INSTANCE_EXIST(wself);
+        __block ORDER_PARSER_MSG result;
         NSMutableArray *tempList = [NSMutableArray new];
-        
-        result = [self parseJSON:data toList:tempList];
-        
+        @try {
+            result = [wself parseJSON:data toList:tempList];
+        }
+        @catch (NSException *exception) {
+            result = ORDER_PARSER_MSG_ERR;
+        }
+        [NSThread sleepForTimeInterval:1.f];
         CHECK_INSTANCE_EXIST(wself);
         
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [[TDBHTTPClient sharedClient] queryMyOrder:^(NSArray *data) {
+            CHECK_INSTANCE_EXIST(wself);
             if (result == ORDER_PARSER_MSG_SUCCESS) {
-                StrongSelf(sself, wself);
-                if (sself) {
-                    sself.orderList = tempList;
-                    [sself.tableView reloadData];
+                @try {
+                    result = [wself parseJSON:data toList:tempList];
                 }
-            } else {
-                [SVProgressHUD showErrorWithStatus:@"获取列表信息失败，请重试"];
+                @catch (NSException *exception) {
+                    result = ORDER_PARSER_MSG_ERR;
+                }
             }
+            CHECK_INSTANCE_EXIST(wself);
             
-            StrongSelf(sself, wself);
-            if (sself) {
-                // 防止刷新过速，每次刷新之后延迟2秒再启用refreshBtn
-                double delayInSeconds = 2.0;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                if (result == ORDER_PARSER_MSG_SUCCESS) {
                     StrongSelf(sself, wself);
                     if (sself) {
-                        sself.refreshProcessEnable = YES;
+                        sself.orderList = tempList;
+                        [sself.tableView reloadData];
                     }
-                });
+                } else {
+                    [SVProgressHUD showErrorWithStatus:@"获取列表信息失败，请重试"];
+                }
                 
-                NSDate *date = [NSDate date];
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"上次更新： MM-dd HH:mm"];
-                
-                [sself.tableView.pullToRefreshView setSubtitle:[formatter stringFromDate:date] forState:SVPullToRefreshStateAll];
-                [sself.tableView.pullToRefreshView stopAnimating];
-            }
-        });
+                StrongSelf(sself, wself);
+                if (sself) {
+                    // 防止刷新过速，每次刷新之后延迟2秒再启用refreshBtn
+                    double delayInSeconds = 2.0;
+                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                        StrongSelf(sself, wself);
+                        if (sself) {
+                            sself.refreshProcessEnable = YES;
+                        }
+                    });
+                    
+                    NSDate *date = [NSDate date];
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"上次更新： MM-dd HH:mm"];
+                    
+                    [sself.tableView.pullToRefreshView setSubtitle:[formatter stringFromDate:date] forState:SVPullToRefreshStateAll];
+                    [sself.tableView.pullToRefreshView stopAnimating];
+                }
+            });
+        }];
     }];
 }
 

@@ -37,6 +37,7 @@
 - (void)getRandpImage:(void (^)(NSData *))success;
 
 - (void)queryMyOrder:(void (^)(NSArray *))success;
+- (void)queryMyOrderNoComplete:(void (^)(NSArray *))success;
 //支付
 
 // 根据订单号，apacheToken，还有ticketToken获取一个未完成订单的支付页面
