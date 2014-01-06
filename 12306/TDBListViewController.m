@@ -112,7 +112,7 @@
             TDBTrainInfoController *controller = [[TDBTrainInfoController alloc] init];
             NSUInteger count = [array count];
             for (NSUInteger i = 0; i < count; i++) {
-                TDBTrainInfo *tt = [[TDBTrainInfo alloc] initWithOriginal:[[array objectAtIndex:i] objectForKey:@"queryLeftNewDTO"]];
+                TDBTrainInfo *tt = [[TDBTrainInfo alloc] initWithOriginal:[array objectAtIndex:i]];
                 
                 if (sself.stationNameExactlyMatch && (![userInputArriveStationName isEqualToString:[tt getArriveStationName]]
                                                       || ![userInputDepartStationName isEqualToString:[tt getDapartStationName]])) {

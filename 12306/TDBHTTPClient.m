@@ -151,13 +151,12 @@
 #pragma mark - 预定模块
 
 - (void)getRandpImage:(void (^)(NSData *))success {
-    NSString *path = [NSString stringWithFormat:@"/otsweb/passCodeNewAction.do?module=passenger&rand=randp&0.%d%d", abs(arc4random()), abs(arc4random())];
+    NSString *path = [NSString stringWithFormat:@"passcodeNew/getPassCodeNew?module=passenger&rand=sjrand"];
     [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(responseObject);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
     }];
 }
 
@@ -173,47 +172,54 @@
     }];
 }
 
-- (void)submutOrderRequestWithTrainInfo:(id)train date:(NSString *)date tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue success:(void (^)(NSData *))success {
+- (void)checkUser:(void (^)(BOOL))finish {
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument setObject:@"" forKey:@"_json_att"];
+    
+    NSString *path = @"login/checkUser";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (finish) {
+            finish(YES);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+}
+- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(BOOL))finish {
     NSLog(@"submutOrderRequestWithTrainInfo");
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument setObject:[train getTrainNo] forKey:@"station_train_code"];
+    [argument setObject:train.mmStr forKey:@"secretStr"];
     [argument setObject:date forKey:@"train_date"];
-    [argument setObject:@"" forKey:@"seatstype_num"];
-    [argument setObject:[train getDepartStationTeleCode] forKey:@"from_station_telecode"];
-    [argument setObject:[train getArriveStationTeleCode] forKey:@"to_station_telecode"];
-    [argument setObject:@"00" forKey:@"include_student"];
-    [argument setObject:[train getDapartStationName] forKey:@"from_station_telecode_name"];
-    [argument setObject:[train getArriveStationName] forKey:@"to_station_telecode_name"];
-    [argument setObject:date forKey:@"round_train_date"];
-    [argument setObject:@"00:00--00:24" forKey:@"round_start_time_str"];
-    [argument setObject:@"1" forKey:@"single_round_trip"];
-    [argument setObject:@"QB" forKey:@"train_pass_type"];
-    [argument setObject:@"QB#D#Z#T#K#QT#" forKey:@"train_class_arr"];
-    [argument setObject:@"00:00--00:24" forKey:@"start_time_str"];
-    [argument setObject:[train getDuration] forKey:@"lishi"];
-    [argument setObject:[train getDepartTime] forKey:@"train_start_time"];
-    [argument setObject:[train getTrainCode] forKey:@"trainno4"];
-    [argument setObject:[train getArriveTime] forKey:@"arrive_time"];
-    [argument setObject:[train getDapartStationName] forKey:@"from_station_name"];
-    [argument setObject:[train getArriveStationName] forKey:@"to_station_name"];
-    [argument setObject:[train getDepartStationNo] forKey:@"from_station_no"];
-    [argument setObject:[train getArriveStationNo] forKey:@"to_station_no"];
-    [argument setObject:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
-    [argument setObject:[train getMMStr] forKey:@"mmStr"];
-    [argument setObject:[train getLocationCode] forKey:@"locationCode"];
-    [argument setObject:tokenValue forKey:tokenKey];
-    [argument setObject:@"undefined" forKey:@"myversion"];
+    [argument setObject:[GlobalDataStorage getTodayDateInString] forKey:@"back_train_date"];
+    [argument setObject:@"dc" forKey:@"tour_flag"];
+    [argument setObject:@"ADULT" forKey:@"purpose_codes"];
+    [argument setObject:[train getDapartStationName] forKey:@"query_from_station_name"];
+    [argument setObject:[train getArriveStationName] forKey:@"query_to_station_name"];
+    [argument setObject:@"" forKey:@"undefined"];
     
+    NSString *path = @"leftTicket/submitOrderRequest";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (finish) {
+            NSError *jsonErr = nil;
+            NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+            finish(jsonErr ? NO : [[result objectForKey:@"status"] boolValue]);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+}
+- (void)initDc:(void (^)(NSData *))success {
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument setObject:@"" forKey:@"_json_att"];
     
-    NSString *path = @"/otsweb/order/querySingleAction.do?method=submutOrderRequest";
+    NSString *path = @"confirmPassenger/initDc";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
     [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(responseObject);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
     }];
 }
 

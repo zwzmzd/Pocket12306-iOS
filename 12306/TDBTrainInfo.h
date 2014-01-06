@@ -11,8 +11,9 @@
 @interface TDBTrainInfo : NSObject
 
 @property (nonatomic, strong) NSDictionary *original;
+@property (nonatomic, copy) NSString *mmStr;
 
-- (id)initWithOriginal: (NSDictionary *)original;
+- (id)initWithOriginal: (NSDictionary *)raw;
 
 - (NSString *)getTrainNo;
 
@@ -37,8 +38,6 @@
 - (NSString *)getArriveStationNo;
 
 - (NSString *)getYPInfoDetail;
-
-- (NSString *)getMMStr;
 
 - (NSString *)getLocationCode;
 

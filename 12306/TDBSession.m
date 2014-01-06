@@ -95,7 +95,7 @@
     [argument setObject:[train getDepartStationNo] forKey:@"from_station_no"];
     [argument setObject:[train getArriveStationNo] forKey:@"to_station_no"];
     [argument setObject:[train getYPInfoDetail] forKey:@"ypInfoDetail"];
-    [argument setObject:[train getMMStr] forKey:@"mmStr"];
+    [argument setObject:train.mmStr forKey:@"mmStr"];
     [argument setObject:[train getLocationCode] forKey:@"locationCode"];
     [argument setObject:tokenValue forKey:tokenKey];
     [argument setObject:@"undefined" forKey:@"myversion"];

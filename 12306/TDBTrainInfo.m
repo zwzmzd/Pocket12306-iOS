@@ -10,10 +10,11 @@
 
 @implementation TDBTrainInfo
 
-- (id)initWithOriginal:(NSDictionary *)original {
+- (id)initWithOriginal:(NSDictionary *)raw {
     self = [super init];
     if (self) {
-        _original = original;
+        _original = [raw objectForKey:@"queryLeftNewDTO"];
+        _mmStr = [[raw objectForKey:@"secretStr"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     }
     return self;
 }
@@ -76,11 +77,6 @@
 - (NSString *)getYPInfoDetail
 {
     return [self.original objectForKey:@"yp_info"];
-}
-
-- (NSString *)getMMStr
-{
-    return [self.original objectForKey:@"secretStr"];
 }
 
 - (NSString *)getLocationCode

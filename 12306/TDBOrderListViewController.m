@@ -126,6 +126,8 @@
         @catch (NSException *exception) {
             result = ORDER_PARSER_MSG_ERR;
         }
+        
+        CHECK_INSTANCE_EXIST(wself);
         [NSThread sleepForTimeInterval:1.f];
         CHECK_INSTANCE_EXIST(wself);
         

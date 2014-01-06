@@ -47,15 +47,18 @@
 //    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
 //    
 //    [self retriveEssentialInfoUsingGCD];
-    [[TDBHTTPClient sharedClient] payOrderInit:^(NSData *data) {
-        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    WeakSelf(wself, self);
+    [[TDBHTTPClient sharedClient] continuePayNoCompleteMyOrder:self.orderSequenceNo success:^{
+        [[TDBHTTPClient sharedClient] payOrderInit:^(NSData *data) {
+            NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }];
     }];
 }
 
 - (IBAction)_backPressed:(id)sender
 {
     [SVProgressHUD dismiss];
-    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
+    [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

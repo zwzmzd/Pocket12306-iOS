@@ -34,8 +34,9 @@
 
 
 // 提交购票信息
-- (void)getSubmutToken:(void (^)(NSData *))success;
-- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue success:(void (^)(NSData *))success;
+- (void)checkUser:(void (^)(BOOL))finish;
+- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(BOOL))finish;
+- (void)initDc:(void (^)(NSData *))success;
 - (void)getRandpImage:(void (^)(NSData *))success;
 
 - (void)queryMyOrder:(void (^)(NSArray *))success;

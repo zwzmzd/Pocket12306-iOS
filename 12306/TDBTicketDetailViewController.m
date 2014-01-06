@@ -29,12 +29,11 @@
 
 @property (nonatomic,strong) MBProgressHUD *HUD;
 
-@property (nonatomic, strong) NSString *tokenKey;
-@property (nonatomic, strong) NSString *tokenValue;
-
+@property (nonatomic, copy) NSString *repeatSubmitToken;
 @property (nonatomic, copy) NSString *html;
-@property (nonatomic, copy) NSString *leftTicketID;
-@property (nonatomic, copy) NSString *apacheToken;
+@property (nonatomic, copy) NSString *leftTicketStr;
+@property (nonatomic, copy) NSString *keyCheckIsChange;
+
 @property (nonatomic) NSArray *ticketList; // 余票和票价
 @property (nonatomic) NSArray *seatTypeList; // 一等座、二等、硬座等等
 @property (nonatomic) NSArray *ticketTypeList; // 成人，学生，残军
@@ -87,227 +86,93 @@
     [self.ticketTypeSelector removeAllSegments];
 }
 
-- (SUBMUTORDER_MSG)parseHTMLWithData:(NSData *)htmlData
-{
-    self.html = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
-    
-    NSRange range = [self.html rangeOfString:@"车票预订"];
-    if (range.length == 0) {
-        NSLog(@"获取订票页面出错");
-        return SUBMUTORDER_MSG_ERR;
-    }
-    
-    range = [self.html rangeOfString:@"现在是系统例行维护时间"];
-    if (range.length > 0) {
-        NSLog(@"现在是系统例行维护时间");
-        return SUBMUTORDER_MSG_OUT_OF_SERVICE;
-    }
-    
-    range = [self.html rangeOfString:@"该车次在互联网已停止办理业务"];
-    if (range.length > 0) {
-        NSLog(@"该车次在互联网已停止办理业务");
-        return SUBMUTORDER_MSG_EXPIRED;
-    }
-    
-    range = [self.html rangeOfString:@"未处理的订单"];
-    if (range.length > 0) {
-        NSLog(@"还有未处理订单，无法继续订票");
-        return SUBMUTORDER_MSG_UNFINISHORDER_DETECTED;
-    }
-    
-    @try {
-        TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
-        
-        self.leftTicketID = [self parseLeftTicketID:xpathParser];
-        self.apacheToken = [self parseApacheToken:xpathParser];
-        
-        NSLog(@"leftTicketID = %@ ; apacheToken = %@", self.leftTicketID, self.apacheToken);
-        
-        /* 获取余票和票价 */
-        {
-            NSArray *elements = [xpathParser searchWithXPathQuery:@"//form[@id='confirmPassenger']/table/tr"];
-            NSMutableArray *array = [[NSMutableArray alloc] init];
-            
-            elements = [[elements objectAtIndex:1] children];
-            
-            for (TFHppleElement *element in elements) {
-                if ([element.tagName isEqualToString:@"td"]) {
-                    NSString *ticket = [element.firstChild content];
-                    if (ticket)
-                        [array addObject:ticket];
-                }
-            }
-            self.ticketList = [[NSArray alloc] initWithArray:array];
-        }
-        
-        /* 获取可用的座位类型，比如硬座、硬卧 */
-        {
-            NSArray *elements = [xpathParser searchWithXPathQuery:@"//select[@name='passenger_1_seat']/option"];
-            NSMutableArray *array = [[NSMutableArray alloc] init];
-            
-            for (TFHppleElement *element in elements) {
-                NSArray *e = [[NSArray alloc] initWithObjects:
-                              [element.attributes objectForKey:@"value"],
-                              [element.firstChild content],
-                              nil];
-                if (e)
-                    [array addObject:e];
-            }
-            self.seatTypeList = [[NSArray alloc] initWithArray:array];
-        }
-        if (self.seatTypeList.count == 0)
-            return SUBMUTORDER_MSG_ERR;
-        
-        {
-            NSArray *elements = [xpathParser searchWithXPathQuery:@"//select[@name='passenger_1_ticket']/option"];
-            NSMutableArray *array = [[NSMutableArray alloc] init];
-            
-            for (TFHppleElement *element in elements) {
-                NSArray *e = @[[element.attributes objectForKey:@"value"],[element.firstChild content]];
-                NSString *title = [element.firstChild content];
-                if ([title hasPrefix:@"儿童"]) {
-                    // 儿童票由于不能单独购买，所以先省略
-                } else {
-                    [array addObject:e];
-                }
-            }
-            self.ticketTypeList = [[NSArray alloc] initWithArray:array];
-        }
-        
-        if (self.ticketTypeList.count == 0)
-            return SUBMUTORDER_MSG_ERR;
-        
-        return SUBMUTORDER_MSG_SUCCESS;
-    }
-    @catch (NSException *exception) {
-        // 主要用于识别登录超时的情况
-        NSLog(@"[EXCEPTION] %@", exception);
-        return SUBMUTORDER_MSG_ACCESS_FAILED;
-    }
-}
-
 - (void)retriveEssentialInfoUsingGCD
 {
     [SVProgressHUD show];
     [self.verifyCodeActivityIndicator startAnimating];
     
     WeakSelfDefine(wself);
-    [[TDBHTTPClient sharedClient] getSubmutToken:^(NSData *data) {
-        NSString *rawJs = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSString *key = nil;
-        @try {
-            NSRange range = [rawJs rangeOfString:@"var key='"];
-            rawJs = [rawJs substringFromIndex:range.location + range.length];
-            range = [rawJs rangeOfString:@"';"];
-            key = [rawJs substringToIndex:range.location];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"[submutToken] fetchFail");
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            StrongSelf(sself, wself);
-            if (sself) {
-                UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
-                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"login_encode" ofType:@"js"];
-                NSString *loginJS = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-                [jsEngine stringByEvaluatingJavaScriptFromString:loginJS];
-                
-                NSString *command = [NSString stringWithFormat:@"encode64(bin216(Base32.encrypt('1111', '%@')))", key];
-                sself.tokenValue = [jsEngine stringByEvaluatingJavaScriptFromString:command];
-                sself.tokenKey = key;
-                NSLog(@"[submutToken] %@: %@", sself.tokenKey, sself.tokenValue);
-                
-                {
-                    double delayInSeconds = 1.0;
-                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                        CHECK_INSTANCE_EXIST(wself);
-                        [wself _retriveSeatInfoUsingGCD];
-                    });
-                }
+    [[TDBHTTPClient sharedClient] checkUser:^(BOOL ok) {
+        CHECK_INSTANCE_EXIST(wself);
+        [[TDBHTTPClient sharedClient] submutOrderRequestWithTrainInfo:self.train date:self.departDate finish:^(BOOL success) {
+            CHECK_INSTANCE_EXIST(wself);
+            if (success) {
+                [[TDBHTTPClient sharedClient] initDc:^(NSData *data) {
+                    [wself _parseHTML:data];
+                    CHECK_INSTANCE_EXIST(wself);
+                    
+                    [wself _retriveVerifyCodeUsingGCD];
+                    StrongSelf(sself, wself);
+                    if (sself) {
+                    }
+                }];
             }
-        });
+        }];
     }];
+    
 }
 
-- (void)_retriveSeatInfoUsingGCD {
-    WeakSelfDefine(wself);
-    [[TDBHTTPClient sharedClient] submutOrderRequestWithTrainInfo:self.train date:self.departDate tokenKey:self.tokenKey tokenValue:self.tokenValue success:^(NSData *htmlData) {
-        SUBMUTORDER_MSG result = 0;
-        {
-            StrongSelf(sself, wself);
-            if (sself) {
-                result = [sself parseHTMLWithData:htmlData];
-            } else {
-                return;
-            }
+- (void)_parseHTML:(NSData *)html {
+    NSMutableArray *scripts = [NSMutableArray new];
+    
+    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:html];
+    NSArray *elements = [xpathParser searchWithXPathQuery:@"//script"];
+    [scripts addObject:[[[elements firstObject] firstChild] raw]];
+    [scripts addObject:[[[elements objectAtIndex:4] firstChild] raw]];
+
+    NSString *code = [scripts componentsJoinedByString:@"\n"];
+    code = [code stringByReplacingOccurrencesOfString:@"<![CDATA[" withString:@""];
+    code = [code stringByReplacingOccurrencesOfString:@"]]>" withString:@""];
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
+        
+        [jsEngine stringByEvaluatingJavaScriptFromString:code];
+        
+        self.repeatSubmitToken = [jsEngine stringByEvaluatingJavaScriptFromString:@"globalRepeatSubmitToken"];
+        NSString *seatTypesStr = [jsEngine stringByEvaluatingJavaScriptFromString:@"JSON.stringify(init_seatTypes)"];
+        NSString *defaultTicketsStr = [jsEngine stringByEvaluatingJavaScriptFromString:@"JSON.stringify(defaultTicketTypes)"];
+        NSString *ticketInfoForPassengerFormStr = [jsEngine stringByEvaluatingJavaScriptFromString:@"JSON.stringify(ticketInfoForPassengerForm)"];
+        NSDictionary *ticketInfoForPassengerForm = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:[ticketInfoForPassengerFormStr dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
+        
+        self.ticketList = [ticketInfoForPassengerForm objectForKey:@"leftDetails"];
+        self.leftTicketStr = [ticketInfoForPassengerForm objectForKey:@"leftTicketStr"];
+        self.keyCheckIsChange = [ticketInfoForPassengerForm objectForKey:@"key_check_isChange"];
+        NSLog(@"[bb] %@", ticketInfoForPassengerFormStr);
+        NSLog(@"[aa] %@ %@ %@", self.repeatSubmitToken, self.keyCheckIsChange, self.leftTicketStr);
+        
+        NSDictionary *limitBuySeatTicketDTO = [ticketInfoForPassengerForm objectForKey:@"limitBuySeatTicketDTO"];
+        
+        NSMutableArray *seatTypeList = [NSMutableArray new];
+        NSArray *seats = [limitBuySeatTicketDTO objectForKey:@"seat_type_codes"];
+        for (NSDictionary *seat in seats) {
+            NSArray *e = @[[seat objectForKey:@"id"], [seat objectForKey:@"value"]];
+            [seatTypeList addObject:e];
         }
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            StrongSelf(sself, wself);
-            if (sself == nil) {
-                return;
-            }
-            sself.doNotBack = YES;
-            
-            if (result != SUBMUTORDER_MSG_SUCCESS) {
-                [SVProgressHUD dismiss];
-            } else {
-                sself.doNotBack = NO;
-            }
-            
-            if (result == SUBMUTORDER_MSG_SUCCESS) {
-                {
-                    double delayInSeconds = 1.f;
-                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                        CHECK_INSTANCE_EXIST(wself);
-                        [wself _retriveVerifyCodeUsingGCD];
-                    });
-                }
-                
-                for (NSUInteger i = 0; i < [sself.seatTypeList count]; i++) {
-                    NSString *title = [[sself.seatTypeList objectAtIndex:i] objectAtIndex:1];
-                    [sself.seatTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
-                }
-                sself.seatTypeSelector.selectedSegmentIndex = 0;
-                
-                for (NSUInteger i = 0; i < [sself.ticketTypeList count]; i++) {
-                    NSString *title = [[sself.ticketTypeList objectAtIndex:i] objectAtIndex:1];
-                    [sself.ticketTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
-                }
-                sself.ticketTypeSelector.selectedSegmentIndex = 0;
-            } else if (result == SUBMUTORDER_MSG_UNFINISHORDER_DETECTED) {
-                
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票"
-                                                                message:@"您尚有未处理的订单，要前往查看吗"
-                                                               delegate:sself
-                                                      cancelButtonTitle:@"暂时不用"
-                                                      otherButtonTitles:@"查看", nil];
-                alert.tag = SUBMUTORDER_MSG_UNFINISHORDER_DETECTED;
-                [alert show];
-                
-            } else if (result == SUBMUTORDER_MSG_OUT_OF_SERVICE) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"每天23点到次日7点是系统维护时间" delegate:sself
-                                                      cancelButtonTitle:@"好的" otherButtonTitles: nil];
-                alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
-                [alert show];
-            } else if (result == SUBMUTORDER_MSG_EXPIRED) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票" message:@"该车次已停止办理互联网售票业务" delegate:sself
-                                                      cancelButtonTitle:@"好的" otherButtonTitles: nil];
-                alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
-                [alert show];
-            } else if (result == SUBMUTORDER_MSG_ACCESS_FAILED) {
-                // 主要用于提示登录超时出现的问题
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"登录超时" message:@"请重新登录" delegate:sself
-                                                      cancelButtonTitle:@"好的" otherButtonTitles: nil];
-                alert.tag = SUBMUTORDER_MSG_OUT_OF_SERVICE;
-                [alert show];
-            } else {
-                NSLog(@"PAGE NOT LOADING PROPERLY");
-            }
-        });
-    }];
+        self.seatTypeList = seatTypeList;
+        
+        NSMutableArray *ticketTypeList = [NSMutableArray new];
+        NSArray *ticketTypes = [limitBuySeatTicketDTO objectForKey:@"ticket_type_codes"];
+        for (NSDictionary *ticketType in ticketTypes) {
+            NSArray *e = @[[ticketType objectForKey:@"id"], [ticketType objectForKey:@"value"]];
+            [ticketTypeList addObject:e];
+        }
+        self.ticketTypeList = ticketTypeList;
+        
+        for (NSUInteger i = 0; i < [self.seatTypeList count]; i++) {
+            NSString *title = [[self.seatTypeList objectAtIndex:i] objectAtIndex:1];
+            [self.seatTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
+        }
+        self.seatTypeSelector.selectedSegmentIndex = 0;
+        
+        for (NSUInteger i = 0; i < [self.ticketTypeList count]; i++) {
+            NSString *title = [[self.ticketTypeList objectAtIndex:i] objectAtIndex:1];
+            [self.ticketTypeSelector insertSegmentWithTitle:title atIndex:i animated:YES];
+        }
+        self.ticketTypeSelector.selectedSegmentIndex = 0;
+
+
+    });
 }
 
 - (void)_retriveVerifyCodeUsingGCD
@@ -327,23 +192,6 @@
             });
         }];
     });
-}
-
-- (NSString *)parseLeftTicketID:(TFHpple *)xpathParser
-{
-    NSArray *elements = [xpathParser searchWithXPathQuery:@"//input[@name='leftTicketStr']"];
-    TFHppleElement *element = [elements objectAtIndex:0];
-    
-    return [element.attributes objectForKey:@"value"];
-}
-
-- (NSString *)parseApacheToken:(TFHpple *)xpathParser
-{
-    
-    NSArray *elements = [xpathParser searchWithXPathQuery:@"//input[@name='org.apache.struts.taglib.html.TOKEN']"];
-    TFHppleElement *element = [elements objectAtIndex:0];
-    
-    return [element.attributes objectForKey:@"value"];
 }
 
 - (void)viewDidLoad
@@ -471,9 +319,9 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.isLoadingFinished) {
+//    if (self.isLoadingFinished) {
         [self performSegueWithIdentifier:@"SelectPassenger" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
-    }
+//    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -554,7 +402,7 @@
                 
                 sleep(0.5);
                 NSString *returnMsg = [tdbss checkOrderInfo:self.train passenger:passenger date:date
-                                              leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode];
+                                              leftTicketStr:nil apacheToken:nil randCode:verifyCode];
                 if (returnMsg == nil) {
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -577,7 +425,7 @@
                 
                 if (!haveError) {
                     sleep(1);
-                    if ([tdbss getQueueCount:self.train passenger:passenger date:date leftTicketID:self.leftTicketID]) {
+                    if ([tdbss getQueueCount:self.train passenger:passenger date:date leftTicketID:nil]) {
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
                             self.progressView.progress = 0.66;
@@ -595,7 +443,7 @@
                 if (!haveError) {
                     sleep(2);
                     if (!haveError && [tdbss confirmSingleForQueue:self.train passenger:passenger date:date
-                                                     leftTicketStr:self.leftTicketID apacheToken:self.apacheToken randCode:verifyCode]) {
+                                                     leftTicketStr:nil apacheToken:nil randCode:verifyCode]) {
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
                             self.progressView.progress = 1;
