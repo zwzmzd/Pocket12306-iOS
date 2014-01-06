@@ -33,9 +33,6 @@ typedef enum {
 // 购票第三步，正式提交订单信息
 - (BOOL)confirmSingleForQueue:(TDBTrainInfo *)train passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode;
 
-// 取消一个未完成订单
-- (NSData *)cancleMyOrderNotComplete:(NSString *)sequenceNo apacheToken:(NSString *)apacheToken;
-
 - (void)restartSession;
 
 @end

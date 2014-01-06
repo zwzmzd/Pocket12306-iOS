@@ -34,8 +34,8 @@
     
     if (self = [super initWithBaseURL:base]) {
         [self setDefaultHeader:@"User-Agent" value:USER_AGENT_STR];
-//        [self setDefaultHeader:@"Referer" value:[self.baseURL absoluteString]];
-//        [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
+        [self setDefaultHeader:@"Referer" value:[self.baseURL absoluteString]];
+        [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
         
         [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     }
@@ -275,6 +275,44 @@
 
 #pragma mark - 支付模块
 
+- (void)cancelNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(BOOL, NSArray *))success {
+    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+    [arguments setObject:sequenceNo forKey:@"sequence_no"];
+    [arguments setObject:@"cancel_order" forKey:@"cancel_flag"];
+    [arguments setObject:@"" forKey:@"_json_att"];
+    
+    NSString *path = @"queryOrder/cancelNoCompleteMyOrder";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[arguments getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            NSLog(@"%@", [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding]);
+            NSError *jsonErr = nil;
+            NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+            if (jsonErr || ![[dict objectForKey:@"status"] boolValue]) {
+                success(NO, @[@"网络异常"]);
+            } else {
+                success([[[dict objectForKey:@"data"] objectForKey:@"existError"] isEqualToString:@"N"], [dict objectForKey:@"messages"]);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+}
+
+- (void)continuePayNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)())success {
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument setObject:sequenceNo forKey:@"sequence_no"];
+    [argument setObject:@"pay" forKey:@"pay_flag"];
+    [argument setObject:@"" forKey:@"_json_att"];
+    
+    NSString *path = @"/otn/queryOrder/continuePayNoCompleteMyOrder";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success();
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+}
 - (void)payOrderInit:(void (^)(NSData *))success {
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
     [argument setObject:@"" forKey:@"_json_att"];
