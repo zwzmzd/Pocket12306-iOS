@@ -16,8 +16,6 @@
 
 @interface TDBHTTPClient()
 
-@property (nonatomic) dispatch_queue_t callbackQueue;
-
 @end
 
 @implementation TDBHTTPClient
@@ -36,19 +34,21 @@
     
     if (self = [super initWithBaseURL:base]) {
         [self setDefaultHeader:@"User-Agent" value:USER_AGENT_STR];
-        [self setDefaultHeader:@"Referer" value:[self.baseURL absoluteString]];
-        [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
-        [self setDefaultHeader:@"Host" value:[self.baseURL host]];
+//        [self setDefaultHeader:@"Referer" value:[self.baseURL absoluteString]];
+//        [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
         
-        _callbackQueue = dispatch_queue_create("com.enjoy-what.app.12306assistant.network-callback-queue", 0);
         [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     }
     return self;
 }
 
+- (void)cancelAllHTTPRequest {
+    [[self operationQueue] cancelAllOperations];
+}
+
 #pragma mark - 登录部分
 - (void)getVerifyImage:(void (^)(NSData *))success {
-    NSString *path = [NSString stringWithFormat:@"/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand"];
+    NSString *path = [NSString stringWithFormat:@"passcodeNew/getPassCodeNew?module=login&rand=sjrand"];
     [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(responseObject);
@@ -231,7 +231,7 @@
     [argument setObject:@"0" forKey:@"pageIndex"];
     [argument setObject:@"" forKey:@"sequence_train_name"];
     
-    NSString *path = @"/otn/queryOrder/queryMyOrder";
+    NSString *path = @"queryOrder/queryMyOrder";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
     [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *jsonErr = nil;
@@ -252,7 +252,7 @@
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
     [argument setObject:@"" forKey:@"_json_att"];
     
-    NSString *path = @"/otn/queryOrder/queryMyOrderNoComplete";
+    NSString *path = @"queryOrder/queryMyOrderNoComplete";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
     [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *jsonErr = nil;
@@ -266,6 +266,11 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
+}
+
+- (void)cancelQueryMyOrderHTTPRequest {
+    [self cancelAllHTTPOperationsWithMethod:nil path:@"queryOrder/queryMyOrder"];
+    [self cancelAllHTTPOperationsWithMethod:nil path:@"queryOrder/queryMyOrderNoComplete"];
 }
 
 #pragma mark - 支付模块
@@ -311,22 +316,22 @@
 - (void)getPassengersWithIndex:(NSUInteger)index size:(NSUInteger)size success:(void (^)(NSDictionary *))success {
     NSLog(@"getPassengers");
     
-    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-    [argument setObject:[NSString stringWithFormat:@"%u", index] forKey:@"pageIndex"];
-    [argument setObject:[NSString stringWithFormat:@"%u", size] forKey:@"pageSize"];
-    [argument setObject:@"" forKey:@"passenger_name"];
-    
-    NSString *path = @"/otsweb/passengerAction.do?method=getPagePassengerAll";
-    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *path = @"confirmPassenger/getPassengerDTOs";
+    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         if (success) {
-            NSError *jsonErr = nil;
-            NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
-            success(jsonErr ? nil : dict);
+            if ([[dict objectForKey:@"status"] boolValue]) {
+                success([dict objectForKey:@"data"]);
+            } else {
+                success(nil);
+            }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
     }];
+}
+- (void)cancelGetPassengers {
+    [self cancelAllHTTPOperationsWithMethod:nil path:@"confirmPassenger/getPassengerDTOs"];
 }
 
 #pragma mark - AFHTTPClient functions overwirte
@@ -343,6 +348,7 @@
     } else {
         request = [super requestWithMethod:method path:path parameters:parameters];
     }
+    
     return request;
 }
 

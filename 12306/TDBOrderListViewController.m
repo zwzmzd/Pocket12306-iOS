@@ -336,7 +336,7 @@
 }
 
 - (IBAction)iWantReturn:(id)sender {
-    [SVProgressHUD dismiss];
+    [[TDBHTTPClient sharedClient] cancelQueryMyOrderHTTPRequest];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 

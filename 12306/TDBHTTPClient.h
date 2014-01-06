@@ -14,6 +14,8 @@
 
 + (TDBHTTPClient *)sharedClient;
 
+- (void)cancelAllHTTPRequest;
+
 // 登录模块
 - (void)getVerifyImage:(void (^)(NSData *))success;
 - (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode success:(void (^)(NSDictionary *))success;
@@ -38,6 +40,7 @@
 
 - (void)queryMyOrder:(void (^)(NSArray *))success;
 - (void)queryMyOrderNoComplete:(void (^)(NSArray *))success;
+- (void)cancelQueryMyOrderHTTPRequest;
 //支付
 
 - (void)payOrderInit:(void (^)(NSData *))success;
@@ -46,4 +49,5 @@
 - (void)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo apacheToken:(NSString *)apacheToken ticketKey:(NSString *)ticketKey success:(void (^)(NSData *))success;
 
 - (void)getPassengersWithIndex:(NSUInteger)index size:(NSUInteger)size success:(void (^)(NSDictionary *))success;
+- (void)cancelGetPassengers;
 @end
