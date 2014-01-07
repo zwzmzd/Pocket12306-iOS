@@ -10,7 +10,6 @@
 
 @class TDBTrainInfo;
 @class PassengerInfo;
-#define SYSURL @"http://kyfw.12306.cn"
 
 typedef enum {
     LOGIN_MSG_SUCCESS = 0,
@@ -22,17 +21,7 @@ typedef enum {
 
 @interface TDBSession : NSObject
 
-@property (nonatomic, copy) NSData *image;
-
 + (void)resetSession;
-
-// 购票第一步：验证订单信息正确性。若订单信息正确，返回nil；否则返回错误信息
-- (NSString *)checkOrderInfo:(TDBTrainInfo *)train  passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode;
-// 购票第二步，照抄即可
-- (BOOL)getQueueCount:(TDBTrainInfo *)train passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketID:(NSString *)leftTicketID;
-// 购票第三步，正式提交订单信息
-- (BOOL)confirmSingleForQueue:(TDBTrainInfo *)train passenger:(PassengerInfo *)passenger date:(NSString *)date leftTicketStr:(NSString *)leftTicketStr apacheToken:(NSString *)apacheToken randCode:(NSString *)randCode;
-
 - (void)restartSession;
 
 @end

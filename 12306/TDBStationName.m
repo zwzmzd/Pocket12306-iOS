@@ -8,6 +8,7 @@
 
 #import "TDBStationName.h"
 #import "TDBSession.h"
+#import "Defines.h"
 
 @interface TDBStationName()
 

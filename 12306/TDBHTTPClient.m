@@ -11,6 +11,7 @@
 #import "GlobalDataStorage.h"
 #import "TDBTrainInfo.h"
 #import "Macros.h"
+#import "Defines.h"
 
 #define USER_DEFINED_POSTBODY (@"UserPostBody")
 
@@ -30,7 +31,7 @@
 }
 
 - (id)init {
-    NSURL *base = [NSURL URLWithString:@"http://kyfw.12306.cn/otn/"];
+    NSURL *base = [NSURL URLWithString:SYSURL @"/otn/"];
     
     if (self = [super initWithBaseURL:base]) {
         [self setDefaultHeader:@"User-Agent" value:USER_AGENT_STR];
@@ -151,7 +152,7 @@
 #pragma mark - 预定模块
 
 - (void)getRandpImage:(void (^)(NSData *))success {
-    NSString *path = [NSString stringWithFormat:@"passcodeNew/getPassCodeNew?module=passenger&rand=sjrand"];
+    NSString *path = [NSString stringWithFormat:@"passcodeNew/getPassCodeNew?module=passenger&rand=randp"];
     [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(responseObject);
@@ -223,6 +224,42 @@
     }];
 }
 
+- (void)checkOrderInfo:(NSString *)postBody finish:(void (^)(NSDictionary *))finish {
+    NSString *path = @"confirmPassenger/checkOrderInfo";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        finish(jsonErr ? nil : dict);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        finish(nil);
+    }];
+}
+
+- (void)getQueueCount:(NSString *)postBody finish:(void (^)(NSDictionary *))finish {
+    NSString *path = @"confirmPassenger/getQueueCount";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        finish(jsonErr ? nil : dict);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        finish(nil);
+    }];
+}
+
+- (void)confirmSingleForQueue:(NSString *)postBody finish:(void (^)(NSDictionary *))finish {
+    NSString *path = @"confirmPassenger/confirmSingleForQueue";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        finish(jsonErr ? nil : dict);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        finish(nil);
+    }];
+}
+
 - (void)queryMyOrder:(void (^)(NSArray *))success {
     NSDate *fromDate = [NSDate dateWithTimeIntervalSinceNow:-3600*24*60];
     NSString *fromDateString = [GlobalDataStorage dateInString:fromDate];
@@ -250,6 +287,7 @@
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        success(nil);
     }];
 }
 
@@ -271,6 +309,7 @@
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        success(nil);
     }];
 }
 

@@ -33,15 +33,24 @@
 
 
 
-// 提交购票信息
+// 查询车票
 - (void)checkUser:(void (^)(BOOL))finish;
 - (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(BOOL))finish;
 - (void)initDc:(void (^)(NSData *))success;
 - (void)getRandpImage:(void (^)(NSData *))success;
 
+// 提交购票
+- (void)checkOrderInfo:(NSString *)postBody finish:(void (^)(NSDictionary *))finish;
+- (void)getQueueCount:(NSString *)postBody finish:(void (^)(NSDictionary *))finish;
+- (void)confirmSingleForQueue:(NSString *)postBody finish:(void (^)(NSDictionary *))finish;
+
+
+
+// 订单查看
 - (void)queryMyOrder:(void (^)(NSArray *))success;
 - (void)queryMyOrderNoComplete:(void (^)(NSArray *))success;
 - (void)cancelQueryMyOrderHTTPRequest;
+
 //支付
 - (void)cancelNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(BOOL, NSArray *))success;
 - (void)continuePayNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)())success;

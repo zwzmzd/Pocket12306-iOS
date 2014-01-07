@@ -246,6 +246,7 @@
 		FAB56A23179C27D8006A05BF /* TDBStationName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationName.m; sourceTree = "<group>"; };
 		FAC510A317B87D8100896AB3 /* WKVerticalScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKVerticalScrollBar.h; path = vendor/WKVerticalScrollBar/WKVerticalScrollBar/WKVerticalScrollBar.h; sourceTree = SOURCE_ROOT; };
 		FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKVerticalScrollBar.m; path = vendor/WKVerticalScrollBar/WKVerticalScrollBar/WKVerticalScrollBar.m; sourceTree = SOURCE_ROOT; };
+		FAD00168187BA2B9003BBCB7 /* Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = "<group>"; };
 		FAE1271A17B60CBE00BAD9C4 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendor/SSKeychain/SSKeychain/SSKeychain.h; sourceTree = SOURCE_ROOT; };
 		FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendor/SSKeychain/SSKeychain/SSKeychain.m; sourceTree = SOURCE_ROOT; };
 		FAE1271C17B60CBE00BAD9C4 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.h; sourceTree = SOURCE_ROOT; };
@@ -467,6 +468,7 @@
 				FAF32E1B179FA360006C2CC9 /* TDBKeybordNotificationManager.h */,
 				FAF32E1C179FA361006C2CC9 /* TDBKeybordNotificationManager.m */,
 				FA50E173181277F500992940 /* Macros.h */,
+				FAD00168187BA2B9003BBCB7 /* Defines.h */,
 			);
 			name = Utility;
 			sourceTree = "<group>";

@@ -19,6 +19,7 @@
 #import "UIButton+TDBAddition.h"
 #import "TDBPassengerInfoViewController.h"
 #import "MobClick.h"
+#import "DataSerializeUtility.h"
 
 #import "TDBHTTPClient.h"
 #import "Macros.h"
@@ -30,9 +31,11 @@
 @property (nonatomic,strong) MBProgressHUD *HUD;
 
 @property (nonatomic, copy) NSString *repeatSubmitToken;
-@property (nonatomic, copy) NSString *html;
 @property (nonatomic, copy) NSString *leftTicketStr;
 @property (nonatomic, copy) NSString *keyCheckIsChange;
+@property (nonatomic, copy) NSString *trainLocation;
+@property (nonatomic, copy) NSString *tourFlag;
+@property (nonatomic, copy) NSString *purposeCodes;
 
 @property (nonatomic) NSArray *ticketList; // 余票和票价
 @property (nonatomic) NSArray *seatTypeList; // 一等座、二等、硬座等等
@@ -130,16 +133,18 @@
         [jsEngine stringByEvaluatingJavaScriptFromString:code];
         
         self.repeatSubmitToken = [jsEngine stringByEvaluatingJavaScriptFromString:@"globalRepeatSubmitToken"];
-        NSString *seatTypesStr = [jsEngine stringByEvaluatingJavaScriptFromString:@"JSON.stringify(init_seatTypes)"];
-        NSString *defaultTicketsStr = [jsEngine stringByEvaluatingJavaScriptFromString:@"JSON.stringify(defaultTicketTypes)"];
+        
         NSString *ticketInfoForPassengerFormStr = [jsEngine stringByEvaluatingJavaScriptFromString:@"JSON.stringify(ticketInfoForPassengerForm)"];
         NSDictionary *ticketInfoForPassengerForm = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:[ticketInfoForPassengerFormStr dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
         
         self.ticketList = [ticketInfoForPassengerForm objectForKey:@"leftDetails"];
         self.leftTicketStr = [ticketInfoForPassengerForm objectForKey:@"leftTicketStr"];
         self.keyCheckIsChange = [ticketInfoForPassengerForm objectForKey:@"key_check_isChange"];
+        self.trainLocation = [ticketInfoForPassengerForm objectForKey:@"train_location"];
+        self.tourFlag = [ticketInfoForPassengerForm objectForKey:@"tour_flag"];
+        self.purposeCodes = [ticketInfoForPassengerForm objectForKey:@"purpose_codes"];
         NSLog(@"[bb] %@", ticketInfoForPassengerFormStr);
-        NSLog(@"[aa] %@ %@ %@", self.repeatSubmitToken, self.keyCheckIsChange, self.leftTicketStr);
+        NSLog(@"[aa] %@ %@ %@ %@", self.repeatSubmitToken, self.keyCheckIsChange, self.leftTicketStr, self.trainLocation);
         
         NSDictionary *limitBuySeatTicketDTO = [ticketInfoForPassengerForm objectForKey:@"limitBuySeatTicketDTO"];
         
@@ -213,7 +218,7 @@
     // UIAlertView存在临界区问题，所以使用这个变量标记
     if (!self.doNotBack) {
         [SVProgressHUD dismiss];
-        [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
+        [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -319,9 +324,7 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-//    if (self.isLoadingFinished) {
-        [self performSegueWithIdentifier:@"SelectPassenger" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
-//    }
+    [self performSegueWithIdentifier:@"SelectPassenger" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -375,17 +378,25 @@
                 break;
             }
             
-            TDBSession *tdbss = [GlobalDataStorage tdbss];
             NSString *date = self.departDate;
-            PassengerInfo *passenger = [[PassengerInfo alloc] init];
+            NSString *verifyCode = self.verifyCode.text;
             
+            PassengerInfo *passenger = [[PassengerInfo alloc] init];
             passenger.seat = [[self.seatTypeList objectAtIndex:self.seatTypeSelector.selectedSegmentIndex] objectAtIndex:0];
             passenger.ticket = [[self.ticketTypeList objectAtIndex:self.ticketTypeSelector.selectedSegmentIndex] objectAtIndex:0];
             passenger.name = self.name.text;
             passenger.id_cardtype = @"1";
             passenger.id_cardno = [self.idCardNo.text uppercaseString];
             passenger.mobileno = self.mobileno.text;
-            NSString *verifyCode = self.verifyCode.text;
+            
+            // limit_tickets[ao].seat_type + ",0," + limit_tickets[ao].ticket_type + "," + limit_tickets[ao].name + "," + limit_tickets[ao].id_type + "," + limit_tickets[ao].id_no + "," + (limit_tickets[ao].phone_no == null ? "" : limit_tickets[ao].phone_no) + "," + (limit_tickets[ao].save_status == "" ? "N" : "Y");
+            NSString *passengerTicketStr = [NSString stringWithFormat:@"%@,0,%@,%@,%@,%@,%@,N", passenger.seat, passenger.ticket, passenger.name, passenger.id_cardtype, passenger.id_cardno, passenger.mobileno];
+            
+            // an.name + "," + an.id_type + "," + an.id_no + "," + an.passenger_type;
+            NSString *oldPassengerStr = [NSString stringWithFormat:@"%@,%@,%@,%@_", passenger.name, passenger.id_cardtype, passenger.id_cardno, passenger.ticket];
+            
+            NSLog(@"%@", passengerTicketStr);
+            NSLog(@"%@", oldPassengerStr);
             
             UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             [spinner startAnimating];
@@ -396,65 +407,127 @@
             overlay.hidesActivity = NO;
             [overlay postMessage:@"正在提交请求"];
             
-            __block BOOL haveError = NO;
-            dispatch_queue_t orderQueue = dispatch_queue_create("12306 orderTicket", DISPATCH_QUEUE_SERIAL);
-            dispatch_async(orderQueue, ^(void) {
+            WeakSelf(wself, self);
+            
+            StrongSelf(sself, self);
+            POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+            [arguments setObject:@"2" forKey:@"cancel_flag"];
+            [arguments setObject:@"000000000000000000000000000000" forKey:@"bed_level_order_num"];
+            [arguments setObject:passengerTicketStr forKey:@"passengerTicketStr"];
+            [arguments setObject:oldPassengerStr forKey:@"oldPassengerStr"];
+            [arguments setObject:sself.tourFlag forKey:@"tour_flag"];
+            [arguments setObject:verifyCode forKey:@"randCode"];
+            [arguments setObject:@"" forKey:@"_json_att"];
+            [arguments setObject:sself.repeatSubmitToken forKey:@"REPEAT_SUBMIT_TOKEN"];
+            
+            [[TDBHTTPClient sharedClient] checkOrderInfo:[arguments getFinalData] finish:^(NSDictionary *result) {
+                CHECK_INSTANCE_EXIST(wself);
+                NSLog(@"checkOrderInfo %@", result);
                 
-                sleep(0.5);
-                NSString *returnMsg = [tdbss checkOrderInfo:self.train passenger:passenger date:date
-                                              leftTicketStr:nil apacheToken:nil randCode:verifyCode];
-                if (returnMsg == nil) {
-                    
+                if (!(result && [[[result objectForKey:@"data"] objectForKey:@"submitStatus"] boolValue])) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        self.progressView.progress = 0.33;
+                        StrongSelf(sself, wself);
+                        if (sself) {
+                            sself.progressView.progress = 0.33;
+                            [overlay postErrorMessage:[[result objectForKey:@"data"] objectForKey:@"errMsg"] duration:2.f];
+                            sself.navigationItem.rightBarButtonItem = submitBtn;
+                        }
+                        
+                    });
+                    return;
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    StrongSelf(sself, wself);
+                    if (sself) {
+                        sself.progressView.progress = 0.33;
                         [overlay postMessage:@"订单信息验证成功" duration:2.f];
-                    });
+                    }
+                });
+                [NSThread sleepForTimeInterval:0.5f];
+                CHECK_INSTANCE_EXIST(wself);
+                
+                StrongSelf(sself, wself);
+                POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+                [arguments setObject:@"" forKey:@"train_date"];
+                [arguments setObject:[sself.train getTrainCode] forKey:@"train_no"];
+                [arguments setObject:[sself.train getTrainNo] forKey:@"stationTrainCode"];
+                [arguments setObject:passenger.seat forKey:@"seatType"];
+                [arguments setObject:[sself.train getDepartStationTeleCode] forKey:@"fromStationTelecode"];
+                [arguments setObject:[sself.train getArriveStationTeleCode] forKey:@"toStationTelecode"];
+                [arguments setObject:sself.leftTicketStr forKey:@"leftTicket"];
+                [arguments setObject:sself.purposeCodes forKey:@"purpose_codes"];
+                [arguments setObject:@"" forKey:@"_json_att"];
+                [arguments setObject:sself.repeatSubmitToken forKey:@"REPEAT_SUBMIT_TOKEN"];
+                
+                [[TDBHTTPClient sharedClient] getQueueCount:[arguments getFinalData] finish:^(NSDictionary *result) {
+                    CHECK_INSTANCE_EXIST(wself);
+                    NSLog(@"checkOrderInfo %@", result);
                     
-                } else {
-                    haveError = YES;
+                    if (!(result && [[[result objectForKey:@"data"] objectForKey:@"submitStatus"] boolValue])) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            StrongSelf(sself, wself);
+                            if (sself) {
+                                sself.progressView.progress = 0.33;
+                                [overlay postErrorMessage:[[result objectForKey:@"data"] objectForKey:@"errMsg"] duration:2.f];
+                                sself.navigationItem.rightBarButtonItem = submitBtn;
+                            }
+                            
+                        });
+                        return;
+                    }
+                    
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        self.progressView.progress = 0.33;
-                        [overlay postErrorMessage:returnMsg duration:2.f];
-                        self.navigationItem.rightBarButtonItem = submitBtn;
+                        StrongSelf(sself, wself);
+                        if (sself) {
+                            sself.progressView.progress = 0.33;
+                            [overlay postMessage:@"余票确认完毕" duration:2.f];
+                        }
                     });
-                }
-                
-            });
-            
-            dispatch_async(orderQueue, ^(void) {
-                
-                if (!haveError) {
-                    sleep(1);
-                    if ([tdbss getQueueCount:self.train passenger:passenger date:date leftTicketID:nil]) {
+                    [NSThread sleepForTimeInterval:0.5f];
+                    CHECK_INSTANCE_EXIST(wself);
+                    
+                    StrongSelf(sself, wself);
+                    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+                    [arguments setObject:passengerTicketStr forKey:@"passengerTicketStr"];
+                    [arguments setObject:oldPassengerStr forKey:@"oldPassengerStr"];
+                    [arguments setObject:verifyCode forKey:@"randCode"];
+                    [arguments setObject:sself.purposeCodes forKey:@"purpose_codes"];
+                    [arguments setObject:sself.keyCheckIsChange forKey:@"key_check_isChange"];
+                    [arguments setObject:sself.leftTicketStr forKey:@"leftTicketStr"];
+                    [arguments setObject:sself.trainLocation forKey:@"train_location"];
+                    [arguments setObject:@"" forKey:@"_json_att"];
+                    [arguments setObject:sself.repeatSubmitToken forKey:@"REPEAT_SUBMIT_TOKEN"];
+                    
+                    [[TDBHTTPClient sharedClient] confirmSingleForQueue:[arguments getFinalData] finish:^(NSDictionary *result) {
+                        CHECK_INSTANCE_EXIST(wself);
+                        NSLog(@"confirmSingleForQueue %@", result);
+                        
+                        if (!(result && [[[result objectForKey:@"data"] objectForKey:@"submitStatus"] boolValue])) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                StrongSelf(sself, wself);
+                                if (sself) {
+                                    sself.progressView.progress = 0.33;
+                                    [overlay postErrorMessage:[[result objectForKey:@"data"] objectForKey:@"errMsg"] duration:2.f];
+                                    sself.navigationItem.rightBarButtonItem = submitBtn;
+                                }
+                                
+                            });
+                            return;
+                        }
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            self.progressView.progress = 0.66;
-                            [overlay postMessage:@"余票信息确认完毕" duration:2.f];
+                            StrongSelf(sself, wself);
+                            if (sself) {
+                                sself.progressView.progress = 1;
+                                [MobClick event:@"ticket order successfully"];
+                                [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:2.f animated:YES];
+                                sself.navigationItem.rightBarButtonItem = nil;
+                            }
                         });
-                    } else {
-                        haveError = YES;
-                    }
-                }
-                
-            });
-            
-            dispatch_async(orderQueue, ^(void) {
-                
-                if (!haveError) {
-                    sleep(2);
-                    if (!haveError && [tdbss confirmSingleForQueue:self.train passenger:passenger date:date
-                                                     leftTicketStr:nil apacheToken:nil randCode:verifyCode]) {
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            self.progressView.progress = 1;
-                            [MobClick event:@"ticket order successfully"];
-                            [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:2.f animated:YES];
-                            self.navigationItem.rightBarButtonItem = nil;
-                        });
-                    }
-                }
-                
-            });
+                    }];
+                }];
+            }];
             
             break;
         }
