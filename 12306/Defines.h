@@ -9,6 +9,6 @@
 #ifndef _2306_Defines_h
 #define _2306_Defines_h
 
-#define SYSURL @"http://dynamic.12306.cn"
+#define SYSURL @"http://kyfw.12306.cn"
 
 #endif

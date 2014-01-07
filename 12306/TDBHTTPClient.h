@@ -35,7 +35,7 @@
 
 // 查询车票
 - (void)checkUser:(void (^)(BOOL))finish;
-- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(BOOL))finish;
+- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(NSDictionary *))finish;
 - (void)initDc:(void (^)(NSData *))success;
 - (void)getRandpImage:(void (^)(NSData *))success;
 

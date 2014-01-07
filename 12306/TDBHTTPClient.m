@@ -186,7 +186,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
 }
-- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(BOOL))finish {
+- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(NSDictionary *))finish {
     NSLog(@"submutOrderRequestWithTrainInfo");
     
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
@@ -205,7 +205,7 @@
         if (finish) {
             NSError *jsonErr = nil;
             NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
-            finish(jsonErr ? NO : [[result objectForKey:@"status"] boolValue]);
+            finish(jsonErr ? nil : result);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];

@@ -185,6 +185,7 @@
 }
 
 - (IBAction)iWantToRetriveVerifyCode:(id)sender {
+    [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
     [self retriveVerifyImageUsingGCD];
 }
 

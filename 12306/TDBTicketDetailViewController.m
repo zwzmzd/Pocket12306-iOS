@@ -95,24 +95,35 @@
     [self.verifyCodeActivityIndicator startAnimating];
     
     WeakSelfDefine(wself);
-    [[TDBHTTPClient sharedClient] checkUser:^(BOOL ok) {
+    [[TDBHTTPClient sharedClient] submutOrderRequestWithTrainInfo:self.train date:self.departDate finish:^(NSDictionary *result) {
         CHECK_INSTANCE_EXIST(wself);
-        [[TDBHTTPClient sharedClient] submutOrderRequestWithTrainInfo:self.train date:self.departDate finish:^(BOOL success) {
-            CHECK_INSTANCE_EXIST(wself);
-            if (success) {
-                [[TDBHTTPClient sharedClient] initDc:^(NSData *data) {
-                    [wself _parseHTML:data];
-                    CHECK_INSTANCE_EXIST(wself);
-                    
-                    [wself _retriveVerifyCodeUsingGCD];
-                    StrongSelf(sself, wself);
-                    if (sself) {
-                    }
-                }];
+        if (result == nil || [[result objectForKey:@"messages"] count] > 0) {
+            NSString *message = [[result objectForKey:@"messages"] firstObject];
+            if (message == nil) {
+                message = @"网络请求失败，请重新尝试";
             }
-        }];
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"无法购票"
+                                                                message:message
+                                                               delegate:wself
+                                                      cancelButtonTitle:@"取消"
+                                                      otherButtonTitles:@"返回", nil];
+                alert.tag = SUBMUTORDER_MSG_UNFINISHORDER_DETECTED;
+                [alert show];
+                [SVProgressHUD dismiss];
+            });
+        } else {
+            [[TDBHTTPClient sharedClient] initDc:^(NSData *data) {
+                [wself _parseHTML:data];
+                CHECK_INSTANCE_EXIST(wself);
+                
+                [wself _retriveVerifyCodeUsingGCD];
+                StrongSelf(sself, wself);
+                if (sself) {
+                }
+            }];
+        }
     }];
-    
 }
 
 - (void)_parseHTML:(NSData *)html {
@@ -143,8 +154,7 @@
         self.trainLocation = [ticketInfoForPassengerForm objectForKey:@"train_location"];
         self.tourFlag = [ticketInfoForPassengerForm objectForKey:@"tour_flag"];
         self.purposeCodes = [ticketInfoForPassengerForm objectForKey:@"purpose_codes"];
-        NSLog(@"[bb] %@", ticketInfoForPassengerFormStr);
-        NSLog(@"[aa] %@ %@ %@ %@", self.repeatSubmitToken, self.keyCheckIsChange, self.leftTicketStr, self.trainLocation);
+        NSLog(@"[info] %@ %@ %@ %@", self.repeatSubmitToken, self.keyCheckIsChange, self.leftTicketStr, self.trainLocation);
         
         NSDictionary *limitBuySeatTicketDTO = [ticketInfoForPassengerForm objectForKey:@"limitBuySeatTicketDTO"];
         
@@ -310,6 +320,7 @@
 }
 
 - (IBAction)refreshVerifyCode:(id)sender {
+    [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
     [self _retriveVerifyCodeUsingGCD];
 }
 
@@ -395,9 +406,6 @@
             // an.name + "," + an.id_type + "," + an.id_no + "," + an.passenger_type;
             NSString *oldPassengerStr = [NSString stringWithFormat:@"%@,%@,%@,%@_", passenger.name, passenger.id_cardtype, passenger.id_cardno, passenger.ticket];
             
-            NSLog(@"%@", passengerTicketStr);
-            NSLog(@"%@", oldPassengerStr);
-            
             UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             [spinner startAnimating];
             UIBarButtonItem *submitBtn = self.navigationItem.rightBarButtonItem;
@@ -441,10 +449,10 @@
                     StrongSelf(sself, wself);
                     if (sself) {
                         sself.progressView.progress = 0.33;
-                        [overlay postMessage:@"订单信息验证成功" duration:2.f];
+                        [overlay postMessage:@"订单信息验证成功" duration:3.f];
                     }
                 });
-                [NSThread sleepForTimeInterval:0.5f];
+                [NSThread sleepForTimeInterval:3.f];
                 CHECK_INSTANCE_EXIST(wself);
                 
                 StrongSelf(sself, wself);
@@ -463,28 +471,16 @@
                 [[TDBHTTPClient sharedClient] getQueueCount:[arguments getFinalData] finish:^(NSDictionary *result) {
                     CHECK_INSTANCE_EXIST(wself);
                     NSLog(@"checkOrderInfo %@", result);
-                    
-                    if (!(result && [[[result objectForKey:@"data"] objectForKey:@"submitStatus"] boolValue])) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            StrongSelf(sself, wself);
-                            if (sself) {
-                                sself.progressView.progress = 0.33;
-                                [overlay postErrorMessage:[[result objectForKey:@"data"] objectForKey:@"errMsg"] duration:2.f];
-                                sself.navigationItem.rightBarButtonItem = submitBtn;
-                            }
-                            
-                        });
-                        return;
-                    }
+                    // 这个GetQueueCount暂时不检查结果，因为结果返回错误，也能正确地订票
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         StrongSelf(sself, wself);
                         if (sself) {
                             sself.progressView.progress = 0.33;
-                            [overlay postMessage:@"余票确认完毕" duration:2.f];
+                            [overlay postMessage:@"余票确认完毕" duration:3.f];
                         }
                     });
-                    [NSThread sleepForTimeInterval:0.5f];
+                    [NSThread sleepForTimeInterval:2.5f];
                     CHECK_INSTANCE_EXIST(wself);
                     
                     StrongSelf(sself, wself);
@@ -521,7 +517,7 @@
                             if (sself) {
                                 sself.progressView.progress = 1;
                                 [MobClick event:@"ticket order successfully"];
-                                [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:2.f animated:YES];
+                                [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:5.f animated:YES];
                                 sself.navigationItem.rightBarButtonItem = nil;
                             }
                         });
