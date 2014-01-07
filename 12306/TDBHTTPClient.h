@@ -53,7 +53,7 @@
 
 //支付
 - (void)cancelNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(BOOL, NSArray *))success;
-- (void)continuePayNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)())success;
+- (void)continuePayNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(NSDictionary *))success;
 - (void)payOrderInit:(void (^)(NSData *))success;
 
 

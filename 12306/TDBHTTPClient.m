@@ -343,7 +343,7 @@
     }];
 }
 
-- (void)continuePayNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)())success {
+- (void)continuePayNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(NSDictionary *))success {
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
     [argument setObject:sequenceNo forKey:@"sequence_no"];
     [argument setObject:@"pay" forKey:@"pay_flag"];
@@ -352,10 +352,11 @@
     NSString *path = @"/otn/queryOrder/continuePayNoCompleteMyOrder";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
     [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (success) {
-            success();
-        }
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        success(jsonErr ? nil : dict);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        success(nil);
     }];
 }
 - (void)payOrderInit:(void (^)(NSData *))success {

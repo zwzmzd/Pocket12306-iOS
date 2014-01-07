@@ -16,8 +16,12 @@
 
 #import "Macros.h"
 #import "TDBHTTPClient.h"
+#import "Defines.h"
 
 @interface TDBEPayEntryViewController () <UIWebViewDelegate>
+
+@property (nonatomic, strong) NSMutableDictionary *attributes;
+@property (nonatomic, copy) NSString *epayurl;
 
 @end
 
@@ -37,22 +41,18 @@
     [super viewDidLoad];
     [MobClick event:@"EPayEntry"];
 	// Do any additional setup after loading the view.
-//    
+    
 //    // 进入后，用户总览全局
 //    self.webView.scalesPageToFit = YES;
-//    self.webView.delegate = self;
-//    
-//    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
-//    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-//    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
-//    
-//    [self retriveEssentialInfoUsingGCD];
-    WeakSelf(wself, self);
-    [[TDBHTTPClient sharedClient] continuePayNoCompleteMyOrder:self.orderSequenceNo success:^{
-        [[TDBHTTPClient sharedClient] payOrderInit:^(NSData *data) {
-            NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        }];
-    }];
+    self.webView.delegate = self;
+    
+    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+    
+    [self retriveEssentialInfoUsingGCD];
+    
+    
 }
 
 - (IBAction)_backPressed:(id)sender
@@ -62,50 +62,44 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (NSString *)_parseHTMLWithData:(TFHpple *)parser
-{
-    NSArray *elements = [parser searchWithXPathQuery:@"//form[@id='epayForm']"];
-    if (elements.count == 0) {
-        return nil;
-    } else {
-        return [[elements objectAtIndex:0] raw];
-    }
-}
-
-- (NSString *)_retriveBoxWrapHtml:(TFHpple *)parser
-{
-    NSArray *elements = [parser searchWithXPathQuery:@"//div[@class='box-wrap']"];
-    if (elements.count == 0) {
-        // 这个不是很重要，如果找不到设置为空字串即可
-        return @"";
-    } else {
-        return [[elements objectAtIndex:0] raw];
-    }
-}
-
-- (NSString *)_retriveOrderTableHtml:(TFHpple *)parser
-{
-    NSArray *elements = [parser searchWithXPathQuery:@"//table[@class='table_list']"];
-    if (elements.count == 0) {
-        return nil;
-    } else {
-        return [[elements objectAtIndex:0] raw];
-    }
-}
-
-- (NSString *)_parseLeaseTime:(NSString *)html
-{
-    NSString *result = nil;
-    @try {
-        NSRange start = [html rangeOfString:@"var loseTime"];
-        NSRange end = [html rangeOfString:@"var epayurl"];
-        NSRange range = NSMakeRange(start.location, end.location - start.location);
-        result = [html substringWithRange:range];
-    }
-    @catch (NSException *exception) {
-        // do nothing
-    }
-    return result;
+- (void)_parseHTML:(NSData *)html {
+    NSMutableArray *scripts = [NSMutableArray new];
+    
+    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:html];
+    NSArray *elements = [xpathParser searchWithXPathQuery:@"//script"];
+    [scripts addObject:[[[elements lastObject] firstChild] raw]];
+    
+    NSString *code = [scripts componentsJoinedByString:@"\n"];
+    code = [code stringByReplacingOccurrencesOfString:@"<![CDATA[" withString:@""];
+    code = [code stringByReplacingOccurrencesOfString:@"]]>" withString:@""];
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
+        self.attributes = [NSMutableDictionary new];
+        
+        [jsEngine stringByEvaluatingJavaScriptFromString:code];
+        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"interfaceName"] forKey:@"interfaceName"];
+        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"interfaceVersion"] forKey:@"interfaceVersion"];
+        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"tranData"] forKey:@"tranData"];
+        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"merSignMsg"] forKey:@"merSignMsg"];
+        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"appId"] forKey:@"appId"];
+        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"transType"] forKey:@"transType"];
+        self.epayurl = [jsEngine stringByEvaluatingJavaScriptFromString:@"epayurl"];
+        
+        NSMutableArray *paramaters = [NSMutableArray new];
+        NSEnumerator *enumerator = [self.attributes keyEnumerator];
+        id key;
+        while ((key = [enumerator nextObject])) {
+            [paramaters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />", key, [self.attributes objectForKey:key]]];
+        }
+        
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"epay" ofType:@"html"];
+        NSString *templateHtml = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+        NSString *webPages = [NSString stringWithFormat:templateHtml, self.totalPrice, self.epayurl, [paramaters componentsJoinedByString:@"\n"], [paramaters componentsJoinedByString:@"\n"]];
+        
+        NSURL *baseURL = [[NSURL alloc] initWithString:SYSURL];
+        [self.webView loadHTMLString:webPages baseURL:baseURL];
+    });
 }
 
 - (void)retriveEssentialInfoUsingGCD
@@ -113,46 +107,18 @@
     [SVProgressHUD show];
     
     WeakSelf(wself, self);
-    [[TDBHTTPClient sharedClient] laterEpayWithOrderSequenceNo:self.orderSequenceNo apacheToken:self.apacheToken ticketKey:self.ticketKey
-        success:^(NSData *htmlData) {
+    [[TDBHTTPClient sharedClient] continuePayNoCompleteMyOrder:self.orderSequenceNo success:^(NSDictionary *result) {
+        if (result == nil || [[[result objectForKey:@"data"] objectForKey:@"existError"] boolValue]) {
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [SVProgressHUD showErrorWithStatus:@"解析错误，请重试"];
+            });
+            return;
+        }
+        [[TDBHTTPClient sharedClient] payOrderInit:^(NSData *data) {
             CHECK_INSTANCE_EXIST(wself);
-            
-            NSString *html = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
-            
-            TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
-            NSString *leaseTimeJS = [wself _parseLeaseTime:html];
-            NSString *epayCode = [wself _parseHTMLWithData:xpathParser];
-            NSString *boxWrapper = [wself _retriveBoxWrapHtml:xpathParser];
-            NSString *orderHtml = [wself _retriveOrderTableHtml:xpathParser];
-            
-            NSString *styleSheet = @"";
-            
-            CHECK_INSTANCE_EXIST(wself);
-            
-            if (epayCode && orderHtml) { // 防止订单正好超时，导致result为空造成系统崩溃问题
-                NSRange range = NSMakeRange(0, epayCode.length - @"</form>".length);
-                epayCode = [epayCode substringWithRange:range];
-                
-                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"epay" ofType:@"html"];
-                NSString *templateHtml = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-                NSString *htmlCode = [NSString stringWithFormat:templateHtml, styleSheet, leaseTimeJS, boxWrapper, orderHtml, epayCode];
-                
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    StrongSelf(sself, wself);
-                    if (sself) {
-                        NSURL *baseURL = [NSURL URLWithString:@"http://dynamic.12306.cn/otsweb/order/myOrderAction.do"];
-                        [sself.webView loadHTMLString:htmlCode baseURL:baseURL];
-                    }
-                });
-            } else {
-#warning 订单支付时发现超时或已被取消的提示
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    [SVProgressHUD showErrorWithStatus:@"网络异常，请重新进入"];
-                    NSLog(@"网络异常，请重新进入");
-                });
-            }
-
+            [wself _parseHTML:data];
         }];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -162,8 +128,12 @@
 }
 
 #pragma mark - UIWebViewDelegate
+- (void)webViewDidStartLoad:(UIWebView *)webView {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [SVProgressHUD dismiss];
 }
 

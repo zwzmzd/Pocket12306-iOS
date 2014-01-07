@@ -35,7 +35,7 @@
 - (ORDER_PARSER_MSG)parseJSON:(NSArray *)data toList:(NSMutableArray *)tempList {
     for (NSDictionary *info in data) {
         TDBOrder *order = [[TDBOrder alloc] init];
-        order.orderSquence_no = [info objectForKey:@"sequence_no"];
+        order.orderSequence_no = [info objectForKey:@"sequence_no"];
         order.orderDate = [info objectForKey:@"order_date"];
         order.trainNo = [info objectForKey:@"train_code_page"];
         order.departStationName = [[info objectForKey:@"from_station_name_page"] firstObject];
@@ -267,7 +267,7 @@
     time_from.text = order.departTime;
     date.text = order.date;
     firstPassengerName.text = [order.names firstObject];
-    orderSequenceNo.text = order.orderSquence_no;
+    orderSequenceNo.text = order.orderSequence_no;
     
     unfinished.text = order.statusDescription;
     

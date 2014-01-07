@@ -40,7 +40,7 @@ typedef enum {
 @property (nonatomic, copy) NSString *totalPrice;
 @property (nonatomic) ORDER_STATUS status;
 
-@property (nonatomic, copy) NSString *orderSquence_no;
+@property (nonatomic, copy) NSString *orderSequence_no;
 @property (nonatomic, copy) NSString *ticketKey;
 
 @property (nonatomic, strong) NSArray *names;

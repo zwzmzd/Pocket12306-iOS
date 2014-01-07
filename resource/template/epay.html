@@ -1,13 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <link  href="/otsweb/css/style.css" rel="stylesheet"  type="text/css"/>
     <link  href="/otsweb/css/newsty.css" rel="stylesheet"  type="text/css"/>
     <link  href="/otsweb/css/contact.css" rel="stylesheet"  type="text/css"/>
     <link  href="/otsweb/css/validation.css" rel="stylesheet" type="text/css" />
-    %@
-    
+    <title>订单支付</title>
     <script type="text/javascript">
         //<![CDATA[
         
@@ -26,10 +24,9 @@
         }
         
         window.onload = function() {
-            %@
-            var leaseTime = parseInt((loseTime - beginTime) / 1000);
-            updateViewEverySecond(leaseTime);
-            
+//            var leaseTime = parseInt((loseTime - beginTime) / 1000);
+//            updateViewEverySecond(leaseTime);
+
             var epayForm = document.getElementById('epayForm');
             epayForm.onsubmit = function() {
                 var epay_entry = document.getElementById('epay-entry');
@@ -42,12 +39,24 @@
     </script>
 </head>
 <body>
+    <div>
+        <span style="font-size:15pt">待支付金额</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:18pt;font-weight:bold">%@</span>
+    </div>
     <div class="conWrap">
-        <div class="enter_w">
-            %@
-            %@
-            <div>%@<div style="text-align: right"><input id="epay-entry" type="submit" value="点此按钮进入支付页面" /></div></form></div>
+        <hr />
+        <div style="float:left">
+            <form action="%@" method="post">
+                %@
+                <input type="submit" value="电脑版支付" />
+            </form>
         </div>
+        <div style="float:right">
+            <form id="epayForm" action="https://epay.12306.cn/pay/wapPayGateway" method="post">
+                %@
+                <input id="epay-entry" type="submit" value="点击进入手机支付（推荐)" />
+            </form>
+        </div>
+        <br class="clear:both" />
     </div>
 </body>
 </html>

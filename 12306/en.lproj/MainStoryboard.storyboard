@@ -730,7 +730,7 @@
                     <navigationItem key="navigationItem" title="未完成订单" id="O44-AS-sfl"/>
                     <connections>
                         <outlet property="orderPrice" destination="HuN-Zd-S2e" id="Iic-WB-XQQ"/>
-                        <outlet property="orderSquenceNo" destination="hvw-TP-NLt" id="7HY-VQ-gtU"/>
+                        <outlet property="orderSequenceNo" destination="hvw-TP-NLt" id="NX4-fs-kg8"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wCl-Hu-sje" userLabel="First Responder" sceneMemberID="firstResponder"/>

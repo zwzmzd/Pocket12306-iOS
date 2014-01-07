@@ -41,7 +41,7 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    self.orderSquenceNo.text = self.order.orderSquence_no;
+    self.orderSequenceNo.text = self.order.orderSequence_no;
     self.orderPrice.text = self.order.totalPrice;
     
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
@@ -74,11 +74,9 @@ typedef enum {
 {
     if ([segue.identifier isEqualToString:@"EPaySegue"]) {
         TDBEPayEntryViewController *epayViewController = segue.destinationViewController;
+        epayViewController.totalPrice = self.order.totalPrice;
+        epayViewController.orderSequenceNo = self.order.orderSequence_no;
         
-        TDBOrder *order = self.order;
-        epayViewController.apacheToken = self.apacheToken;
-        epayViewController.ticketKey = order.ticketKey;
-        epayViewController.orderSequenceNo = order.orderSquence_no;
     }
 }
 
@@ -101,7 +99,7 @@ typedef enum {
         WeakSelf(wself, self);
         [[TDBHTTPClient sharedClient] queryMyOrderNoComplete:^(NSArray *_nouse) {
             CHECK_INSTANCE_EXIST(wself);
-            [[TDBHTTPClient sharedClient] cancelNoCompleteMyOrder:wself.order.orderSquence_no success:^(BOOL result, NSArray *messages) {
+            [[TDBHTTPClient sharedClient] cancelNoCompleteMyOrder:wself.order.orderSequence_no success:^(BOOL result, NSArray *messages) {
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
                     StrongSelf(sself, wself);
                     if (sself) {
@@ -125,7 +123,7 @@ typedef enum {
 }
 
 - (void)viewDidUnload {
-    [self setOrderSquenceNo:nil];
+    [self setOrderSequenceNo:nil];
     [super viewDidUnload];
 }
 @end
