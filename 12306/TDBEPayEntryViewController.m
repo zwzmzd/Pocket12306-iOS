@@ -59,6 +59,7 @@
 {
     [SVProgressHUD dismiss];
     [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
+    [self.webView stopLoading];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -125,6 +126,10 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+    NSLog(@"[dealloc] %@ %p", [self class], self);
 }
 
 #pragma mark - UIWebViewDelegate
