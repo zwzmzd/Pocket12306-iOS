@@ -128,7 +128,7 @@
         }
         
         CHECK_INSTANCE_EXIST(wself);
-        [NSThread sleepForTimeInterval:1.f];
+        [NSThread sleepForTimeInterval:0.5f];
         CHECK_INSTANCE_EXIST(wself);
         
         [[TDBHTTPClient sharedClient] queryMyOrder:^(NSArray *data) {

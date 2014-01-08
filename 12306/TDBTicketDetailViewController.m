@@ -449,10 +449,10 @@
                     StrongSelf(sself, wself);
                     if (sself) {
                         sself.progressView.progress = 0.33;
-                        [overlay postMessage:@"订单信息验证成功" duration:3.f];
+                        [overlay postMessage:@"订单信息验证成功"];
                     }
                 });
-                [NSThread sleepForTimeInterval:3.f];
+                [NSThread sleepForTimeInterval:1.f];
                 CHECK_INSTANCE_EXIST(wself);
                 
                 StrongSelf(sself, wself);
@@ -477,10 +477,10 @@
                         StrongSelf(sself, wself);
                         if (sself) {
                             sself.progressView.progress = 0.33;
-                            [overlay postMessage:@"余票确认完毕" duration:3.f];
+                            [overlay postMessage:@"余票确认完毕"];
                         }
                     });
-                    [NSThread sleepForTimeInterval:2.5f];
+                    [NSThread sleepForTimeInterval:1.f];
                     CHECK_INSTANCE_EXIST(wself);
                     
                     StrongSelf(sself, wself);
