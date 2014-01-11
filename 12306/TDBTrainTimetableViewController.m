@@ -76,27 +76,32 @@
                                                         departDate:departData
                                                            success:^(NSArray *dataModel) {
                                                                CHECK_INSTANCE_EXIST(wself);
-                                                               
-                                                               NSUInteger i;
-                                                               for (i = 0; i < dataModel.count; i++) {
-                                                                   if ([[[dataModel objectAtIndex:i] objectForKey:@"isEnabled"] boolValue]) {
-                                                                       break;
+                                                               if (dataModel) {
+                                                                   NSUInteger i;
+                                                                   for (i = 0; i < dataModel.count; i++) {
+                                                                       if ([[[dataModel objectAtIndex:i] objectForKey:@"isEnabled"] boolValue]) {
+                                                                           break;
+                                                                       }
                                                                    }
+                                                                   
+                                                                   dispatch_async(dispatch_get_main_queue(), ^(void) {
+                                                                       StrongSelf(sself, wself);
+                                                                       if (sself) {
+                                                                           sself.dataModel = dataModel;
+                                                                           [sself.tableView reloadData];
+                                                                           [SVProgressHUD dismiss];
+                                                                           
+                                                                           NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                                                                           [sself.tableView scrollToRowAtIndexPath:indexPath
+                                                                                                  atScrollPosition:UITableViewScrollPositionTop
+                                                                                                          animated:NO];
+                                                                       }
+                                                                   });
+                                                               } else {
+                                                                   dispatch_async(dispatch_get_main_queue(), ^(void) {
+                                                                       [SVProgressHUD showErrorWithStatus:@"信息获取失败，请重试"];
+                                                                   });
                                                                }
-                                                               
-                                                               dispatch_async(dispatch_get_main_queue(), ^(void) {
-                                                                   StrongSelf(sself, wself);
-                                                                   if (sself) {
-                                                                       sself.dataModel = dataModel;
-                                                                       [sself.tableView reloadData];
-                                                                       [SVProgressHUD dismiss];
-                                                                       
-                                                                       NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
-                                                                       [sself.tableView scrollToRowAtIndexPath:indexPath
-                                                                                             atScrollPosition:UITableViewScrollPositionTop
-                                                                                                     animated:NO];
-                                                                   }
-                                                               });
 
                                                            }];
         

@@ -140,12 +140,17 @@
         if (success) {
             NSError *jsonErr = nil;
             NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
-            if (result) {
+            if (result && [[result objectForKey:@"status"] boolValue]) {
                 success([[result objectForKey:@"data"] objectForKey:@"data"]);
+                return;
             }
+            
+            success(nil);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
@@ -287,7 +292,9 @@
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        success(nil);
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
@@ -309,7 +316,9 @@
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        success(nil);
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
@@ -356,7 +365,9 @@
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         success(jsonErr ? nil : dict);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        success(nil);
+        if (success) {
+            success(nil);
+        }
     }];
 }
 - (void)payOrderInit:(void (^)(NSData *))success {
