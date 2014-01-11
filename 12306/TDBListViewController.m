@@ -16,6 +16,7 @@
 #import "TDBLeftTicketForList.h"
 #import "TDBTrainTimetableViewController.h"
 #import "UIButton+TDBAddition.h"
+#import "MobClick.h"
 
 #import "TDBHTTPClient.h"
 #import "Macros.h"
@@ -49,6 +50,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"ListViewControllerLoad"];
+    
+    // 为了App Store，由于外国人可能不会输入中文，所以如果发现值为空
+    // 那么就加上一个默认的效果，并且需要把stationNameExactlyMatch关闭
+    if (self.departStationTelecode == nil || self.arriveStationTelecode == nil) {
+        self.departStationTelecode = @"WXH";
+        self.arriveStationTelecode = @"NJH";
+        self.stationNameExactlyMatch = NO;
+    }
     
     self.title = [NSString stringWithFormat:@"%@车票", self.dateInString];
     [self retriveTrainInfoListUsingGCD];
@@ -75,87 +85,62 @@
 {
     [SVProgressHUD show];
     WeakSelfDefine(wself);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        [[TDBHTTPClient sharedClient] qt:wself.dateInString from:wself.departStationTelecode to:wself.arriveStationTelecode success:^{
-            CHECK_INSTANCE_EXIST(wself);
+    
+    void (^progress)(NSData *);
+    progress = ^(NSData *data) {
+        CHECK_INSTANCE_EXIST(wself);
+        
+        NSMutableArray *storage;
+        // 获取正常返回0
+        // 不存在符合条件的列车返回空html页面
+        NSError *jsonErr = nil;
+        NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonErr];
+        if (result == nil || ![[result objectForKey:@"status"] boolValue]) {
+            storage = nil;
+        } else {
+            storage = [result objectForKey:@"data"];
+        }
+        
+        StrongSelf(sself, wself);
+        if (sself) {
+            NSArray *array = storage;
+            BOOL dataIsError = (array == nil);
             
-            void (^progress)(NSData *);
-            progress = ^(NSData *data) {
-                CHECK_INSTANCE_EXIST(wself);
+            NSString *userInputDepartStationName = [GlobalDataStorage userInputDepartStation];
+            NSString *userInputArriveStationName = [GlobalDataStorage userInputArriveStation];
+            
+            TDBTrainInfoController *controller = [[TDBTrainInfoController alloc] init];
+            NSUInteger count = [array count];
+            for (NSUInteger i = 0; i < count; i++) {
+                TDBTrainInfo *tt = [[TDBTrainInfo alloc] initWithOriginal:[array objectAtIndex:i]];
                 
-                NSData *result = data;
-                NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
-                NSArray *split = [html componentsSeparatedByString:@","];
+                if (sself.stationNameExactlyMatch && (![userInputArriveStationName isEqualToString:[tt getArriveStationName]]
+                                                      || ![userInputDepartStationName isEqualToString:[tt getDapartStationName]])) {
+                    continue;
+                }
                 
-                NSMutableArray *storage;
-                // 获取正常返回0
-                // 不存在符合条件的列车返回空html页面
-                if (html.length > 0 && ![[split objectAtIndex:0] isEqualToString:@"0"]) {
-                    storage = nil;
+                [controller addTrainInfo:tt];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                sself.dataController = controller;
+                [sself.tableView reloadData];
+                
+                if ( dataIsError) { // 未正确获取数据
+                    [SVProgressHUD showErrorWithStatus:@"获取车次信息失败，请重试"];
+                } else if ([sself.dataController count] == 0) { // 获取的数据长度为0
+                    [SVProgressHUD showErrorWithStatus:@"没有符合条件的列车了"];
                 } else {
-                    storage = [[NSMutableArray alloc] init];
-                    
-                    NSUInteger count = [split count];
-                    NSUInteger i = 1;
-                    for (; i < count; i += 16) {
-                        NSString *string = [DataSerializeUtility parseOrderKey:[split objectAtIndex:(i + 15)]];
-                        
-                        
-                        if (string != nil) {
-                            NSMutableArray *leftTicket = [[NSMutableArray alloc] init];
-                            [leftTicket addObject:string];
-                            
-                            for (NSUInteger j = 0; j < 11; j++) {
-                                [leftTicket addObject:[DataSerializeUtility parseLeftTicket:[split objectAtIndex:(i + 4 + j)]]];
-                            }
-                            
-                            [storage addObject:[[NSArray alloc] initWithArray:leftTicket]];
-                        }
-                    }
+                    [SVProgressHUD dismiss];
                 }
-                
-                StrongSelf(sself, wself);
-                if (sself) {
-                    NSArray *array = storage;
-                    BOOL dataIsError = (array == nil);
-                    
-                    NSString *userInputDepartStationName = [GlobalDataStorage userInputDepartStation];
-                    NSString *userInputArriveStationName = [GlobalDataStorage userInputArriveStation];
-                    
-                    TDBTrainInfoController *controller = [[TDBTrainInfoController alloc] init];
-                    NSUInteger count = [array count];
-                    for (NSUInteger i = 0; i < count; i++) {
-                        TDBTrainInfo *train = [[TDBTrainInfo alloc] initWithArray:[array objectAtIndex:i]];
-                        
-                        if (sself.stationNameExactlyMatch && (![userInputArriveStationName isEqualToString:[train getArriveStationName]]
-                                                              || ![userInputDepartStationName isEqualToString:[train getDapartStationName]])) {
-                            continue;
-                        }
-                        
-                        [controller addTrainInfo:train];
-                    }
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^(void) {
-                        sself.dataController = controller;
-                        [sself.tableView reloadData];
-                        
-                        if ( dataIsError) { // 未正确获取数据
-                            [SVProgressHUD showErrorWithStatus:@"获取车次信息失败，请重试"];
-                        } else if ([sself.dataController count] == 0) { // 获取的数据长度为0
-                            [SVProgressHUD showErrorWithStatus:@"没有符合条件的列车了"];
-                        } else {
-                            [SVProgressHUD dismiss];
-                        }
-                    });
-                }
-            };
-            
-            [[TDBHTTPClient sharedClient] queryLeftTickWithDate:wself.dateInString
-                                                           from:wself.departStationTelecode
-                                                             to:wself.arriveStationTelecode
-                                                        success:progress];
-        }];
-    });
+            });
+        }
+    };
+    
+    [[TDBHTTPClient sharedClient] queryLeftTickWithDate:wself.dateInString
+                                                   from:wself.departStationTelecode
+                                                     to:wself.arriveStationTelecode
+                                                success:progress];
 
 }
 
@@ -197,10 +182,7 @@
     
     time_duration.text = [train getDuration];
     
-    
-    NSRange range = NSMakeRange(1, train.original.count - 1);
-    NSArray *a = [train.original subarrayWithRange:range];
-    leftTicketView.dataModel = a;
+    leftTicketView.dataModel = [train getLeftTicketStatistics];
     
     return cell;
 }

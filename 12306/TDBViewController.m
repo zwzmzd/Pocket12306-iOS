@@ -14,6 +14,7 @@
 #import "TDBKeybordNotificationManager.h"
 #import "TDBListViewController.h"
 #import "TDBHTTPClient.h"
+#import "MobClick.h"
 
 #define USER_LAST_INPUT_DEPART_STATION_NAME (@"__userLastInputDepartStationName")
 #define USER_LAST_INPUT_ARRIVE_STATION_NAME (@"__userLastInputArriveStationName")
@@ -31,6 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"MainViewControllerLoad"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -40,7 +42,7 @@
     static UIBarButtonItem *buyTicket = nil;
     if ([GlobalDataStorage tdbss]) {
         self.navigationItem.leftBarButtonItem.title = @"更换账户";
-        self.title = @"车票查询";
+        self.title = @"购票";
         
         if (buyTicket)
             self.navigationItem.rightBarButtonItem = buyTicket;
@@ -149,8 +151,6 @@
         lv.orderDate = self.selectorView.userSelectedDate;
         // 设置精确匹配站名
         lv.stationNameExactlyMatch = stationNameExactlyMatch;
-        
-        NSLog(@"%@ %@", lv.departStationTelecode, lv.arriveStationTelecode);
     }
 }
 

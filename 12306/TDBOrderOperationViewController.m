@@ -13,6 +13,9 @@
 #import "TDBEPayEntryViewController.h"
 #import "TDBOrderListViewController.h"
 #import "UIButton+TDBAddition.h"
+#import "TDBHTTPClient.h"
+#import "MobClick.h"
+#import "Macros.h"
 
 typedef enum {
     TAGLIST_BEFORE_CANCLE = 1,
@@ -38,7 +41,8 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    self.orderSquenceNo.text = self.order.orderSquence_no;
+    self.orderSequenceNo.text = self.order.orderSequence_no;
+    self.orderPrice.text = self.order.totalPrice;
     
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
@@ -47,6 +51,7 @@ typedef enum {
 
 - (IBAction)_backPressed:(id)sender
 {
+    [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -69,11 +74,9 @@ typedef enum {
 {
     if ([segue.identifier isEqualToString:@"EPaySegue"]) {
         TDBEPayEntryViewController *epayViewController = segue.destinationViewController;
+        epayViewController.totalPrice = self.order.totalPrice;
+        epayViewController.orderSequenceNo = self.order.orderSequence_no;
         
-        TDBOrder *order = self.order;
-        epayViewController.apacheToken = self.apacheToken;
-        epayViewController.ticketKey = order.ticketKey;
-        epayViewController.orderSequenceNo = order.orderSquence_no;
     }
 }
 
@@ -93,23 +96,26 @@ typedef enum {
 {
     if (alertView.tag == TAGLIST_BEFORE_CANCLE && buttonIndex != alertView.cancelButtonIndex) {
         // 用户试图取消订单
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSData *result = [[GlobalDataStorage tdbss] cancleMyOrderNotComplete:self.order.orderSquence_no apacheToken:self.apacheToken];
-            NSString *html = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
-            NSRange range = [html rangeOfString:@"取消订单成功"];
-            BOOL success = (range.length > 0);
-            
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                UIAlertView *alert;
-                if (success) {
-                    alert = [[UIAlertView alloc] initWithTitle:@"取消成功" message:@"您已成功取消订单" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                } else {
-                    alert = [[UIAlertView alloc] initWithTitle:@"取消失败" message:@"无法取消订单" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                }
-                alert.tag = TAGLIST_AFTER_CANCLE;
-                [alert show];
-            });
-        });
+        WeakSelf(wself, self);
+        [[TDBHTTPClient sharedClient] queryMyOrderNoComplete:^(NSArray *_nouse) {
+            CHECK_INSTANCE_EXIST(wself);
+            [[TDBHTTPClient sharedClient] cancelNoCompleteMyOrder:wself.order.orderSequence_no success:^(BOOL result, NSArray *messages) {
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    StrongSelf(sself, wself);
+                    if (sself) {
+                        UIAlertView *alert;
+                        if (result) {
+                            [MobClick event:@"CancleUnfinishedOrderSuccess"];
+                            alert = [[UIAlertView alloc] initWithTitle:@"取消成功" message:@"您已成功取消订单" delegate:sself cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                        } else {
+                            alert = [[UIAlertView alloc] initWithTitle:@"取消失败" message:[messages firstObject] delegate:sself cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                        }
+                        alert.tag = TAGLIST_AFTER_CANCLE;
+                        [alert show];
+                    }
+                });
+            }];
+        }];
     } else if (alertView.tag == TAGLIST_AFTER_CANCLE) {
         // 用户订单取消后的反馈
         [self popAndRefresh];
@@ -117,7 +123,7 @@ typedef enum {
 }
 
 - (void)viewDidUnload {
-    [self setOrderSquenceNo:nil];
+    [self setOrderSequenceNo:nil];
     [super viewDidUnload];
 }
 @end

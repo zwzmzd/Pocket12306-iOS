@@ -12,8 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
-@property (nonatomic) NSString *apacheToken;
-@property (nonatomic) NSString *orderSequenceNo;
-@property (nonatomic) NSString *ticketKey;
+@property (nonatomic) NSString *totalPrice;
+@property (nonatomic, copy) NSString *orderSequenceNo;
 
 @end

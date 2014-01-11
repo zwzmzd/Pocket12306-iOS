@@ -10,10 +10,10 @@
 
 @interface TDBTrainInfo : NSObject
 
-@property (nonatomic, strong) NSArray *keySplitted;
-@property (nonatomic, strong) NSArray *original;
+@property (nonatomic, strong) NSDictionary *original;
+@property (nonatomic, copy) NSString *mmStr;
 
-- (id)initWithArray: (NSArray *)original;
+- (id)initWithOriginal: (NSDictionary *)raw;
 
 - (NSString *)getTrainNo;
 
@@ -39,8 +39,8 @@
 
 - (NSString *)getYPInfoDetail;
 
-- (NSString *)getMMStr;
-
 - (NSString *)getLocationCode;
+
+- (NSArray *)getLeftTicketStatistics;
 
 @end

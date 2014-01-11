@@ -14,12 +14,11 @@
 
 + (TDBHTTPClient *)sharedClient;
 
+- (void)cancelAllHTTPRequest;
+
 // 登录模块
 - (void)getVerifyImage:(void (^)(NSData *))success;
-- (void)getLoginToken:(void (^)(NSData *))success;
-- (void)loginAysnSuggest:(void (^)(NSDictionary *))success;
-- (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode loginRand:(NSString *)loginRand tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue success:(void (^)())success;
-
+- (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode success:(void (^)(NSDictionary *))success;
 // 查询可用车票
 // 预操作
 - (void)qt:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)())success;
@@ -34,15 +33,33 @@
 
 
 
-// 提交购票信息
-- (void)getSubmutToken:(void (^)(NSData *))success;
-- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date tokenKey:(NSString *)tokenKey tokenValue:(NSString *)tokenValue success:(void (^)(NSData *))success;
+// 查询车票
+- (void)checkUser:(void (^)(BOOL))finish;
+- (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(NSDictionary *))finish;
+- (void)initDc:(void (^)(NSData *))success;
 - (void)getRandpImage:(void (^)(NSData *))success;
 
+// 提交购票
+- (void)checkOrderInfo:(NSString *)postBody finish:(void (^)(NSDictionary *))finish;
+- (void)getQueueCount:(NSString *)postBody finish:(void (^)(NSDictionary *))finish;
+- (void)confirmSingleForQueue:(NSString *)postBody finish:(void (^)(NSDictionary *))finish;
+
+
+
+// 订单查看
+- (void)queryMyOrder:(void (^)(NSArray *))success;
+- (void)queryMyOrderNoComplete:(void (^)(NSArray *))success;
+- (void)cancelQueryMyOrderHTTPRequest;
+
 //支付
+- (void)cancelNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(BOOL, NSArray *))success;
+- (void)continuePayNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(NSDictionary *))success;
+- (void)payOrderInit:(void (^)(NSData *))success;
+
 
 // 根据订单号，apacheToken，还有ticketToken获取一个未完成订单的支付页面
 - (void)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo apacheToken:(NSString *)apacheToken ticketKey:(NSString *)ticketKey success:(void (^)(NSData *))success;
 
 - (void)getPassengersWithIndex:(NSUInteger)index size:(NSUInteger)size success:(void (^)(NSDictionary *))success;
+- (void)cancelGetPassengers;
 @end

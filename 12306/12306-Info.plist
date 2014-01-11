@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>${PRODUCT_NAME}</string>
+	<string>手机购票</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIcons</key>
@@ -14,7 +14,8 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>dropbox-1.png</string>
+				<string>Icon-60</string>
+				<string>Icon</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
@@ -29,11 +30,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.5</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>140111</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchImages</key>
@@ -87,8 +88,10 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarHidden</key>
+	<false/>
 	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleBlackOpaque</string>
+	<string>UIStatusBarStyleDefault</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

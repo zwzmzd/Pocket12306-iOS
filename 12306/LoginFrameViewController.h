@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@class OLImageView;
+
 @interface LoginFrameViewController : UITableViewController <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *username;
 @property (weak, nonatomic) IBOutlet UITextField *password;
 @property (weak, nonatomic) IBOutlet UITextField *verifyCode;
-@property (weak, nonatomic) IBOutlet UIImageView *verifyImage;
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *retriveVerifyCodeButton;
+@property (weak, nonatomic) IBOutlet OLImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *retriveVerifyActivityIndicator;
 @property (weak, nonatomic) IBOutlet UISwitch *rememberProfile;
 
 - (IBAction)iWantCancle:(id)sender;

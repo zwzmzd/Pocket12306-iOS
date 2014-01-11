@@ -54,7 +54,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -66,15 +66,19 @@
     switch (indexPath.row) {
             
         case 0:
-            cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %@", pio.seatType, pio.vehicle, pio.seatNo];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@ %@车 %@", pio.seatType, pio.vehicle, pio.seatNo];
             break;
             
         case 1:
-            cell.textLabel.text = pio.ticketType;
+            cell.textLabel.text = [NSString stringWithFormat:@"%@ %@元", pio.ticketType, pio.price];
             break;
             
         case 2:
             cell.textLabel.text = [NSString stringWithFormat:@"使用%@购票", pio.idcardType];
+            break;
+            
+        case 3:
+            cell.textLabel.text = [NSString stringWithFormat:@"%@", pio.idcardNo];
             break;
     }
     
@@ -83,8 +87,8 @@
 
 -  (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSString *name = [[self.passengerList objectAtIndex:section] name];
-    return name;
+    PassengerInOrder *pio = [self.passengerList objectAtIndex:section];
+    return [NSString stringWithFormat:@"%@(%@)", pio.name, pio.status];
 }
 
 @end

@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
-        <!--View Controller - 12306助手-->
+        <!--View Controller - 12306手机购票-->
         <scene sceneID="5">
             <objects>
                 <viewController id="2" customClass="TDBViewController" sceneMemberID="viewController">
@@ -14,13 +14,13 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="12306助手" id="Mwn-IN-g87">
+                    <navigationItem key="navigationItem" title="12306手机购票" id="Mwn-IN-g87">
                         <barButtonItem key="leftBarButtonItem" title="登录" id="gjw-IZ-5Si">
                             <connections>
                                 <segue destination="bmC-DP-Jkp" kind="modal" id="xTU-y8-ox4"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="购票" id="1zD-RG-Kyp">
+                        <barButtonItem key="rightBarButtonItem" title="查询车票" id="1zD-RG-Kyp">
                             <connections>
                                 <segue destination="kgZ-2o-xLq" kind="push" identifier="PushToListView" id="3cC-Fa-c5x"/>
                             </connections>
@@ -367,7 +367,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="v4R-Qs-bQ5">
-                                                    <rect key="frame" x="0.0" y="6" width="320" height="29"/>
+                                                    <rect key="frame" x="0.0" y="5" width="320" height="29"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <segments>
                                                         <segment title="First"/>
@@ -385,7 +385,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="gAc-ex-LbJ">
-                                                    <rect key="frame" x="0.0" y="6" width="320" height="29"/>
+                                                    <rect key="frame" x="0.0" y="5" width="320" height="29"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <segments>
                                                         <segment title="First"/>
@@ -432,6 +432,11 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" id="Vcy-fJ-yRO">
+                                                    <rect key="frame" x="52" y="3" width="37" height="37"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="color" red="0.39620396320000001" green="0.49881186039999997" blue="0.65768494899999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -466,6 +471,7 @@
                         <outlet property="seatTypeSelector" destination="v4R-Qs-bQ5" id="fEd-WX-00G"/>
                         <outlet property="ticketTypeSelector" destination="gAc-ex-LbJ" id="1P9-aV-47n"/>
                         <outlet property="verifyCode" destination="5T2-5a-nCf" id="bw7-md-DmR"/>
+                        <outlet property="verifyCodeActivityIndicator" destination="Vcy-fJ-yRO" id="05Y-cQ-TkS"/>
                         <segue destination="mrA-xv-3bf" kind="push" identifier="SelectPassenger" id="vbY-8I-143"/>
                         <segue destination="1HA-xc-aif" kind="push" identifier="SeatDetail" id="nhw-Ue-ezh"/>
                     </connections>
@@ -611,11 +617,25 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="请尽快完成支付" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jkK-oI-YNX">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="43"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="总计" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jkK-oI-YNX">
+                                                    <rect key="frame" x="20" y="0.0" width="75" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="元" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8Pa-Da-aMS">
+                                                    <rect key="frame" x="165" y="0.0" width="50" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="14.5" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HuN-Zd-S2e">
+                                                    <rect key="frame" x="96" y="0.0" width="61" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.2028965462" green="0.34193215319999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                             </subviews>
@@ -709,7 +729,8 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="未完成订单" id="O44-AS-sfl"/>
                     <connections>
-                        <outlet property="orderSquenceNo" destination="hvw-TP-NLt" id="7HY-VQ-gtU"/>
+                        <outlet property="orderPrice" destination="HuN-Zd-S2e" id="Iic-WB-XQQ"/>
+                        <outlet property="orderSequenceNo" destination="hvw-TP-NLt" id="NX4-fs-kg8"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wCl-Hu-sje" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -824,6 +845,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <view contentMode="scaleToFill" id="xYY-ni-pFa" customClass="OLImageView">
+                                                    <rect key="frame" x="18" y="4" width="99" height="34"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                                </view>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" placeholder="验证码" minimumFontSize="17" clearButtonMode="whileEditing" id="bE4-p0-2Mj">
                                                     <rect key="frame" x="125" y="8" width="155" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -832,10 +858,22 @@
                                                         <outlet property="delegate" destination="M5t-TF-cDA" id="eDf-zd-nhN"/>
                                                     </connections>
                                                 </textField>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="999" id="B8P-OF-8hr">
-                                                    <rect key="frame" x="20" y="5" width="88" height="33"/>
-                                                    <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" id="im2-mX-j3r">
+                                                    <rect key="frame" x="20" y="4" width="97" height="35"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="iWantToRetriveVerifyCode:" destination="M5t-TF-cDA" eventType="touchUpInside" id="KxA-ax-RYb"/>
+                                                    </connections>
+                                                </button>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" id="RCd-CA-83p">
+                                                    <rect key="frame" x="50" y="3" width="37" height="37"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="color" red="0.39620396320000001" green="0.49881186039999997" blue="0.65768494899999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -865,61 +903,6 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection id="b3e-2q-NIo">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="IGS-hY-qVC">
-                                        <rect key="frame" x="0.0" y="295" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IGS-hY-qVC" id="9RG-5V-qZD">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" id="wFk-yx-8dc">
-                                                    <rect key="frame" x="0.0" y="-1" width="320" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <state key="normal" title="重新获取验证码">
-                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <state key="highlighted">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="iWantToRetriveVerifyCode:" destination="M5t-TF-cDA" eventType="touchUpInside" id="tXk-or-krj"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ZgJ-yU-k5d">
-                                        <rect key="frame" x="0.0" y="339" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZgJ-yU-k5d" id="gId-ga-6x3">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" id="lrt-ml-4FM">
-                                                    <rect key="frame" x="0.0" y="1" width="320" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <state key="normal" title="重置网络">
-                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <state key="highlighted">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="iWantResetSession:" destination="M5t-TF-cDA" eventType="touchUpInside" id="x6L-gI-es6"/>
-                                                        <action selector="iWantToRetriveVerifyCode:" destination="M5t-TF-cDA" eventType="touchUpInside" id="tcX-vh-pL6"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="M5t-TF-cDA" id="GIU-Qn-Mcs"/>
@@ -940,12 +923,13 @@
                     </navigationItem>
                     <connections>
                         <outlet property="doneButton" destination="MRp-ix-H77" id="QQu-aO-x5X"/>
+                        <outlet property="imageView" destination="xYY-ni-pFa" id="jnH-fJ-sj6"/>
                         <outlet property="password" destination="RWh-7U-44h" id="DGY-PG-alC"/>
                         <outlet property="rememberProfile" destination="pMN-Gm-bYg" id="RE1-qZ-Muo"/>
-                        <outlet property="retriveVerifyCodeButton" destination="wFk-yx-8dc" id="iOJ-1w-Tht"/>
+                        <outlet property="retriveVerifyActivityIndicator" destination="RCd-CA-83p" id="7F3-5v-TQ7"/>
+                        <outlet property="retriveVerifyCodeButton" destination="im2-mX-j3r" id="QCG-t4-js2"/>
                         <outlet property="username" destination="4lR-hM-5Bk" id="b5Y-gc-g7X"/>
                         <outlet property="verifyCode" destination="bE4-p0-2Mj" id="MxB-G5-jky"/>
-                        <outlet property="verifyImage" destination="B8P-OF-8hr" id="xnG-30-aFe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U17-fN-0fc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1024,6 +1008,32 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ORP-7S-i5P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1629" y="1038"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="VtP-bq-cep">
+            <objects>
+                <viewController id="9Jn-b6-HDF" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vIT-xL-wll">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hnr-qE-xrK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Di8-m6-dJq">
+            <objects>
+                <viewController id="8MY-pN-VD9" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8py-XD-WwF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cFo-zn-QgI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

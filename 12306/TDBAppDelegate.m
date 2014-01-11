@@ -8,6 +8,7 @@
 
 #import "TDBAppDelegate.h"
 #import "TDBKeybordNotificationManager.h"
+#import "MobClick.h"
 
 @implementation TDBAppDelegate
 
@@ -26,6 +27,12 @@
     [[TDBKeybordNotificationManager getSharedManager] registerSelfToNotificationCenter];
     
     [self _customGlobalUserInterface];
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+    }
+    
+    [MobClick startWithAppkey:@"526f924a56240b9043005378"];
+    
     return YES;
 }
 

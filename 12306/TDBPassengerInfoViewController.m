@@ -12,6 +12,7 @@
 #import "FMDatabase.h"
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
+#import "MobClick.h"
 
 #import "TDBHTTPClient.h"
 #import "Macros.h"
@@ -49,6 +50,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick event:@"PassengerInfo"];
      
     [self getInformationFromDatabaseUsingGCD];
     
@@ -60,7 +62,7 @@
 - (IBAction)_backPressed:(id)sender
 {
     [SVProgressHUD dismiss];
-    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
+    [[TDBHTTPClient sharedClient] cancelGetPassengers];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -112,7 +114,7 @@
             [db open];
             [db executeUpdate:@"drop table " SQL_TABLE_NAME];
             [db executeUpdate:@"create table " SQL_TABLE_NAME @" (name text, mobile_no text, passenger_id_no text, first_letter text)"];
-            NSArray *rows = [dict objectForKey:@"rows"];
+            NSArray *rows = [dict objectForKey:@"normal_passengers"];
             for (NSDictionary *row in rows) {
                 BOOL result = [db executeUpdate:@"insert into " SQL_TABLE_NAME " (name, mobile_no, passenger_id_no, first_letter) values (?, ?, ?, ?)", [row objectForKey:@"passenger_name"], [row objectForKey:@"mobile_no"], [row objectForKey:@"passenger_id_no"], [row objectForKey:@"first_letter"]];
                 if (!result) {
@@ -122,6 +124,7 @@
             [db close];
             
             dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [MobClick event:@"PassengerInfoRefreshed"];
                 [sself getInformationFromDatabaseUsingGCD];
             });
         }
