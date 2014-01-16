@@ -18,6 +18,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // 设置uiwebview的User-Agent
+    NSDictionary *dictionary = [NSDictionary
+                                dictionaryWithObjectsAndKeys:
+                                @"Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0_2 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A400 Safari/6531.22.7",
+                                @"UserAgent", nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+    
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024
                                                          diskCapacity:4 * 1024 * 1024
                                                              diskPath:@"AppCacheDir2013"];

@@ -98,7 +98,7 @@
         NSString *templateHtml = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
         NSString *webPages = [NSString stringWithFormat:templateHtml, self.totalPrice, self.epayurl, [paramaters componentsJoinedByString:@"\n"], [paramaters componentsJoinedByString:@"\n"]];
         
-        NSURL *baseURL = [[NSURL alloc] initWithString:SYSURL];
+        NSURL *baseURL = [[NSURL alloc] initWithString:@"https://epay.12306.cn"];
         [self.webView loadHTMLString:webPages baseURL:baseURL];
     });
 }
@@ -140,6 +140,16 @@
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [SVProgressHUD dismiss];
+//    NSCachedURLResponse *resp = [[NSURLCache sharedURLCache] cachedResponseForRequest:webView.request];
+//    NSLog(@"%@", resp.response);
+//    NSLog(@"%@",[self.webView stringByEvaluatingJavaScriptFromString:
+//                 @"document.body.innerHTML"]);
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+//    NSLog(@"%@ %@", request, [request allHTTPHeaderFields]);
+//    NSLog(@"%@", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
+    return YES;
 }
 
 @end
