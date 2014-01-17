@@ -89,6 +89,7 @@
 		FA9A51451812574500043327 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9A513C1812574500043327 /* UIImageView+AFNetworking.m */; };
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FAC510A517B87D8100896AB3 /* WKVerticalScrollBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FACDCF881888411600C4FE7C /* TDBDateShower.m in Sources */ = {isa = PBXBuildFile; fileRef = FACDCF871888411600C4FE7C /* TDBDateShower.m */; };
 		FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */; };
 		FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */; };
 		FAE1272117B60D2E00BAD9C4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE1272017B60D2E00BAD9C4 /* Security.framework */; };
@@ -246,6 +247,8 @@
 		FAB56A23179C27D8006A05BF /* TDBStationName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBStationName.m; sourceTree = "<group>"; };
 		FAC510A317B87D8100896AB3 /* WKVerticalScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKVerticalScrollBar.h; path = vendor/WKVerticalScrollBar/WKVerticalScrollBar/WKVerticalScrollBar.h; sourceTree = SOURCE_ROOT; };
 		FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKVerticalScrollBar.m; path = vendor/WKVerticalScrollBar/WKVerticalScrollBar/WKVerticalScrollBar.m; sourceTree = SOURCE_ROOT; };
+		FACDCF861888411600C4FE7C /* TDBDateShower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDateShower.h; sourceTree = "<group>"; };
+		FACDCF871888411600C4FE7C /* TDBDateShower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBDateShower.m; sourceTree = "<group>"; };
 		FAD00168187BA2B9003BBCB7 /* Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = "<group>"; };
 		FAE1271A17B60CBE00BAD9C4 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendor/SSKeychain/SSKeychain/SSKeychain.h; sourceTree = SOURCE_ROOT; };
 		FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendor/SSKeychain/SSKeychain/SSKeychain.m; sourceTree = SOURCE_ROOT; };
@@ -725,6 +728,8 @@
 				FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */,
 				FAF902A817C6848B0080A5CC /* TDBDatePickerView.h */,
 				FAF902A917C6848B0080A5CC /* TDBDatePickerView.m */,
+				FACDCF861888411600C4FE7C /* TDBDateShower.h */,
+				FACDCF871888411600C4FE7C /* TDBDateShower.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -910,6 +915,7 @@
 				FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */,
 				FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */,
 				FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */,
+				FACDCF881888411600C4FE7C /* TDBDateShower.m in Sources */,
 				FA9A513E1812574500043327 /* AFHTTPRequestOperation.m in Sources */,
 				FA26F40917B4C4B500DAB404 /* MBProgressHUD.m in Sources */,
 				FA26F41017B4D0F000DAB404 /* SVProgressHUD.m in Sources */,
