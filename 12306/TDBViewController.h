@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UISwitch *stationNameExactlyMatch;
 @property (weak, nonatomic) IBOutlet UITableViewCell *dateSelectContainer;
 @property (weak, nonatomic) IBOutlet TDBDateShower *dateShower;
+- (IBAction)doQuery:(id)sender;
 
 @end

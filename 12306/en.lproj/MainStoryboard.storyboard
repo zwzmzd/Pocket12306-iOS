@@ -40,7 +40,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入起点站" minimumFontSize="17" id="JV7-HV-gaC">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入起点站" minimumFontSize="17" clearButtonMode="always" id="JV7-HV-gaC">
                                                     <rect key="frame" x="20" y="7" width="280" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -56,7 +56,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入终点站" minimumFontSize="17" id="aZ0-xO-uZ6">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入终点站" minimumFontSize="17" clearButtonMode="always" id="aZ0-xO-uZ6">
                                                     <rect key="frame" x="20" y="7" width="280" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -103,7 +103,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="查询车票" id="xUT-kL-8dS">
                             <connections>
-                                <segue destination="kgZ-2o-xLq" kind="push" identifier="PushToListView" id="Mra-9k-uOh"/>
+                                <action selector="doQuery:" destination="aXX-b5-IBE" id="I5J-gh-GZY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -113,6 +113,7 @@
                         <outlet property="dateShower" destination="xeL-Lu-VLV" id="c4Q-2a-8Fs"/>
                         <outlet property="departStationField" destination="JV7-HV-gaC" id="KgS-Pv-ghO"/>
                         <outlet property="stationNameExactlyMatch" destination="Ir4-4g-vRl" id="Ecr-83-OuV"/>
+                        <segue destination="kgZ-2o-xLq" kind="push" identifier="PushToListView" id="9Xd-HK-gZm"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hdh-95-p1I" userLabel="First Responder" sceneMemberID="firstResponder"/>

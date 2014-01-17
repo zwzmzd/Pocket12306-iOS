@@ -144,7 +144,6 @@
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [textField selectAll:self];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -154,5 +153,11 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
+}
+
+- (IBAction)doQuery:(id)sender {
+    [self.departStationField resignFirstResponder];
+    [self.arriveStationField resignFirstResponder];
+    [self performSegueWithIdentifier:@"PushToListView" sender:sender];
 }
 @end
