@@ -69,14 +69,13 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         CHECK_INSTANCE_EXIST(wself);
         TDBTrainInfo *train = wself.train;
-        NSString *departData = wself.departDate;
         [[TDBHTTPClient sharedClient] queryaTrainStopTimeByTrainNo:train.getTrainCode
                                                fromStationTelecode:train.getDepartStationTeleCode
                                                  toStationTelecode:train.getArriveStationTeleCode
-                                                        departDate:departData
+                                                        departDate:train.getStartTrainDate
                                                            success:^(NSArray *dataModel) {
                                                                CHECK_INSTANCE_EXIST(wself);
-                                                               if (dataModel) {
+                                                               if (dataModel && dataModel.count > 0) {
                                                                    NSUInteger i;
                                                                    for (i = 0; i < dataModel.count; i++) {
                                                                        if ([[[dataModel objectAtIndex:i] objectForKey:@"isEnabled"] boolValue]) {
