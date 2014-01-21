@@ -7,7 +7,7 @@
 //
 
 #import "TDBStationName.h"
-#import "TDBSession.h"
+#import "TDBHTTPClient.h"
 #import "Defines.h"
 
 @interface TDBStationName()
@@ -22,26 +22,27 @@
 
 - (BOOL)fetchStationNameRawTextFromNet
 {
-    NSString *path = [NSString stringWithFormat:SYSURL @"/otn/resources/js/framework/station_name.js"];
-    NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    [[TDBHTTPClient sharedClient] getStationNameAndTelecode:^(NSData *data) {
+        NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        
+        NSRange range = [result rangeOfString:@"station_names"];
+        if (range.length == 0)
+            return;
+        
+        NSRange startPos = [result rangeOfString:@"='"];
+        NSRange endPos = [result rangeOfString:@"';"];
+        
+        NSAssert(startPos.length && endPos.length, @"TDBSessionName fetchStationNameRawTextFromNet with exception");
+        
+        self.raw = [result substringWithRange:NSMakeRange(startPos.location + startPos.length, endPos.location - startPos.location - startPos.length)];
+        
+        [self _parseRawText];
+    }];
     
-    NSRange range = [result rangeOfString:@"station_names"];
-    if (range.length == 0)
-        return NO;
-    
-    NSRange startPos = [result rangeOfString:@"='"];
-    NSRange endPos = [result rangeOfString:@"';"];
-    
-    NSAssert(startPos.length && endPos.length, @"TDBSessionName fetchStationNameRawTextFromNet with exception");
-    
-    self.raw = [result substringWithRange:NSMakeRange(startPos.location + startPos.length, endPos.location - startPos.location - startPos.length)];
-    return TRUE;
+    return YES;
 }
 
-- (BOOL)parseRawText
+- (BOOL)_parseRawText
 {
     if (self.raw == nil)
         return NO;

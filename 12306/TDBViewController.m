@@ -83,19 +83,8 @@
 
 - (void)initStationNameControllerUsingGCD
 {
-    if (self.stationNameController == nil) {
-        dispatch_queue_t orderQueue = dispatch_queue_create("12306 fetchStationName", DISPATCH_QUEUE_SERIAL);
-        dispatch_async(orderQueue, ^(void) {
-            
-            TDBStationName *dataController = [[TDBStationName alloc] init];
-            [dataController fetchStationNameRawTextFromNet];
-            [dataController parseRawText];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.stationNameController = dataController;
-            });
-        });
-    }
+    self.stationNameController = [[TDBStationName alloc] init];
+    [self.stationNameController fetchStationNameRawTextFromNet];
 }
 
 

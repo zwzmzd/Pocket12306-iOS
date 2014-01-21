@@ -9,6 +9,8 @@
 #ifndef _2306_Defines_h
 #define _2306_Defines_h
 
-#define SYSURL @"http://kyfw.12306.cn"
+#define SYSURL @"https://kyfw.12306.cn"
+
+#define USER_AGENT_STR (@"Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11B554a Safari/9537.53")
 
 #endif

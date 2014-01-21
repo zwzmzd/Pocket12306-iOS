@@ -16,6 +16,9 @@
 
 - (void)cancelAllHTTPRequest;
 
+// 车站代码表
+- (void)getStationNameAndTelecode:(void (^)(NSData *))success;
+
 // 登录模块
 - (void)getVerifyImage:(void (^)(NSData *))success;
 - (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode success:(void (^)(NSDictionary *))success;
