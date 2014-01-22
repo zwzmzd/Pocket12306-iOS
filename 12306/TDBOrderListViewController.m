@@ -105,12 +105,12 @@
         if (b) {
             order.status = ORDER_STATUS_OTHER;
             order.statusDescription = @"已出票";
-        } else if (d) {
-            order.status = ORDER_STATUS_OTHER;
-            order.statusDescription = @"已改签";
         } else if (c) {
             order.status = ORDER_STATUS_OTHER;
             order.statusDescription = @"已退票";
+        } else if (d) {
+            order.status = ORDER_STATUS_OTHER;
+            order.statusDescription = @"已改签";
         } else if (i) {
             order.status = ORDER_STATUS_UNFINISHED;
             order.statusDescription = @"待支付";
