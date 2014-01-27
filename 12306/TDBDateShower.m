@@ -81,8 +81,11 @@
     [self.parentController.departStationField resignFirstResponder];
     [self.parentController.arriveStationField resignFirstResponder];
     
-    self.pickerView.frame = self.parentController.view.bounds;
-    CGSize size = self.pickerView.frame.size;
+    CGRect frame = self.parentController.view.bounds;
+    CGSize size = frame.size;
+    frame.origin.y += self.parentController.tableView.contentInset.top;
+    self.pickerView.frame = frame;
+    
     if ( size.width > 400.f) {
         [self.pickerView setAnchor:CGPointMake(20.f, 5.f)];
     } else {
