@@ -31,7 +31,7 @@ static NSString *_userInputArriveStation = nil;
 {
     if (_seatNameAbbr == nil) {
         _seatNameAbbr = [[NSArray alloc]
-                         initWithObjects:@"商务", @"特等", @"一等", @"二等", @"高软", @"软卧", @"硬卧", @"软座", @"硬座", @"无坐", @"其它", nil];
+                         initWithObjects:@"商务", @"特等", @"一等", @"二等", @"高软", @"软卧", @"硬卧", @"软座", @"硬座", @"无座", @"其它", nil];
     }
     return _seatNameAbbr;
 }
@@ -40,7 +40,7 @@ static NSString *_userInputArriveStation = nil;
 {
     if (_seatNameFull == nil) {
         _seatNameFull = [[NSArray alloc]
-                         initWithObjects:@"商务座", @"特等坐", @"一等座", @"二等座", @"高级软", @"软卧", @"硬卧", @"软座", @"硬座", @"无坐", @"其它", nil];
+                         initWithObjects:@"商务座", @"特等坐", @"一等座", @"二等座", @"高级软", @"软卧", @"硬卧", @"软座", @"硬座", @"无座", @"其它", nil];
     }
     return _seatNameFull;
 }
