@@ -227,7 +227,12 @@
         [self.tableView.pullToRefreshView setTitle:@"正在载入" forState:SVPullToRefreshStateLoading];
         [self.tableView.pullToRefreshView setTitle:@"松开后刷新订单" forState:SVPullToRefreshStateTriggered];
         [self.tableView.pullToRefreshView setTitle:@"下拉刷新订单" forState:SVPullToRefreshStateStopped];
-        [self.tableView triggerPullToRefresh];
+        
+        if (self.delayBeforeRefresh) {
+            [self forceRefreshOrderList];
+        } else {
+            [self.tableView triggerPullToRefresh];
+        }
     }
 }
 

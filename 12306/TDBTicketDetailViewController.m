@@ -14,6 +14,7 @@
 #import "MBProgressHUD.h"
 #import "TFHpple.h"
 #import "TDBSeatDetailViewController.h"
+#import "TDBOrderListViewController.h"
 #import "MTStatusBarOverlay.h"
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
@@ -356,6 +357,11 @@
     } else if ([segue.identifier isEqualToString:@"SelectPassenger"]) {
         TDBPassengerInfoViewController *vc = [segue destinationViewController];
         vc.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"ShowOrderList"]) {
+        // 购票完成后，TDB需要一段事件来更新未完成数据，所以延迟一段时间后再刷新订单列表
+        UINavigationController *dest = (UINavigationController *)segue.destinationViewController;
+        TDBOrderListViewController *vc = (TDBOrderListViewController *)dest.topViewController;
+        vc.delayBeforeRefresh = YES;
     }
 }
 
@@ -519,6 +525,13 @@
                                 [MobClick event:@"ticket order successfully"];
                                 [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:5.f animated:YES];
                                 sself.navigationItem.rightBarButtonItem = nil;
+                                
+                                // 购票成功后直接弹出订单查看页面
+                                double delayInSeconds = 2.0;
+                                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                    [sself performSegueWithIdentifier:@"ShowOrderList" sender:nil];
+                                });
                             }
                         });
                     }];

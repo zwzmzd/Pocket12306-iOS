@@ -67,6 +67,7 @@ typedef enum {
         [self.receiver forceRefreshOrderList];
     });
     
+    [MobClick event:@"PaidCompleteAndRefresh"];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
