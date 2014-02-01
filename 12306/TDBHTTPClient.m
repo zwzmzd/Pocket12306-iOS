@@ -39,12 +39,27 @@
         [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
         
         [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+        self.allowsInvalidSSLCertificate = YES;
     }
     return self;
 }
 
 - (void)cancelAllHTTPRequest {
     [[self operationQueue] cancelAllOperations];
+}
+
+#pragma mark - 车站代码表
+- (void)getStationNameAndTelecode:(void (^)(NSData *))success {
+    NSString *path = @"resources/js/framework/station_name.js";
+    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (success) {
+            success(nil);
+        }
+    }];
 }
 
 #pragma mark - 登录部分

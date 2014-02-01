@@ -51,7 +51,7 @@
 - (void)setAnchor:(CGPoint)rightBottomAnchor
 {
     CGSize size = self.ckView.frame.size;
-    CGRect rect = CGRectMake(rightBottomAnchor.x - PADDING - size.width, rightBottomAnchor.y - PADDING - size.height, size.width, size.height);
+    CGRect rect = CGRectMake(rightBottomAnchor.x, rightBottomAnchor.y, size.width, size.height);
     self.ckView.frame = rect;
 }
 

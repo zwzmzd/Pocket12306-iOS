@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "TDBKeybordNotificationManager.h"
+#import "TDBDateShower.h"
 
-@interface TDBViewController : UIViewController <UITextFieldDelegate, KeyboardNotificationDelegate>
+@interface TDBViewController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buyTicket;
-- (IBAction)cancleLogin:(UIStoryboard *)segue;
+@property (weak, nonatomic) IBOutlet UITextField *departStationField;
+@property (weak, nonatomic) IBOutlet UITextField *arriveStationField;
+@property (weak, nonatomic) IBOutlet UISwitch *stationNameExactlyMatch;
+@property (weak, nonatomic) IBOutlet UITableViewCell *dateSelectContainer;
+@property (weak, nonatomic) IBOutlet TDBDateShower *dateShower;
+- (IBAction)doQuery:(id)sender;
 
 @end

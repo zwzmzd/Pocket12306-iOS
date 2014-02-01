@@ -49,6 +49,14 @@
     return [self.original objectForKey:@"to_station_telecode"];
 }
 
+- (NSString *)getStartTrainDate {
+    NSString *raw = [self.original objectForKey:@"start_train_date"];
+    NSString *yyyy = [raw substringWithRange:NSMakeRange(0, 4)];
+    NSString *mm = [raw substringWithRange:NSMakeRange(4, 2)];
+    NSString *dd = [raw substringWithRange:NSMakeRange(6, 2)];
+    return [NSString stringWithFormat:@"%@-%@-%@", yyyy, mm, dd];
+}
+
 - (NSString *)getArriveTime
 {
     return [self.original objectForKey:@"arrive_time"];

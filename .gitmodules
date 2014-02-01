@@ -1,9 +1,6 @@
 [submodule "vendor/SVPullToRefresh"]
 	path = vendor/SVPullToRefresh
 url=git@github.com:zwzmzd/SVPullToRefresh.git
-[submodule "vendor/ViewDeck"]
-	path = vendor/ViewDeck
-	url = git@github.com:Inferis/ViewDeck.git
 [submodule "vendor/MTStatusBarOverlay"]
 	path = vendor/MTStatusBarOverlay
 	url = git@github.com:myell0w/MTStatusBarOverlay.git

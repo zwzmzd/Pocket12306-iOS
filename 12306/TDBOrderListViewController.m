@@ -73,6 +73,19 @@
                 order.ticketKey = [ticket objectForKey:@"ticket_no"];
                 [passengers addObject:passengerInOrder];
             }
+            if ([[ticket objectForKey:@"ticket_status_code"] isEqualToString:@"f"]) {
+                // 改签过的票面，需要使用ticket内部的新信息来覆盖
+                NSDictionary *stationTrainDTO = [ticket objectForKey:@"stationTrainDTO"];
+                
+                order.trainNo = [stationTrainDTO objectForKey:@"station_train_code"];
+                order.departStationName = [stationTrainDTO objectForKey:@"from_station_name"];
+                order.arriveStationName = [stationTrainDTO objectForKey:@"to_station_name"];
+                
+                NSArray *componenets = [[ticket objectForKey:@"start_train_date_page"] componentsSeparatedByString:@" "];
+                NSArray *yy_mm_dd = [[componenets firstObject] componentsSeparatedByString:@"-"];
+                order.date = [NSString stringWithFormat:@"%@月%@日", [yy_mm_dd objectAtIndex:1], [yy_mm_dd objectAtIndex:2]];
+                order.departTime = [componenets lastObject];
+            }
         }
         
         order.status = ORDER_STATUS_PAID;
@@ -92,12 +105,12 @@
         if (b) {
             order.status = ORDER_STATUS_OTHER;
             order.statusDescription = @"已出票";
-        } else if (d) {
-            order.status = ORDER_STATUS_OTHER;
-            order.statusDescription = @"已改签";
         } else if (c) {
             order.status = ORDER_STATUS_OTHER;
             order.statusDescription = @"已退票";
+        } else if (d) {
+            order.status = ORDER_STATUS_OTHER;
+            order.statusDescription = @"已改签";
         } else if (i) {
             order.status = ORDER_STATUS_UNFINISHED;
             order.statusDescription = @"待支付";
@@ -214,7 +227,12 @@
         [self.tableView.pullToRefreshView setTitle:@"正在载入" forState:SVPullToRefreshStateLoading];
         [self.tableView.pullToRefreshView setTitle:@"松开后刷新订单" forState:SVPullToRefreshStateTriggered];
         [self.tableView.pullToRefreshView setTitle:@"下拉刷新订单" forState:SVPullToRefreshStateStopped];
-        [self.tableView triggerPullToRefresh];
+        
+        if (self.delayBeforeRefresh) {
+            [self forceRefreshOrderList];
+        } else {
+            [self.tableView triggerPullToRefresh];
+        }
     }
 }
 

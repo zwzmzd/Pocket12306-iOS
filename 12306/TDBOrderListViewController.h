@@ -15,6 +15,8 @@ typedef enum {
 
 @interface TDBOrderListViewController : UITableViewController
 
+@property (nonatomic, assign) BOOL delayBeforeRefresh;
+
 - (IBAction)iWantReturn:(id)sender;
 
 - (void)forceRefreshOrderList;

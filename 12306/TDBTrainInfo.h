@@ -27,6 +27,8 @@
 
 - (NSString *)getArriveStationTeleCode;
 
+- (NSString *)getStartTrainDate;
+
 - (NSString *)getArriveTime;
 
 - (NSString *)getDapartStationName;
