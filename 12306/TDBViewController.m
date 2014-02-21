@@ -67,8 +67,9 @@
         self.navigationItem.rightBarButtonItem = nil;
         
         self.mask.frame = self.view.bounds;
-        [self.view addSubview:self.mask];
-        [self.view bringSubviewToFront:self.mask];
+        UIView *wrapperView = self.view.superview;
+        [wrapperView addSubview:self.mask];
+        [wrapperView bringSubviewToFront:self.mask];
     }
     
     [self initStationNameControllerUsingGCD];
@@ -78,7 +79,8 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    self.mask.frame = self.view.bounds;
+    UIView *wrapperView = self.view.superview;
+    self.mask.frame = wrapperView.bounds;
 }
 
 - (void)initStationNameControllerUsingGCD
