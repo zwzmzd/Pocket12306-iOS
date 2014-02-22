@@ -12,11 +12,7 @@
 #import "TFHpple.h"
 #import "UIButton+TDBAddition.h"
 #import "SVProgressHUD.h"
-#import "MobClick.h"
-
-#import "Macros.h"
 #import "TDBHTTPClient.h"
-#import "Defines.h"
 
 @interface TDBEPayEntryViewController () <UIWebViewDelegate>
 
@@ -53,6 +49,16 @@
     [self retriveEssentialInfoUsingGCD];
     
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (IBAction)_backPressed:(id)sender

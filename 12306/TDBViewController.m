@@ -15,7 +15,6 @@
 #import "TDBListViewController.h"
 #import "TDBHTTPClient.h"
 #import "TDBDateShower.h"
-#import "MobClick.h"
 
 #define USER_LAST_INPUT_DEPART_STATION_NAME (@"__userLastInputDepartStationName")
 #define USER_LAST_INPUT_ARRIVE_STATION_NAME (@"__userLastInputArriveStationName")
@@ -49,6 +48,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
     
     static UIBarButtonItem *buyTicket = nil;
     
@@ -74,6 +74,11 @@
     
     [self initStationNameControllerUsingGCD];
     
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidLayoutSubviews {

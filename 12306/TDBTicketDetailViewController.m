@@ -19,11 +19,8 @@
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
 #import "TDBPassengerInfoViewController.h"
-#import "MobClick.h"
 #import "DataSerializeUtility.h"
-
 #import "TDBHTTPClient.h"
-#import "Macros.h"
 
 #define CONFIRM_DATE_AV 0xf00001
 
@@ -224,6 +221,16 @@
     [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
+}
+
 - (IBAction)_backPressed:(id)sender
 {
     // UIAlertView存在临界区问题，所以使用这个变量标记
@@ -232,11 +239,6 @@
         [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
         [self.navigationController popViewControllerAnimated:YES];
     }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

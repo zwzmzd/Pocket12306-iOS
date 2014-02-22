@@ -33,6 +33,16 @@
     [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
+}
+
 - (IBAction)_backPressed:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];

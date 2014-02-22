@@ -15,8 +15,6 @@
 #import "TDBHTTPClient.h"
 #import "OLImageView.h"
 #import "OLImage.h"
-#import "Macros.h"
-#import "MobClick.h"
 
 #define KEYCHAIN_SERVICE (@"12306_account")
 #define KEYCHAIN_USERNAME_KEY (@"12306_account_username")
@@ -85,6 +83,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (IBAction)iWantCancle:(id)sender {

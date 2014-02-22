@@ -26,4 +26,9 @@
 #define RefRelease(var) \
     var = nil
 
+#define CurrentPageName NSStringFromClass([self class])
+
+#define MobClickBeginLogPageView() [MobClick beginLogPageView:CurrentPageName]
+#define MobClickEndLogPageView() [MobClick endLogPageView:CurrentPageName]
+
 #endif
