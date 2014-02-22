@@ -17,8 +17,6 @@
 #import "TDBHTTPClient.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SVPullToRefresh.h"
-#import "Macros.h"
-#import "MobClick.h"
 
 @interface TDBOrderListViewController ()
 
