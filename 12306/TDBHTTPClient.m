@@ -441,6 +441,26 @@
     }];
 }
 
+- (void)addPassenger:(NSString *)postBody finish:(void (^)(BOOL))finish {
+    NSString *path = @"passengers/add";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        if (finish) {
+            if ([[dict objectForKey:@"status"] boolValue]) {
+                finish(YES);
+            } else {
+                finish(NO);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (finish) {
+            finish(NO);
+        }
+    }];
+}
+
 - (void)deletePassenger:(NSString *)name idCardNo:(NSString *)idCardNo success:(void (^)(BOOL))success {
     NSString *path = @"passengers/delete";
     POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];

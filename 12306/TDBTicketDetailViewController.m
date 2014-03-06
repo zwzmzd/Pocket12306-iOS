@@ -18,9 +18,10 @@
 #import "MTStatusBarOverlay.h"
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
-#import "TDBPassengerInfoViewController.h"
+#import "TDBContactInfoViewController.h"
 #import "DataSerializeUtility.h"
 #import "TDBHTTPClient.h"
+#import "TDBContactList.h"
 
 #define CONFIRM_DATE_AV 0xf00001
 
@@ -357,7 +358,7 @@
         vc.dataController = self.ticketList;
         [vc.tableView reloadData];
     } else if ([segue.identifier isEqualToString:@"SelectPassenger"]) {
-        TDBPassengerInfoViewController *vc = [segue destinationViewController];
+        TDBContactInfoViewController *vc = [segue destinationViewController];
         vc.delegate = self;
     } else if ([segue.identifier isEqualToString:@"ShowOrderList"]) {
         // 购票完成后，TDB需要一段事件来更新未完成数据，所以延迟一段时间后再刷新订单列表
@@ -419,73 +420,62 @@
             UIBarButtonItem *submitBtn = self.navigationItem.rightBarButtonItem;
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
             
+            
+            
             MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
             overlay.hidesActivity = NO;
             [overlay postMessage:@"正在提交请求"];
             
             WeakSelf(wself, self);
             
-            StrongSelf(sself, self);
-            POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-            [arguments setObject:@"2" forKey:@"cancel_flag"];
-            [arguments setObject:@"000000000000000000000000000000" forKey:@"bed_level_order_num"];
-            [arguments setObject:passengerTicketStr forKey:@"passengerTicketStr"];
-            [arguments setObject:oldPassengerStr forKey:@"oldPassengerStr"];
-            [arguments setObject:sself.tourFlag forKey:@"tour_flag"];
-            [arguments setObject:verifyCode forKey:@"randCode"];
-            [arguments setObject:@"" forKey:@"_json_att"];
-            [arguments setObject:sself.repeatSubmitToken forKey:@"REPEAT_SUBMIT_TOKEN"];
-            
-            [[TDBHTTPClient sharedClient] checkOrderInfo:[arguments getFinalData] finish:^(NSDictionary *result) {
-                CHECK_INSTANCE_EXIST(wself);
-                NSLog(@"checkOrderInfo %@", result);
-                
-                if (!(result && [[[result objectForKey:@"data"] objectForKey:@"submitStatus"] boolValue])) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        StrongSelf(sself, wself);
-                        if (sself) {
-                            sself.progressView.progress = 0.33;
-                            [overlay postErrorMessage:[[result objectForKey:@"data"] objectForKey:@"errMsg"] duration:2.f];
-                            sself.navigationItem.rightBarButtonItem = submitBtn;
-                        }
-                        
-                    });
-                    return;
-                }
-                
+            void (^abortBlock)() = ^() {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     StrongSelf(sself, wself);
                     if (sself) {
                         sself.progressView.progress = 0.33;
-                        [overlay postMessage:@"订单信息验证成功"];
+                        [overlay postErrorMessage:@"实名制认证失败，请通过12306添加乘客信息" duration:3.f];
+                        sself.navigationItem.rightBarButtonItem = submitBtn;
                     }
                 });
-                [NSThread sleepForTimeInterval:1.f];
+            };
+            
+            void (^orderBlock)() = ^() {
+                [NSThread sleepForTimeInterval:0.5f];
                 CHECK_INSTANCE_EXIST(wself);
                 
-                StrongSelf(sself, wself);
+                StrongSelf(sself, self);
                 POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-                [arguments setObject:@"" forKey:@"train_date"];
-                [arguments setObject:[sself.train getTrainCode] forKey:@"train_no"];
-                [arguments setObject:[sself.train getTrainNo] forKey:@"stationTrainCode"];
-                [arguments setObject:passenger.seat forKey:@"seatType"];
-                [arguments setObject:[sself.train getDepartStationTeleCode] forKey:@"fromStationTelecode"];
-                [arguments setObject:[sself.train getArriveStationTeleCode] forKey:@"toStationTelecode"];
-                [arguments setObject:sself.leftTicketStr forKey:@"leftTicket"];
-                [arguments setObject:sself.purposeCodes forKey:@"purpose_codes"];
+                [arguments setObject:@"2" forKey:@"cancel_flag"];
+                [arguments setObject:@"000000000000000000000000000000" forKey:@"bed_level_order_num"];
+                [arguments setObject:passengerTicketStr forKey:@"passengerTicketStr"];
+                [arguments setObject:oldPassengerStr forKey:@"oldPassengerStr"];
+                [arguments setObject:sself.tourFlag forKey:@"tour_flag"];
+                [arguments setObject:verifyCode forKey:@"randCode"];
                 [arguments setObject:@"" forKey:@"_json_att"];
                 [arguments setObject:sself.repeatSubmitToken forKey:@"REPEAT_SUBMIT_TOKEN"];
                 
-                [[TDBHTTPClient sharedClient] getQueueCount:[arguments getFinalData] finish:^(NSDictionary *result) {
+                [[TDBHTTPClient sharedClient] checkOrderInfo:[arguments getFinalData] finish:^(NSDictionary *result) {
                     CHECK_INSTANCE_EXIST(wself);
                     NSLog(@"checkOrderInfo %@", result);
-                    // 这个GetQueueCount暂时不检查结果，因为结果返回错误，也能正确地订票
+                    
+                    if (!(result && [[[result objectForKey:@"data"] objectForKey:@"submitStatus"] boolValue])) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            StrongSelf(sself, wself);
+                            if (sself) {
+                                sself.progressView.progress = 0.33;
+                                [overlay postErrorMessage:[[result objectForKey:@"data"] objectForKey:@"errMsg"] duration:2.f];
+                                sself.navigationItem.rightBarButtonItem = submitBtn;
+                            }
+                            
+                        });
+                        return;
+                    }
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         StrongSelf(sself, wself);
                         if (sself) {
                             sself.progressView.progress = 0.33;
-                            [overlay postMessage:@"余票确认完毕"];
+                            [overlay postMessage:@"订单信息验证成功"];
                         }
                     });
                     [NSThread sleepForTimeInterval:1.f];
@@ -493,51 +483,180 @@
                     
                     StrongSelf(sself, wself);
                     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
-                    [arguments setObject:passengerTicketStr forKey:@"passengerTicketStr"];
-                    [arguments setObject:oldPassengerStr forKey:@"oldPassengerStr"];
-                    [arguments setObject:verifyCode forKey:@"randCode"];
+                    [arguments setObject:@"" forKey:@"train_date"];
+                    [arguments setObject:[sself.train getTrainCode] forKey:@"train_no"];
+                    [arguments setObject:[sself.train getTrainNo] forKey:@"stationTrainCode"];
+                    [arguments setObject:passenger.seat forKey:@"seatType"];
+                    [arguments setObject:[sself.train getDepartStationTeleCode] forKey:@"fromStationTelecode"];
+                    [arguments setObject:[sself.train getArriveStationTeleCode] forKey:@"toStationTelecode"];
+                    [arguments setObject:sself.leftTicketStr forKey:@"leftTicket"];
                     [arguments setObject:sself.purposeCodes forKey:@"purpose_codes"];
-                    [arguments setObject:sself.keyCheckIsChange forKey:@"key_check_isChange"];
-                    [arguments setObject:sself.leftTicketStr forKey:@"leftTicketStr"];
-                    [arguments setObject:sself.trainLocation forKey:@"train_location"];
                     [arguments setObject:@"" forKey:@"_json_att"];
                     [arguments setObject:sself.repeatSubmitToken forKey:@"REPEAT_SUBMIT_TOKEN"];
                     
-                    [[TDBHTTPClient sharedClient] confirmSingleForQueue:[arguments getFinalData] finish:^(NSDictionary *result) {
+                    [[TDBHTTPClient sharedClient] getQueueCount:[arguments getFinalData] finish:^(NSDictionary *result) {
                         CHECK_INSTANCE_EXIST(wself);
-                        NSLog(@"confirmSingleForQueue %@", result);
-                        
-                        if (!(result && [[[result objectForKey:@"data"] objectForKey:@"submitStatus"] boolValue])) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                StrongSelf(sself, wself);
-                                if (sself) {
-                                    sself.progressView.progress = 0.33;
-                                    [overlay postErrorMessage:[[result objectForKey:@"data"] objectForKey:@"errMsg"] duration:2.f];
-                                    sself.navigationItem.rightBarButtonItem = submitBtn;
-                                }
-                                
-                            });
-                            return;
-                        }
+                        NSLog(@"checkOrderInfo %@", result);
+                        // 这个GetQueueCount暂时不检查结果，因为结果返回错误，也能正确地订票
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
                             StrongSelf(sself, wself);
                             if (sself) {
-                                sself.progressView.progress = 1;
-                                [MobClick event:@"ticket order successfully"];
-                                [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:5.f animated:YES];
-                                sself.navigationItem.rightBarButtonItem = nil;
-                                
-                                // 购票成功后直接弹出订单查看页面
-                                double delayInSeconds = 2.0;
-                                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                    [sself performSegueWithIdentifier:@"ShowOrderList" sender:nil];
-                                });
+                                sself.progressView.progress = 0.33;
+                                [overlay postMessage:@"余票确认完毕"];
                             }
                         });
+                        [NSThread sleepForTimeInterval:1.f];
+                        CHECK_INSTANCE_EXIST(wself);
+                        
+                        StrongSelf(sself, wself);
+                        POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+                        [arguments setObject:passengerTicketStr forKey:@"passengerTicketStr"];
+                        [arguments setObject:oldPassengerStr forKey:@"oldPassengerStr"];
+                        [arguments setObject:verifyCode forKey:@"randCode"];
+                        [arguments setObject:sself.purposeCodes forKey:@"purpose_codes"];
+                        [arguments setObject:sself.keyCheckIsChange forKey:@"key_check_isChange"];
+                        [arguments setObject:sself.leftTicketStr forKey:@"leftTicketStr"];
+                        [arguments setObject:sself.trainLocation forKey:@"train_location"];
+                        [arguments setObject:@"" forKey:@"_json_att"];
+                        [arguments setObject:sself.repeatSubmitToken forKey:@"REPEAT_SUBMIT_TOKEN"];
+                        
+                        [[TDBHTTPClient sharedClient] confirmSingleForQueue:[arguments getFinalData] finish:^(NSDictionary *result) {
+                            CHECK_INSTANCE_EXIST(wself);
+                            NSLog(@"confirmSingleForQueue %@", result);
+                            
+                            if (!(result && [[[result objectForKey:@"data"] objectForKey:@"submitStatus"] boolValue])) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    StrongSelf(sself, wself);
+                                    if (sself) {
+                                        sself.progressView.progress = 0.33;
+                                        [overlay postErrorMessage:[[result objectForKey:@"data"] objectForKey:@"errMsg"] duration:2.f];
+                                        sself.navigationItem.rightBarButtonItem = submitBtn;
+                                    }
+                                    
+                                });
+                                return;
+                            }
+                            
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                StrongSelf(sself, wself);
+                                if (sself) {
+                                    sself.progressView.progress = 1;
+                                    [MobClick event:@"ticket order successfully"];
+                                    [overlay postImmediateFinishMessage:@"订票信息已经确认，请继续完成支付" duration:5.f animated:YES];
+                                    sself.navigationItem.rightBarButtonItem = nil;
+                                    
+                                    // 购票成功后直接弹出订单查看页面
+                                    double delayInSeconds = 2.0;
+                                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                        [sself performSegueWithIdentifier:@"ShowOrderList" sender:nil];
+                                    });
+                                }
+                            });
+                        }];
                     }];
                 }];
+            };
+            
+            NSArray *passengerList = @[passenger];
+            __block BOOL secondRoundNeeded = NO;
+            __block BOOL mustAbort = NO;
+            [[TDBHTTPClient sharedClient] getPassengersWithIndex:0 size:200 success:^(NSDictionary *dict) {
+                StrongSelf(sself, wself);
+                if (sself) {
+                    NSArray *rows = [dict objectForKey:@"normal_passengers"];
+                    TDBContactList *clist = [[TDBContactList alloc] initWithArray:rows];
+                    for (PassengerInfo *passenger in passengerList) {
+                        if ([clist isInSet:passenger]) {
+                            if ([clist isValid:passenger]) {
+                                // 通过验证了
+                                // pass
+                            } else {
+                                // 证件号存在，但没有通过验证
+                                // abort
+                                mustAbort = YES;
+                            }
+                        } else {
+                            // 证件号不存在
+                            // addAccount
+                            
+                            [NSThread sleepForTimeInterval:0.5f];
+                            CHECK_INSTANCE_EXIST(wself);
+                            
+                            
+                            POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+                            [argument setObject:passenger.name forKey:@"passenger_name"];
+                            [argument setObject:@"M" forKey:@"sex_code"];
+                            [argument setObject:@"" forKey:@"_birthDate"];
+                            [argument setObject:@"CN" forKey:@"country_code"];
+                            [argument setObject:passenger.id_cardtype forKey:@"passenger_id_type_code"];
+                            [argument setObject:passenger.id_cardno forKey:@"passenger_id_no"];
+                            [argument setObject:@"" forKey:@"mobile_no"];
+                            [argument setObject:@"" forKey:@"phone_no"];
+                            [argument setObject:@"" forKey:@"email"];
+                            [argument setObject:@"" forKey:@"address"];
+                            [argument setObject:@"" forKey:@"postalcode"];
+                            [argument setObject:@"1" forKey:@"passenger_type"];
+                            
+                            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                            [[TDBHTTPClient sharedClient] addPassenger:[argument getFinalData] finish:^(BOOL indicator) {
+                                dispatch_semaphore_signal(semaphore);
+                            }];
+                            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                            
+                            secondRoundNeeded = YES;
+                        }
+                    }
+                }
+                
+                if (mustAbort) {
+                    abortBlock();
+                } else if (!secondRoundNeeded) {
+                    orderBlock();
+                } else {
+                    [NSThread sleepForTimeInterval:0.5f];
+                    CHECK_INSTANCE_EXIST(wself);
+                    
+                    [[TDBHTTPClient sharedClient] getPassengersWithIndex:0 size:200 success:^(NSDictionary *dict) {
+                        StrongSelf(sself, wself);
+                        if (sself) {
+                            BOOL successIndicator = YES;
+                            NSArray *rows = [dict objectForKey:@"normal_passengers"];
+                            TDBContactList *clist = [[TDBContactList alloc] initWithArray:rows];
+                            for (PassengerInfo *passenger in passengerList) {
+                                if ([clist isInSet:passenger]) {
+                                    if ([clist isValid:passenger]) {
+                                        // 通过验证了
+                                        // pass
+                                    } else {
+                                        // 证件号存在，但没有通过验证
+                                        [NSThread sleepForTimeInterval:0.5f];
+                                        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                                        [[TDBHTTPClient sharedClient] deletePassenger:passenger.name idCardNo:passenger.id_cardno success:^(BOOL indicator) {
+                                            dispatch_semaphore_signal(semaphore);
+                                        }];
+                                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                                        
+                                        successIndicator = NO;
+                                    }
+                                } else {
+                                    // 证件号不存在
+                                    // assert(NO);
+                                    successIndicator = NO;
+                                    break;
+                                }
+                            }
+                            
+                            if (!successIndicator) {
+                                // 第二轮检查失败
+                                abortBlock();
+                            } else {
+                                orderBlock();
+                            }
+                        }
+                    }];
+                }
             }];
             
             break;

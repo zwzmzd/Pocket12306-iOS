@@ -13,6 +13,7 @@
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
 #import "TDBHTTPClient.h"
+#import "DataSerializeUtility.h"
 
 #define SQL_TABLE_NAME @"passenger"
 
@@ -176,11 +177,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *passenger = [self.dataModel objectAtIndex:indexPath.row];
-    [[TDBHTTPClient sharedClient] deletePassenger:[passenger objectForKey:@"name"] idCardNo:[passenger objectForKey:@"passenger_id_no"] success:^(BOOL s) {
-        [self.delegate didSelectPassenger:@[[self.dataModel objectAtIndex:indexPath.row]]];
-        [self.navigationController popViewControllerAnimated:YES];
-    }];
+    [self.delegate didSelectPassenger:@[[self.dataModel objectAtIndex:indexPath.row]]];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)retrivePassengerList:(UIBarButtonItem *)sender {
