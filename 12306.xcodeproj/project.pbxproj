@@ -73,6 +73,7 @@
 		FA6A9D171825690000FFCAC2 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF71825690000FFCAC2 /* Icon@2x.png */; };
 		FA6A9D181825690000FFCAC2 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF81825690000FFCAC2 /* iTunesArtwork.png */; };
 		FA6A9D191825690000FFCAC2 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF91825690000FFCAC2 /* iTunesArtwork@2x.png */; };
+		FA73777718C852AD00B73ADF /* TDBContactList.m in Sources */ = {isa = PBXBuildFile; fileRef = FA73777618C852AD00B73ADF /* TDBContactList.m */; };
 		FA77E04117E8181F009308BF /* login_encode.js in Sources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FA77E04217E81C7C009308BF /* login_encode.js in Resources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FA77E0F017EED7C3009308BF /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = FA77E0EB17EED7C3009308BF /* TFHpple.m */; };
@@ -97,7 +98,7 @@
 		FAE1272917B6560900BAD9C4 /* TDBTrainTimetableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */; };
 		FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */; };
 		FAEB719217C9B23500C047E4 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEB719117C9B23500C047E4 /* EGOCache.m */; };
-		FAEB719517C9B98200C047E4 /* TDBPassengerInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEB719417C9B98200C047E4 /* TDBPassengerInfoViewController.m */; };
+		FAEB719517C9B98200C047E4 /* TDBContactInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEB719417C9B98200C047E4 /* TDBContactInfoViewController.m */; };
 		FAEB71A217CA2A0B00C047E4 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEB719817CA2A0B00C047E4 /* FMDatabase.m */; };
 		FAEB71A317CA2A0B00C047E4 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEB719A17CA2A0B00C047E4 /* FMDatabaseAdditions.m */; };
 		FAEB71A417CA2A0B00C047E4 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEB719C17CA2A0B00C047E4 /* FMDatabasePool.m */; };
@@ -217,6 +218,8 @@
 		FA6A9CF71825690000FFCAC2 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		FA6A9CF81825690000FFCAC2 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
 		FA6A9CF91825690000FFCAC2 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
+		FA73777518C852AD00B73ADF /* TDBContactList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBContactList.h; sourceTree = "<group>"; };
+		FA73777618C852AD00B73ADF /* TDBContactList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBContactList.m; sourceTree = "<group>"; };
 		FA77E04017E8181F009308BF /* login_encode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = login_encode.js; sourceTree = "<group>"; };
 		FA77E0EA17EED7C3009308BF /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = vendor/Hpple/TFHpple.h; sourceTree = SOURCE_ROOT; };
 		FA77E0EB17EED7C3009308BF /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = vendor/Hpple/TFHpple.m; sourceTree = SOURCE_ROOT; };
@@ -263,8 +266,8 @@
 		FAE88A2817AE5FAF00D632F2 /* TDBOrderOperationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBOrderOperationViewController.m; sourceTree = "<group>"; };
 		FAEB719017C9B23500C047E4 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EGOCache.h; path = vendor/EGOCache/EGOCache.h; sourceTree = SOURCE_ROOT; };
 		FAEB719117C9B23500C047E4 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EGOCache.m; path = vendor/EGOCache/EGOCache.m; sourceTree = SOURCE_ROOT; };
-		FAEB719317C9B98200C047E4 /* TDBPassengerInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBPassengerInfoViewController.h; sourceTree = "<group>"; };
-		FAEB719417C9B98200C047E4 /* TDBPassengerInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBPassengerInfoViewController.m; sourceTree = "<group>"; };
+		FAEB719317C9B98200C047E4 /* TDBContactInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBContactInfoViewController.h; sourceTree = "<group>"; };
+		FAEB719417C9B98200C047E4 /* TDBContactInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBContactInfoViewController.m; sourceTree = "<group>"; };
 		FAEB719717CA2A0B00C047E4 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = vendor/fmdb/src/FMDatabase.h; sourceTree = SOURCE_ROOT; };
 		FAEB719817CA2A0B00C047E4 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = vendor/fmdb/src/FMDatabase.m; sourceTree = SOURCE_ROOT; };
 		FAEB719917CA2A0B00C047E4 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = vendor/fmdb/src/FMDatabaseAdditions.h; sourceTree = SOURCE_ROOT; };
@@ -636,8 +639,8 @@
 				FAED1B4A179ACD57003DA90E /* TDBSeatDetailViewController.m */,
 				FAE1272417B655DC00BAD9C4 /* TDBTrainTimetableViewController.h */,
 				FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */,
-				FAEB719317C9B98200C047E4 /* TDBPassengerInfoViewController.h */,
-				FAEB719417C9B98200C047E4 /* TDBPassengerInfoViewController.m */,
+				FAEB719317C9B98200C047E4 /* TDBContactInfoViewController.h */,
+				FAEB719417C9B98200C047E4 /* TDBContactInfoViewController.m */,
 			);
 			name = BuyTicket;
 			sourceTree = "<group>";
@@ -713,6 +716,8 @@
 				FA3BACA117A4F25600D535BC /* TDBOrder.m */,
 				FA50E169181258A500992940 /* TDBHTTPClient.h */,
 				FA50E16A181258A500992940 /* TDBHTTPClient.m */,
+				FA73777518C852AD00B73ADF /* TDBContactList.h */,
+				FA73777618C852AD00B73ADF /* TDBContactList.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -901,6 +906,7 @@
 				FAED1B4B179ACD57003DA90E /* TDBSeatDetailViewController.m in Sources */,
 				FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */,
 				FA9A51451812574500043327 /* UIImageView+AFNetworking.m in Sources */,
+				FA73777718C852AD00B73ADF /* TDBContactList.m in Sources */,
 				FAF32E16179F6FE3006C2CC9 /* TDBStationAndDateSelector.m in Sources */,
 				FA2B6836187290880039FC3D /* OLImageView.m in Sources */,
 				FAF32E1D179FA361006C2CC9 /* TDBKeybordNotificationManager.m in Sources */,
@@ -929,7 +935,7 @@
 				FAF902A317C6816A0080A5CC /* CKCalendarView.m in Sources */,
 				FAF902AA17C6848B0080A5CC /* TDBDatePickerView.m in Sources */,
 				FAEB719217C9B23500C047E4 /* EGOCache.m in Sources */,
-				FAEB719517C9B98200C047E4 /* TDBPassengerInfoViewController.m in Sources */,
+				FAEB719517C9B98200C047E4 /* TDBContactInfoViewController.m in Sources */,
 				FA50E16B181258A500992940 /* TDBHTTPClient.m in Sources */,
 				FAEB71A217CA2A0B00C047E4 /* FMDatabase.m in Sources */,
 				FAEB71A317CA2A0B00C047E4 /* FMDatabaseAdditions.m in Sources */,

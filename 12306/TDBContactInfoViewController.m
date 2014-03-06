@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 zwz. All rights reserved.
 //
 
-#import "TDBPassengerInfoViewController.h"
+#import "TDBContactInfoViewController.h"
 #import "TDBSession.h"
 #import "GlobalDataStorage.h"
 #import "FMDatabase.h"
@@ -16,13 +16,13 @@
 
 #define SQL_TABLE_NAME @"passenger"
 
-@interface TDBPassengerInfoViewController ()
+@interface TDBContactInfoViewController ()
 
 @property (nonatomic, strong) NSArray *dataModel;
 
 @end
 
-@implementation TDBPassengerInfoViewController
+@implementation TDBContactInfoViewController
 
 + (NSString *)databasePath
 {
@@ -176,8 +176,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.delegate didSelectPassenger:@[[self.dataModel objectAtIndex:indexPath.row]]];
-    [self.navigationController popViewControllerAnimated:YES];
+    NSDictionary *passenger = [self.dataModel objectAtIndex:indexPath.row];
+    [[TDBHTTPClient sharedClient] deletePassenger:[passenger objectForKey:@"name"] idCardNo:[passenger objectForKey:@"passenger_id_no"] success:^(BOOL s) {
+        [self.delegate didSelectPassenger:@[[self.dataModel objectAtIndex:indexPath.row]]];
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
 }
 
 - (IBAction)retrivePassengerList:(UIBarButtonItem *)sender {
