@@ -584,10 +584,14 @@
                             [NSThread sleepForTimeInterval:0.5f];
                             CHECK_INSTANCE_EXIST(wself);
                             
+                            // 取出身份证倒数第二位，得出用户的性别
+                            NSInteger len = passenger.id_cardno.length;
+                            NSString *sexDigit = [passenger.id_cardno substringWithRange:NSMakeRange(len - 2, 1)];
+                            NSString *sex = [sexDigit intValue] % 2 == 0 ? @"F" : @"M";
                             
                             POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
                             [argument setObject:passenger.name forKey:@"passenger_name"];
-                            [argument setObject:@"M" forKey:@"sex_code"];
+                            [argument setObject:sex forKey:@"sex_code"];
                             [argument setObject:@"" forKey:@"_birthDate"];
                             [argument setObject:@"CN" forKey:@"country_code"];
                             [argument setObject:passenger.id_cardtype forKey:@"passenger_id_type_code"];
