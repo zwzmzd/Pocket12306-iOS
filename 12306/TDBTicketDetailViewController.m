@@ -424,7 +424,7 @@
             
             MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
             overlay.hidesActivity = NO;
-            [overlay postMessage:@"正在提交请求"];
+            [overlay postMessage:@"正在验证乘客信息"];
             
             WeakSelf(wself, self);
             
@@ -443,7 +443,7 @@
                 [NSThread sleepForTimeInterval:0.5f];
                 CHECK_INSTANCE_EXIST(wself);
                 
-                StrongSelf(sself, self);
+                StrongSelf(sself, wself);
                 POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
                 [arguments setObject:@"2" forKey:@"cancel_flag"];
                 [arguments setObject:@"000000000000000000000000000000" forKey:@"bed_level_order_num"];
@@ -563,56 +563,66 @@
             __block BOOL secondRoundNeeded = NO;
             __block BOOL mustAbort = NO;
             [[TDBHTTPClient sharedClient] getPassengersWithIndex:0 size:200 success:^(NSDictionary *dict) {
-                StrongSelf(sself, wself);
-                if (sself) {
-                    NSArray *rows = [dict objectForKey:@"normal_passengers"];
-                    TDBContactList *clist = [[TDBContactList alloc] initWithArray:rows];
-                    for (PassengerInfo *passenger in passengerList) {
-                        if ([clist isInSet:passenger]) {
-                            if ([clist isValid:passenger]) {
-                                // 通过验证了
-                                // pass
-                            } else {
-                                // 证件号存在，但没有通过验证
-                                // abort
-                                mustAbort = YES;
-                            }
+                CHECK_INSTANCE_EXIST(wself);
+                
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    StrongSelf(sself, wself);
+                    if (sself) {
+                        [overlay postMessage:@"连接服务器成功"];
+                    }
+                });
+                
+                NSArray *rows = [dict objectForKey:@"normal_passengers"];
+                TDBContactList *clist = [[TDBContactList alloc] initWithArray:rows];
+                for (PassengerInfo *passenger in passengerList) {
+                    CHECK_INSTANCE_EXIST(wself);
+                    
+                    if ([clist isInSet:passenger]) {
+                        if ([clist isValid:passenger]) {
+                            // 通过验证了
+                            // pass
                         } else {
-                            // 证件号不存在
-                            // addAccount
-                            
-                            [NSThread sleepForTimeInterval:0.5f];
-                            CHECK_INSTANCE_EXIST(wself);
-                            
-                            // 取出身份证倒数第二位，得出用户的性别
-                            NSInteger len = passenger.id_cardno.length;
-                            NSString *sexDigit = [passenger.id_cardno substringWithRange:NSMakeRange(len - 2, 1)];
-                            NSString *sex = [sexDigit intValue] % 2 == 0 ? @"F" : @"M";
-                            
-                            POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
-                            [argument setObject:passenger.name forKey:@"passenger_name"];
-                            [argument setObject:sex forKey:@"sex_code"];
-                            [argument setObject:@"" forKey:@"_birthDate"];
-                            [argument setObject:@"CN" forKey:@"country_code"];
-                            [argument setObject:passenger.id_cardtype forKey:@"passenger_id_type_code"];
-                            [argument setObject:passenger.id_cardno forKey:@"passenger_id_no"];
-                            [argument setObject:@"" forKey:@"mobile_no"];
-                            [argument setObject:@"" forKey:@"phone_no"];
-                            [argument setObject:@"" forKey:@"email"];
-                            [argument setObject:@"" forKey:@"address"];
-                            [argument setObject:@"" forKey:@"postalcode"];
-                            [argument setObject:@"1" forKey:@"passenger_type"];
-                            
-                            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-                            [[TDBHTTPClient sharedClient] addPassenger:[argument getFinalData] finish:^(BOOL indicator) {
-                                dispatch_semaphore_signal(semaphore);
-                            }];
-                            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-                            
-                            secondRoundNeeded = YES;
+                            // 证件号存在，但没有通过验证
+                            // abort
+                            mustAbort = YES;
                         }
+                    } else {
+                        // 证件号不存在
+                        // addAccount
+                        
+                        [NSThread sleepForTimeInterval:0.5f];
+                        CHECK_INSTANCE_EXIST(wself);
+                        
+                        // 取出身份证倒数第二位，得出用户的性别
+                        NSInteger len = passenger.id_cardno.length;
+                        NSString *sexDigit = [passenger.id_cardno substringWithRange:NSMakeRange(len - 2, 1)];
+                        NSString *sex = [sexDigit intValue] % 2 == 0 ? @"F" : @"M";
+                        
+                        POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+                        [argument setObject:passenger.name forKey:@"passenger_name"];
+                        [argument setObject:sex forKey:@"sex_code"];
+                        [argument setObject:@"" forKey:@"_birthDate"];
+                        [argument setObject:@"CN" forKey:@"country_code"];
+                        [argument setObject:passenger.id_cardtype forKey:@"passenger_id_type_code"];
+                        [argument setObject:passenger.id_cardno forKey:@"passenger_id_no"];
+                        [argument setObject:@"" forKey:@"mobile_no"];
+                        [argument setObject:@"" forKey:@"phone_no"];
+                        [argument setObject:@"" forKey:@"email"];
+                        [argument setObject:@"" forKey:@"address"];
+                        [argument setObject:@"" forKey:@"postalcode"];
+                        [argument setObject:@"1" forKey:@"passenger_type"];
+                        
+                        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                        [[TDBHTTPClient sharedClient] addPassenger:[argument getFinalData] finish:^(BOOL indicator) {
+                            dispatch_semaphore_signal(semaphore);
+                        }];
+                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                        
+                        secondRoundNeeded = YES;
                     }
                 }
+                
+                CHECK_INSTANCE_EXIST(wself);
                 
                 if (mustAbort) {
                     abortBlock();
@@ -623,41 +633,49 @@
                     CHECK_INSTANCE_EXIST(wself);
                     
                     [[TDBHTTPClient sharedClient] getPassengersWithIndex:0 size:200 success:^(NSDictionary *dict) {
-                        StrongSelf(sself, wself);
-                        if (sself) {
-                            BOOL successIndicator = YES;
-                            NSArray *rows = [dict objectForKey:@"normal_passengers"];
-                            TDBContactList *clist = [[TDBContactList alloc] initWithArray:rows];
-                            for (PassengerInfo *passenger in passengerList) {
-                                if ([clist isInSet:passenger]) {
-                                    if ([clist isValid:passenger]) {
-                                        // 通过验证了
-                                        // pass
-                                    } else {
-                                        // 证件号存在，但没有通过验证
-                                        [NSThread sleepForTimeInterval:0.5f];
-                                        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-                                        [[TDBHTTPClient sharedClient] deletePassenger:passenger.name idCardNo:passenger.id_cardno success:^(BOOL indicator) {
-                                            dispatch_semaphore_signal(semaphore);
-                                        }];
-                                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-                                        
-                                        successIndicator = NO;
-                                    }
+                        dispatch_async(dispatch_get_main_queue(), ^(void) {
+                            StrongSelf(sself, wself);
+                            if (sself) {
+                                [overlay postMessage:@"校验返回结果"];
+                            }
+                        });
+                        
+                        BOOL successIndicator = YES;
+                        NSArray *rows = [dict objectForKey:@"normal_passengers"];
+                        TDBContactList *clist = [[TDBContactList alloc] initWithArray:rows];
+                        for (PassengerInfo *passenger in passengerList) {
+                            if ([clist isInSet:passenger]) {
+                                if ([clist isValid:passenger]) {
+                                    // 通过验证了
+                                    // pass
                                 } else {
-                                    // 证件号不存在
-                                    // assert(NO);
+                                    // 证件号存在，但没有通过验证
+                                    [NSThread sleepForTimeInterval:0.5f];
+                                    CHECK_INSTANCE_EXIST(wself);
+                                    
+                                    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                                    [[TDBHTTPClient sharedClient] deletePassenger:passenger.name idCardNo:passenger.id_cardno success:^(BOOL indicator) {
+                                        dispatch_semaphore_signal(semaphore);
+                                    }];
+                                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                                    
                                     successIndicator = NO;
-                                    break;
                                 }
-                            }
-                            
-                            if (!successIndicator) {
-                                // 第二轮检查失败
-                                abortBlock();
                             } else {
-                                orderBlock();
+                                // 证件号不存在
+                                // assert(NO);
+                                successIndicator = NO;
+                                break;
                             }
+                        }
+                        
+                        CHECK_INSTANCE_EXIST(wself);
+                        
+                        if (!successIndicator) {
+                            // 第二轮检查失败
+                            abortBlock();
+                        } else {
+                            orderBlock();
                         }
                     }];
                 }
@@ -669,6 +687,7 @@
 }
 
 - (void)dealloc {
+    [[MTStatusBarOverlay sharedInstance] hide];
     NSLog(@"dealloc %@", [self class]);
 }
 
