@@ -13,9 +13,6 @@
 #import "GlobalDataStorage.h"
 #import "TDBSession.h"
 #import "UIButton+TDBAddition.h"
-#import "MobClick.h"
-
-#import "Macros.h"
 #import "TDBHTTPClient.h"
 
 @interface TDBTrainTimetableViewController ()
@@ -48,6 +45,16 @@
     
     self.title = [NSString stringWithFormat:@"%@次列车", self.train.getTrainNo];
     [self retriveEssentialDataUsingGCD];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

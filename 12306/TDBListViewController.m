@@ -16,10 +16,7 @@
 #import "TDBLeftTicketForList.h"
 #import "TDBTrainTimetableViewController.h"
 #import "UIButton+TDBAddition.h"
-#import "MobClick.h"
-
 #import "TDBHTTPClient.h"
-#import "Macros.h"
 #import "DataSerializeUtility.h"
 
 @interface TDBListViewController ()
@@ -66,6 +63,16 @@
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (IBAction)_backPressed:(id)sender

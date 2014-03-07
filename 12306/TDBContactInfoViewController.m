@@ -6,26 +6,24 @@
 //  Copyright (c) 2013年 zwz. All rights reserved.
 //
 
-#import "TDBPassengerInfoViewController.h"
+#import "TDBContactInfoViewController.h"
 #import "TDBSession.h"
 #import "GlobalDataStorage.h"
 #import "FMDatabase.h"
 #import "SVProgressHUD.h"
 #import "UIButton+TDBAddition.h"
-#import "MobClick.h"
-
 #import "TDBHTTPClient.h"
-#import "Macros.h"
+#import "DataSerializeUtility.h"
 
 #define SQL_TABLE_NAME @"passenger"
 
-@interface TDBPassengerInfoViewController ()
+@interface TDBContactInfoViewController ()
 
 @property (nonatomic, strong) NSArray *dataModel;
 
 @end
 
-@implementation TDBPassengerInfoViewController
+@implementation TDBContactInfoViewController
 
 + (NSString *)databasePath
 {
@@ -57,6 +55,16 @@
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (IBAction)_backPressed:(id)sender

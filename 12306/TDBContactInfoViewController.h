@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol PassengerSelectorDelegate;
-@interface TDBPassengerInfoViewController : UITableViewController
+@interface TDBContactInfoViewController : UITableViewController
 
 @property (nonatomic, weak) id<PassengerSelectorDelegate> delegate;
 

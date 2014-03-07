@@ -14,8 +14,6 @@
 #import "TDBOrderListViewController.h"
 #import "UIButton+TDBAddition.h"
 #import "TDBHTTPClient.h"
-#import "MobClick.h"
-#import "Macros.h"
 
 typedef enum {
     TAGLIST_BEFORE_CANCLE = 1,
@@ -47,6 +45,16 @@ typedef enum {
     UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
     [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (IBAction)_backPressed:(id)sender

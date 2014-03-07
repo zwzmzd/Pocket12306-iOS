@@ -12,11 +12,7 @@
 #import "TFHpple.h"
 #import "UIButton+TDBAddition.h"
 #import "SVProgressHUD.h"
-#import "MobClick.h"
-
-#import "Macros.h"
 #import "TDBHTTPClient.h"
-#import "Defines.h"
 
 @interface TDBEPayEntryViewController () <UIWebViewDelegate>
 
@@ -53,6 +49,16 @@
     [self retriveEssentialInfoUsingGCD];
     
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (IBAction)_backPressed:(id)sender
@@ -111,7 +117,7 @@
     [[TDBHTTPClient sharedClient] continuePayNoCompleteMyOrder:self.orderSequenceNo success:^(NSDictionary *result) {
         if (result == nil || [[[result objectForKey:@"data"] objectForKey:@"existError"] boolValue]) {
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [SVProgressHUD showErrorWithStatus:@"解析错误，请重试"];
+                [SVProgressHUD showErrorWithStatus:@"解析错误，可能是订单未在指定时间内支付，请刷新订单列表后重试"];
             });
             return;
         }
@@ -129,6 +135,9 @@
 }
 
 - (void)dealloc {
+    _webView.delegate = nil;
+    [_webView stopLoading];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     NSLog(@"[dealloc] %@ %p", [self class], self);
 }
 

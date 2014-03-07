@@ -440,6 +440,50 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
 }
+
+- (void)addPassenger:(NSString *)postBody finish:(void (^)(BOOL))finish {
+    NSString *path = @"passengers/add";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        if (finish) {
+            if ([[dict objectForKey:@"status"] boolValue]) {
+                finish(YES);
+            } else {
+                finish(NO);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (finish) {
+            finish(NO);
+        }
+    }];
+}
+
+- (void)deletePassenger:(NSString *)name idCardNo:(NSString *)idCardNo success:(void (^)(BOOL))success {
+    NSString *path = @"passengers/delete";
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument setObject:name forKey:@"passenger_name"];
+    [argument setObject:@"1" forKey:@"passenger_id_type_code"];
+    [argument setObject:idCardNo forKey:@"passenger_id_no"];
+    [argument setObject:@"N" forKey:@"isUserSelf"];
+
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *jsonErr = nil;
+        NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+        if (success) {
+            if ([[dict objectForKey:@"status"] boolValue]) {
+                success(YES);
+            } else {
+                success(NO);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+}
+
 - (void)cancelGetPassengers {
     [self cancelAllHTTPOperationsWithMethod:nil path:@"confirmPassenger/getPassengerDTOs"];
 }

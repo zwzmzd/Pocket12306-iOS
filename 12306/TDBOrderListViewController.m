@@ -17,8 +17,6 @@
 #import "TDBHTTPClient.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SVPullToRefresh.h"
-#import "Macros.h"
-#import "MobClick.h"
 
 @interface TDBOrderListViewController ()
 
@@ -208,6 +206,16 @@
     
     _refreshProcessEnable = YES;
     _isFirstScene = YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MobClickBeginLogPageView();
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    MobClickEndLogPageView();
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
