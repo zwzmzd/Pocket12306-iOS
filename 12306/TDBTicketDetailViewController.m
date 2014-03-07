@@ -616,7 +616,10 @@
                         [[TDBHTTPClient sharedClient] addPassenger:[argument getFinalData] finish:^(BOOL indicator) {
                             dispatch_semaphore_signal(semaphore);
                         }];
-                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                        
+                        int64_t delayInSeconds = 10.f;
+                        dispatch_time_t waitTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                        dispatch_semaphore_wait(semaphore, waitTime);
                         
                         secondRoundNeeded = YES;
                     }
@@ -657,7 +660,10 @@
                                     [[TDBHTTPClient sharedClient] deletePassenger:passenger.name idCardNo:passenger.id_cardno success:^(BOOL indicator) {
                                         dispatch_semaphore_signal(semaphore);
                                     }];
-                                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                                    
+                                    int64_t delayInSeconds = 6.f;
+                                    dispatch_time_t waitTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                                    dispatch_semaphore_wait(semaphore, waitTime);
                                     
                                     successIndicator = NO;
                                 }
