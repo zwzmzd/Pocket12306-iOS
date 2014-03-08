@@ -48,9 +48,12 @@
         order.date = [NSString stringWithFormat:@"%@月%@日", [yy_mm_dd objectAtIndex:1], [yy_mm_dd objectAtIndex:2]];
         
         NSMutableArray *statusCode = [NSMutableArray new];
+        NSMutableArray *statusName = [NSMutableArray new];
         NSMutableArray *passengers = [NSMutableArray new];
         for (NSDictionary *ticket in [info objectForKey:@"tickets"]) {
             [statusCode addObject:[ticket objectForKey:@"ticket_status_code"]];
+            [statusName addObject:[ticket objectForKey:@"ticket_status_name"]];
+            
             if (![[ticket objectForKey:@"ticket_status_code"] isEqualToString:@"d"]) {
                 PassengerInOrder *passengerInOrder = [[PassengerInOrder alloc] init];
                 NSDictionary *passengerDTO = [ticket objectForKey:@"passengerDTO"];
@@ -86,9 +89,10 @@
             }
         }
         
-        order.status = ORDER_STATUS_PAID;
-        order.statusDescription = @"已支付";
-        BOOL b = NO, c = NO, d = NO, i = NO;
+        
+        order.status = ORDER_STATUS_OTHER;
+        order.statusDescription = [statusName lastObject];
+        BOOL a = NO, b = NO, c = NO, d = NO, i = NO;
         for (NSString *code in statusCode) {
             if ([code isEqualToString:@"b"]) {
                 b = YES;
@@ -98,6 +102,8 @@
                 d = YES;
             } else if ([code isEqualToString:@"i"]) {
                 i = YES;
+            } else if ([code isEqualToString:@"a"]) {
+                a = YES;
             }
         }
         if (b) {
@@ -112,6 +118,9 @@
         } else if (i) {
             order.status = ORDER_STATUS_UNFINISHED;
             order.statusDescription = @"待支付";
+        } else if (a) {
+            order.status = ORDER_STATUS_PAID;
+            order.statusDescription = @"已支付";
         }
         
         order.passengers = passengers;
