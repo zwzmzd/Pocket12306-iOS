@@ -573,7 +573,12 @@
                 });
                 
                 NSArray *rows = [dict objectForKey:@"normal_passengers"];
+                if (rows == nil) {
+                    // 有时会获取不到normal_passengers，这里设置为一个空的数组以避免crash
+                    rows = @[];
+                }
                 TDBContactList *clist = [[TDBContactList alloc] initWithArray:rows];
+                
                 for (PassengerInfo *passenger in passengerList) {
                     CHECK_INSTANCE_EXIST(wself);
                     
@@ -644,8 +649,14 @@
                         });
                         
                         BOOL successIndicator = YES;
+                        
                         NSArray *rows = [dict objectForKey:@"normal_passengers"];
+                        if (rows == nil) {
+                            // 有时会获取不到normal_passengers，这里设置为一个空的数组以避免crash
+                            rows = @[];
+                        }
                         TDBContactList *clist = [[TDBContactList alloc] initWithArray:rows];
+                        
                         for (PassengerInfo *passenger in passengerList) {
                             if ([clist isInSet:passenger]) {
                                 if ([clist isValid:passenger]) {
