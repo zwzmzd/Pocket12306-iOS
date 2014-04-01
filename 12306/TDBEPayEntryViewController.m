@@ -123,7 +123,15 @@
         }
         [[TDBHTTPClient sharedClient] payOrderInit:^(NSData *data) {
             CHECK_INSTANCE_EXIST(wself);
-            [wself _parseHTML:data];
+            
+            @try {
+                [wself _parseHTML:data];
+            }
+            @catch (NSException *exception) {
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    [SVProgressHUD showErrorWithStatus:@"解析错误，可能是订单未在指定时间内支付，请刷新订单列表后重试"];
+                });
+            }
         }];
     }];
 }
