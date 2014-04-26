@@ -1040,8 +1040,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/macbook/Pocket12306-iOS/12306",
-					"/Users/macbook/Pocket12306-iOS/vendor/UMAnalytics_Sdk_2.2.2.OpenUDID",
+					"$(SRCROOT)/12306",
+					"$(SRCROOT)/vendor/UMAnalytics_Sdk_2.2.2.OpenUDID",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1061,8 +1061,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/macbook/Pocket12306-iOS/12306",
-					"/Users/macbook/Pocket12306-iOS/vendor/UMAnalytics_Sdk_2.2.2.OpenUDID",
+					"$(SRCROOT)/12306",
+					"$(SRCROOT)/vendor/UMAnalytics_Sdk_2.2.2.OpenUDID",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
