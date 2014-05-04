@@ -18,6 +18,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // 设置默认的时区
+    [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+    
     // 设置uiwebview的User-Agent
     NSDictionary *dictionary = [NSDictionary
                                 dictionaryWithObjectsAndKeys:

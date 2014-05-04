@@ -134,7 +134,17 @@
                 [sself.tableView reloadData];
                 
                 if ( dataIsError) { // 未正确获取数据
-                    [SVProgressHUD showErrorWithStatus:@"获取车次信息失败，请重试"];
+                    // 检查购票日期是否无效
+                    NSDate *today = [NSDate date];
+                    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+                    NSUInteger preservedComponents = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit);
+                    today = [calendar dateFromComponents:[calendar components:preservedComponents fromDate:today]];
+                    
+                    if ([self.orderDate compare:today] == NSOrderedAscending) {
+                        [SVProgressHUD showErrorWithStatus:@"购票日期已过，无法购票"];
+                    } else {
+                        [SVProgressHUD showErrorWithStatus:@"获取车次信息失败，请重试"];
+                    }
                 } else if ([sself.dataController count] == 0) { // 获取的数据长度为0
                     [SVProgressHUD showErrorWithStatus:@"没有符合条件的列车了"];
                 } else {
