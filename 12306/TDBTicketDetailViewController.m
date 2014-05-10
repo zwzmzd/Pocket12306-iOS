@@ -572,8 +572,8 @@
                     }
                 });
                 
-                NSArray *rows = [dict objectForKey:@"normal_passengers"];
-                if (rows == nil) {
+                id rows = [dict objectForKey:@"normal_passengers"];
+                if (rows == nil || rows == [NSNull null]) {
                     // 有时会获取不到normal_passengers，这里设置为一个空的数组以避免crash
                     rows = @[];
                 }
