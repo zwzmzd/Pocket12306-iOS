@@ -69,40 +69,36 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)_parseHTML:(NSData *)html {
-    NSMutableArray *scripts = [NSMutableArray new];
-    
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:html];
-    NSArray *elements = [xpathParser searchWithXPathQuery:@"//script"];
-    [scripts addObject:[[[elements lastObject] firstChild] raw]];
-    
-    NSString *code = [scripts componentsJoinedByString:@"\n"];
-    code = [code stringByReplacingOccurrencesOfString:@"<![CDATA[" withString:@""];
-    code = [code stringByReplacingOccurrencesOfString:@"]]>" withString:@""];
-    
+- (void)_parsePaycheck:(NSDictionary *)data {
+    NSString *epayURLKey = @"epayurl";
+    self.epayurl = [data objectForKey:epayURLKey];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        UIWebView *jsEngine = [[UIWebView alloc] initWithFrame:CGRectZero];
-        self.attributes = [NSMutableDictionary new];
-        
-        [jsEngine stringByEvaluatingJavaScriptFromString:code];
-        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"interfaceName"] forKey:@"interfaceName"];
-        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"interfaceVersion"] forKey:@"interfaceVersion"];
-        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"tranData"] forKey:@"tranData"];
-        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"merSignMsg"] forKey:@"merSignMsg"];
-        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"appId"] forKey:@"appId"];
-        [self.attributes setObject:[jsEngine stringByEvaluatingJavaScriptFromString:@"transType"] forKey:@"transType"];
-        self.epayurl = [jsEngine stringByEvaluatingJavaScriptFromString:@"epayurl"];
-        
         NSMutableArray *paramaters = [NSMutableArray new];
-        NSEnumerator *enumerator = [self.attributes keyEnumerator];
+        NSMutableArray *wapParameters = [NSMutableArray new];
+        
+        NSEnumerator *enumerator = [data keyEnumerator];
         id key;
         while ((key = [enumerator nextObject])) {
-            [paramaters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />", key, [self.attributes objectForKey:key]]];
+            if ([key isEqualToString:epayURLKey]) {
+                continue;
+            }
+            [paramaters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />", key, [data objectForKey:key]]];
         }
+        
+        [wapParameters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />",
+                                  @"interfaceName", @"WAP_SERVLET"]];
+        [wapParameters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />",
+                                  @"interfaceVersion", @"1.0"]];
+        [wapParameters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />", @"tranData", [data objectForKey:@"tranData"]]];
+        [wapParameters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />", @"merSignMsg", [data objectForKey:@"merSignMsg"]]];
+        [wapParameters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />",
+                                  @"appId", @"0001"]];
+        [wapParameters addObject:[NSString stringWithFormat:@"<input name=\"%@\" type=\"hidden\" value=\"%@\" />",
+                                  @"transType", @"01"]];
         
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"epay" ofType:@"html"];
         NSString *templateHtml = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-        NSString *webPages = [NSString stringWithFormat:templateHtml, self.totalPrice, self.epayurl, [paramaters componentsJoinedByString:@"\n"], [paramaters componentsJoinedByString:@"\n"]];
+        NSString *webPages = [NSString stringWithFormat:templateHtml, self.totalPrice, self.epayurl, [paramaters componentsJoinedByString:@"\n"], [wapParameters componentsJoinedByString:@"\n"]];
         
         NSURL *baseURL = [[NSURL alloc] initWithString:@"https://epay.12306.cn"];
         [self.webView loadHTMLString:webPages baseURL:baseURL];
@@ -115,6 +111,7 @@
     
     WeakSelf(wself, self);
     [[TDBHTTPClient sharedClient] continuePayNoCompleteMyOrder:self.orderSequenceNo success:^(NSDictionary *result) {
+        CHECK_INSTANCE_EXIST(wself);
         if (result == nil || [[[result objectForKey:@"data"] objectForKey:@"existError"] boolValue]) {
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [SVProgressHUD showErrorWithStatus:@"解析错误，可能是订单未在指定时间内支付，请刷新订单列表后重试"];
@@ -123,15 +120,17 @@
         }
         [[TDBHTTPClient sharedClient] payOrderInit:^(NSData *data) {
             CHECK_INSTANCE_EXIST(wself);
-            
-            @try {
-                [wself _parseHTML:data];
-            }
-            @catch (NSException *exception) {
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    [SVProgressHUD showErrorWithStatus:@"解析错误，可能是订单未在指定时间内支付，请刷新订单列表后重试"];
-                });
-            }
+            [[TDBHTTPClient sharedClient] paycheck:^(NSDictionary *result) {
+                CHECK_INSTANCE_EXIST(wself);
+                NSDictionary *data = [[result objectForKey:@"data"] objectForKey:@"payForm"];
+                if (data == nil || [[[result objectForKey:@"data"] objectForKey:@"existError"] boolValue]) {
+                    dispatch_async(dispatch_get_main_queue(), ^(void) {
+                        [SVProgressHUD showErrorWithStatus:@"解析错误，可能是订单未在指定时间内支付，请刷新订单列表后重试"];
+                    });
+                    return;
+                }
+                [wself _parsePaycheck:data];
+            }];
         }];
     }];
 }

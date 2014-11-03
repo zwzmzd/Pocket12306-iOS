@@ -398,6 +398,24 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
 }
+- (void)paycheck:(void (^)(NSDictionary *))success {
+    POSTDataConstructor *argument = [[POSTDataConstructor alloc] init];
+    [argument setObject:@"" forKey:@"_json_att"];
+    
+    NSString *path = @"/otn/payOrder/paycheck";
+    NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            NSError *jsonErr = nil;
+            NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+            success(jsonErr ? nil : dict);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (success) {
+            success(nil);
+        }
+    }];
+}
 
 - (void)laterEpayWithOrderSequenceNo:(NSString *)orderSequenceNo apacheToken:(NSString *)apacheToken ticketKey:(NSString *)ticketKey success:(void (^)(NSData *))success {
     NSLog(@"laterEpay");

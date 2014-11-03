@@ -34,6 +34,12 @@
                 epay_entry.setAttribute('disabled', 'disabled');
                 return true;
             }
+            
+            var button = document.getElementById('epay-entry');
+            button.onclick = function() {
+                var epayForm = document.getElementById('epayForm');
+                epayForm.submit();
+            }
         }
         //]]>
     </script>
@@ -53,8 +59,8 @@
         <div style="float:right">
             <form id="epayForm" action="https://epay.12306.cn/pay/wapPayGateway" method="post">
                 %@
-                <input id="epay-entry" type="submit" value="点击进入手机支付（推荐)" />
             </form>
+            <button id="epay-entry">手机支付（推荐)</button>
         </div>
         <br class="clear:both" />
     </div>

@@ -58,6 +58,7 @@
 - (void)cancelNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(BOOL, NSArray *))success;
 - (void)continuePayNoCompleteMyOrder:(NSString *)sequenceNo success:(void (^)(NSDictionary *))success;
 - (void)payOrderInit:(void (^)(NSData *))success;
+- (void)paycheck:(void (^)(NSDictionary *))success;
 
 
 // 根据订单号，apacheToken，还有ticketToken获取一个未完成订单的支付页面
