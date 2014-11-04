@@ -46,6 +46,7 @@
 		FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA117A4F25600D535BC /* TDBOrder.m */; };
 		FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA417A5124300D535BC /* TDBOrderDetailViewController.m */; };
 		FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */; };
+		FA4E3F171A08A9CF00D08D1D /* srca.cer in Resources */ = {isa = PBXBuildFile; fileRef = FA4E3F161A08A9CF00D08D1D /* srca.cer */; };
 		FA4F7B5617D2221300DF19A0 /* epay.html in Resources */ = {isa = PBXBuildFile; fileRef = FA4F7B5517D2221300DF19A0 /* epay.html */; };
 		FA50E16B181258A500992940 /* TDBHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FA50E16A181258A500992940 /* TDBHTTPClient.m */; };
 		FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = FA683F1A17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m */; };
@@ -185,6 +186,7 @@
 		FA3BACA717A54FEE00D535BC /* TDBEPayEntryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBEPayEntryViewController.m; sourceTree = "<group>"; };
 		FA4C1CE717AA6297003AB59A /* ODRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ODRefreshControl.h; path = vendor/ORDRefreshControl/ODRefreshControl/ODRefreshControl.h; sourceTree = SOURCE_ROOT; };
 		FA4C1CE817AA6297003AB59A /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ODRefreshControl.m; path = vendor/ORDRefreshControl/ODRefreshControl/ODRefreshControl.m; sourceTree = SOURCE_ROOT; };
+		FA4E3F161A08A9CF00D08D1D /* srca.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = srca.cer; path = ../../Downloads/srca12306/srca.cer; sourceTree = "<group>"; };
 		FA4F7B5517D2221300DF19A0 /* epay.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = epay.html; path = template/epay.html; sourceTree = "<group>"; };
 		FA50E169181258A500992940 /* TDBHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBHTTPClient.h; sourceTree = "<group>"; };
 		FA50E16A181258A500992940 /* TDBHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBHTTPClient.m; sourceTree = "<group>"; };
@@ -491,6 +493,7 @@
 		FA4F7B5417D221D600DF19A0 /* web */ = {
 			isa = PBXGroup;
 			children = (
+				FA4E3F161A08A9CF00D08D1D /* srca.cer */,
 				FA77E04017E8181F009308BF /* login_encode.js */,
 				FA4F7B5517D2221300DF19A0 /* epay.html */,
 			);
@@ -813,7 +816,7 @@
 				ORGANIZATIONNAME = zwz;
 				TargetAttributes = {
 					FA320A2017966A0800F2E282 = {
-						DevelopmentTeam = NZBY2D34QL;
+						DevelopmentTeam = FA2369NZKZ;
 					};
 				};
 			};
@@ -874,6 +877,7 @@
 				FAF902A617C6816A0080A5CC /* right_arrow.png in Resources */,
 				FA6A9D0B1825690000FFCAC2 /* Icon-40@2x.png in Resources */,
 				FAF902A717C6816A0080A5CC /* right_arrow@2x.png in Resources */,
+				FA4E3F171A08A9CF00D08D1D /* srca.cer in Resources */,
 				FA6A9D101825690000FFCAC2 /* Icon-76.png in Resources */,
 				FA4F7B5617D2221300DF19A0 /* epay.html in Resources */,
 			);
@@ -984,6 +988,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1015,7 +1020,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
