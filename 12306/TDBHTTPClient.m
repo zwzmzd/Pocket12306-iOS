@@ -40,7 +40,10 @@
         
         [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
         self.allowsInvalidSSLCertificate = YES;
+#ifdef DEBUG
+#else
         self.defaultSSLPinningMode = AFSSLPinningModePublicKey;
+#endif
     }
     return self;
 }
