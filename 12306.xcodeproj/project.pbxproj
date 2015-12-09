@@ -77,9 +77,11 @@
 		FA73779B18C9C45B00B73ADF /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA73779818C9C45B00B73ADF /* libMobClickLibrary.a */; };
 		FA77E04117E8181F009308BF /* login_encode.js in Sources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FA77E04217E81C7C009308BF /* login_encode.js in Resources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
-		FA77E0F017EED7C3009308BF /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = FA77E0EB17EED7C3009308BF /* TFHpple.m */; };
-		FA77E0F117EED7C3009308BF /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = FA77E0ED17EED7C3009308BF /* TFHppleElement.m */; };
-		FA77E0F217EED7C3009308BF /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FA77E0EF17EED7C3009308BF /* XPathQuery.m */; };
+		FA934C481C17B10400EC854F /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C461C17B10400EC854F /* SSKeychain.m */; };
+		FA934C491C17B10400EC854F /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C471C17B10400EC854F /* SSKeychainQuery.m */; };
+		FA934C501C17B55C00EC854F /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C4D1C17B55C00EC854F /* TFHpple.m */; };
+		FA934C511C17B55C00EC854F /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C4E1C17B55C00EC854F /* TFHppleElement.m */; };
+		FA934C521C17B55C00EC854F /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C4F1C17B55C00EC854F /* XPathQuery.m */; };
 		FA9A513D1812574500043327 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9A512B1812574500043327 /* AFHTTPClient.m */; };
 		FA9A513E1812574500043327 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9A512D1812574500043327 /* AFHTTPRequestOperation.m */; };
 		FA9A513F1812574500043327 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9A512F1812574500043327 /* AFImageRequestOperation.m */; };
@@ -92,8 +94,6 @@
 		FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB56A23179C27D8006A05BF /* TDBStationName.m */; };
 		FAC510A517B87D8100896AB3 /* WKVerticalScrollBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FACDCF881888411600C4FE7C /* TDBDateShower.m in Sources */ = {isa = PBXBuildFile; fileRef = FACDCF871888411600C4FE7C /* TDBDateShower.m */; };
-		FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */; };
-		FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */; };
 		FAE1272117B60D2E00BAD9C4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE1272017B60D2E00BAD9C4 /* Security.framework */; };
 		FAE1272617B655DC00BAD9C4 /* TDBTrainTimetableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */; };
 		FAE1272917B6560900BAD9C4 /* TDBTrainTimetableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE1272817B6560900BAD9C4 /* TDBTrainTimetableCell.m */; };
@@ -223,12 +223,16 @@
 		FA73779818C9C45B00B73ADF /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMobClickLibrary.a; path = vendor/UMAnalytics_Sdk_2.2.2.OpenUDID/libMobClickLibrary.a; sourceTree = SOURCE_ROOT; };
 		FA73779918C9C45B00B73ADF /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MobClick.h; path = vendor/UMAnalytics_Sdk_2.2.2.OpenUDID/MobClick.h; sourceTree = SOURCE_ROOT; };
 		FA77E04017E8181F009308BF /* login_encode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = login_encode.js; sourceTree = "<group>"; };
-		FA77E0EA17EED7C3009308BF /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = vendor/Hpple/TFHpple.h; sourceTree = SOURCE_ROOT; };
-		FA77E0EB17EED7C3009308BF /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = vendor/Hpple/TFHpple.m; sourceTree = SOURCE_ROOT; };
-		FA77E0EC17EED7C3009308BF /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = vendor/Hpple/TFHppleElement.h; sourceTree = SOURCE_ROOT; };
-		FA77E0ED17EED7C3009308BF /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHppleElement.m; path = vendor/Hpple/TFHppleElement.m; sourceTree = SOURCE_ROOT; };
-		FA77E0EE17EED7C3009308BF /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = vendor/Hpple/XPathQuery.h; sourceTree = SOURCE_ROOT; };
-		FA77E0EF17EED7C3009308BF /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPathQuery.m; path = vendor/Hpple/XPathQuery.m; sourceTree = SOURCE_ROOT; };
+		FA934C441C17B10400EC854F /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendor/SSKeychain/SSKeychain/SSKeychain.h; sourceTree = SOURCE_ROOT; };
+		FA934C451C17B10400EC854F /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.h; sourceTree = SOURCE_ROOT; };
+		FA934C461C17B10400EC854F /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendor/SSKeychain/SSKeychain/SSKeychain.m; sourceTree = SOURCE_ROOT; };
+		FA934C471C17B10400EC854F /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychainQuery.m; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.m; sourceTree = SOURCE_ROOT; };
+		FA934C4A1C17B55C00EC854F /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = vendor/Hpple/Pod/Classes/TFHpple.h; sourceTree = SOURCE_ROOT; };
+		FA934C4B1C17B55C00EC854F /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = vendor/Hpple/Pod/Classes/TFHppleElement.h; sourceTree = SOURCE_ROOT; };
+		FA934C4C1C17B55C00EC854F /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = vendor/Hpple/Pod/Classes/XPathQuery.h; sourceTree = SOURCE_ROOT; };
+		FA934C4D1C17B55C00EC854F /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = vendor/Hpple/Pod/Classes/TFHpple.m; sourceTree = SOURCE_ROOT; };
+		FA934C4E1C17B55C00EC854F /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHppleElement.m; path = vendor/Hpple/Pod/Classes/TFHppleElement.m; sourceTree = SOURCE_ROOT; };
+		FA934C4F1C17B55C00EC854F /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPathQuery.m; path = vendor/Hpple/Pod/Classes/XPathQuery.m; sourceTree = SOURCE_ROOT; };
 		FA9A512A1812574500043327 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPClient.h; path = vendor/AFNetworking/AFNetworking/AFHTTPClient.h; sourceTree = SOURCE_ROOT; };
 		FA9A512B1812574500043327 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFHTTPClient.m; path = vendor/AFNetworking/AFNetworking/AFHTTPClient.m; sourceTree = SOURCE_ROOT; };
 		FA9A512C1812574500043327 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperation.h; path = vendor/AFNetworking/AFNetworking/AFHTTPRequestOperation.h; sourceTree = SOURCE_ROOT; };
@@ -255,10 +259,6 @@
 		FACDCF861888411600C4FE7C /* TDBDateShower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBDateShower.h; sourceTree = "<group>"; };
 		FACDCF871888411600C4FE7C /* TDBDateShower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBDateShower.m; sourceTree = "<group>"; };
 		FAD00168187BA2B9003BBCB7 /* Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = "<group>"; };
-		FAE1271A17B60CBE00BAD9C4 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendor/SSKeychain/SSKeychain/SSKeychain.h; sourceTree = SOURCE_ROOT; };
-		FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendor/SSKeychain/SSKeychain/SSKeychain.m; sourceTree = SOURCE_ROOT; };
-		FAE1271C17B60CBE00BAD9C4 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.h; sourceTree = SOURCE_ROOT; };
-		FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychainQuery.m; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.m; sourceTree = SOURCE_ROOT; };
 		FAE1272017B60D2E00BAD9C4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		FAE1272417B655DC00BAD9C4 /* TDBTrainTimetableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBTrainTimetableViewController.h; sourceTree = "<group>"; };
 		FAE1272517B655DC00BAD9C4 /* TDBTrainTimetableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBTrainTimetableViewController.m; sourceTree = "<group>"; };
@@ -307,17 +307,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAE1272117B60D2E00BAD9C4 /* Security.framework in Frameworks */,
+				FA320A2717966A0800F2E282 /* Foundation.framework in Frameworks */,
 				FA2B683018728FF80039FC3D /* MobileCoreServices.framework in Frameworks */,
 				FA2B682E18728F540039FC3D /* ImageIO.framework in Frameworks */,
 				FA1630661822428D008E0B10 /* libz.dylib in Frameworks */,
 				FA73779B18C9C45B00B73ADF /* libMobClickLibrary.a in Frameworks */,
 				FAEB71A917CA2AE900C047E4 /* libsqlite3.dylib in Frameworks */,
 				FA73779A18C9C45B00B73ADF /* libMobClickLibrary_armv6.a in Frameworks */,
-				FAE1272117B60D2E00BAD9C4 /* Security.framework in Frameworks */,
 				FA3BAC9917A4B7C200D535BC /* QuartzCore.framework in Frameworks */,
 				FAED1B43179A4977003DA90E /* libxml2.dylib in Frameworks */,
 				FA320A2517966A0800F2E282 /* UIKit.framework in Frameworks */,
-				FA320A2717966A0800F2E282 /* Foundation.framework in Frameworks */,
 				FA320A2917966A0800F2E282 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -560,14 +560,25 @@
 		FA77E0E917EED78F009308BF /* Hpple */ = {
 			isa = PBXGroup;
 			children = (
-				FA77E0EA17EED7C3009308BF /* TFHpple.h */,
-				FA77E0EB17EED7C3009308BF /* TFHpple.m */,
-				FA77E0EC17EED7C3009308BF /* TFHppleElement.h */,
-				FA77E0ED17EED7C3009308BF /* TFHppleElement.m */,
-				FA77E0EE17EED7C3009308BF /* XPathQuery.h */,
-				FA77E0EF17EED7C3009308BF /* XPathQuery.m */,
+				FA934C4A1C17B55C00EC854F /* TFHpple.h */,
+				FA934C4B1C17B55C00EC854F /* TFHppleElement.h */,
+				FA934C4C1C17B55C00EC854F /* XPathQuery.h */,
+				FA934C4D1C17B55C00EC854F /* TFHpple.m */,
+				FA934C4E1C17B55C00EC854F /* TFHppleElement.m */,
+				FA934C4F1C17B55C00EC854F /* XPathQuery.m */,
 			);
 			name = Hpple;
+			sourceTree = "<group>";
+		};
+		FA934C431C17B0DD00EC854F /* SSKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				FA934C441C17B10400EC854F /* SSKeychain.h */,
+				FA934C451C17B10400EC854F /* SSKeychainQuery.h */,
+				FA934C461C17B10400EC854F /* SSKeychain.m */,
+				FA934C471C17B10400EC854F /* SSKeychainQuery.m */,
+			);
+			name = SSKeychain;
 			sourceTree = "<group>";
 		};
 		FA9A51291812572300043327 /* AFNetworking */ = {
@@ -603,17 +614,6 @@
 				FAC510A417B87D8100896AB3 /* WKVerticalScrollBar.m */,
 			);
 			name = WKVerticalScrollBar;
-			sourceTree = "<group>";
-		};
-		FAE1271317B60C7A00BAD9C4 /* SSKeychain */ = {
-			isa = PBXGroup;
-			children = (
-				FAE1271A17B60CBE00BAD9C4 /* SSKeychain.h */,
-				FAE1271B17B60CBE00BAD9C4 /* SSKeychain.m */,
-				FAE1271C17B60CBE00BAD9C4 /* SSKeychainQuery.h */,
-				FAE1271D17B60CBE00BAD9C4 /* SSKeychainQuery.m */,
-			);
-			name = SSKeychain;
 			sourceTree = "<group>";
 		};
 		FAE1272217B654A000BAD9C4 /* Order */ = {
@@ -767,6 +767,7 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				FA934C431C17B0DD00EC854F /* SSKeychain */,
 				FA2B681E18728C3A0039FC3D /* OLImageView */,
 				FA16305A18224138008E0B10 /* umeng */,
 				FA9A51291812572300043327 /* AFNetworking */,
@@ -775,7 +776,6 @@
 				FAEB718F17C9B20D00C047E4 /* EGOCache */,
 				FAF9029B17C6814B0080A5CC /* CKCalendar */,
 				FAC510A617B87D9D00896AB3 /* WKVerticalScrollBar */,
-				FAE1271317B60C7A00BAD9C4 /* SSKeychain */,
 				FA26F41117B4D0F900DAB404 /* SVProgressHUD */,
 				FA26F40A17B4C4BC00DAB404 /* MBProgressHUD */,
 				FA0311A617B370530024FB55 /* MTStatusBarOverlay */,
@@ -816,7 +816,7 @@
 				ORGANIZATIONNAME = zwz;
 				TargetAttributes = {
 					FA320A2017966A0800F2E282 = {
-						DevelopmentTeam = NZBY2D34QL;
+						DevelopmentTeam = FA2369NZKZ;
 					};
 				};
 			};
@@ -899,7 +899,6 @@
 				FA320A551797991C00F2E282 /* TDBListViewController.m in Sources */,
 				FA77E04117E8181F009308BF /* login_encode.js in Sources */,
 				FA320A581797AB3A00F2E282 /* DataSerializeUtility.m in Sources */,
-				FA77E0F117EED7C3009308BF /* TFHppleElement.m in Sources */,
 				FA320A5B1797D77100F2E282 /* TDBTrainInfo.m in Sources */,
 				FA320A5E1797DC4100F2E282 /* TDBTrainInfoController.m in Sources */,
 				FA320A611797DFE000F2E282 /* GlobalDataStorage.m in Sources */,
@@ -915,13 +914,16 @@
 				FA2B6836187290880039FC3D /* OLImageView.m in Sources */,
 				FAF32E1D179FA361006C2CC9 /* TDBKeybordNotificationManager.m in Sources */,
 				FA3BAC9617A3B72B00D535BC /* TDBLeftTicketForList.m in Sources */,
+				FA934C511C17B55C00EC854F /* TFHppleElement.m in Sources */,
 				FA3BAC9C17A4BC9400D535BC /* TDBOrderListViewController.m in Sources */,
 				FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */,
 				FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */,
 				FA9A51421812574500043327 /* AFPropertyListRequestOperation.m in Sources */,
+				FA934C481C17B10400EC854F /* SSKeychain.m in Sources */,
 				FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */,
 				FA2B6835187290880039FC3D /* OLImage.m in Sources */,
 				FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */,
+				FA934C521C17B55C00EC854F /* XPathQuery.m in Sources */,
 				FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */,
 				FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */,
 				FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */,
@@ -929,8 +931,6 @@
 				FA9A513E1812574500043327 /* AFHTTPRequestOperation.m in Sources */,
 				FA26F40917B4C4B500DAB404 /* MBProgressHUD.m in Sources */,
 				FA26F41017B4D0F000DAB404 /* SVProgressHUD.m in Sources */,
-				FAE1271E17B60CBE00BAD9C4 /* SSKeychain.m in Sources */,
-				FAE1271F17B60CBE00BAD9C4 /* SSKeychainQuery.m in Sources */,
 				FAE1272617B655DC00BAD9C4 /* TDBTrainTimetableViewController.m in Sources */,
 				FAE1272917B6560900BAD9C4 /* TDBTrainTimetableCell.m in Sources */,
 				FAC510A517B87D8100896AB3 /* WKVerticalScrollBar.m in Sources */,
@@ -942,14 +942,14 @@
 				FAEB719517C9B98200C047E4 /* TDBContactInfoViewController.m in Sources */,
 				FA50E16B181258A500992940 /* TDBHTTPClient.m in Sources */,
 				FAEB71A217CA2A0B00C047E4 /* FMDatabase.m in Sources */,
+				FA934C501C17B55C00EC854F /* TFHpple.m in Sources */,
 				FAEB71A317CA2A0B00C047E4 /* FMDatabaseAdditions.m in Sources */,
-				FA77E0F217EED7C3009308BF /* XPathQuery.m in Sources */,
-				FA77E0F017EED7C3009308BF /* TFHpple.m in Sources */,
 				FAEB71A417CA2A0B00C047E4 /* FMDatabasePool.m in Sources */,
 				FAEB71A517CA2A0B00C047E4 /* FMDatabaseQueue.m in Sources */,
 				FA9A51411812574500043327 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				FAEB71A717CA2A0B00C047E4 /* FMResultSet.m in Sources */,
 				FAEB71AD17CA314000C047E4 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
+				FA934C491C17B10400EC854F /* SSKeychainQuery.m in Sources */,
 				FA9A513D1812574500043327 /* AFHTTPClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1037,6 +1037,7 @@
 		FA320A4517966A0800F2E282 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1058,6 +1059,7 @@
 		FA320A4617966A0800F2E282 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
