@@ -10,7 +10,7 @@
 #import "TDBOrder.h"
 #import "TDBTrainInfo.h"
 
-@interface TDBHTTPClient : AFHTTPClient
+@interface TDBHTTPClient : AFHTTPSessionManager
 
 + (TDBHTTPClient *)sharedClient;
 

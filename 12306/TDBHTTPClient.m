@@ -32,34 +32,50 @@
 
 - (id)init {
     NSURL *base = [NSURL URLWithString:SYSURL @"/otn/"];
-    
     if (self = [super initWithBaseURL:base]) {
-        [self setDefaultHeader:@"User-Agent" value:USER_AGENT_STR];
-        [self setDefaultHeader:@"Referer" value:[self.baseURL absoluteString]];
-        [self setDefaultHeader:@"Origin" value:[self.baseURL absoluteString]];
-        
-        [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-        self.allowsInvalidSSLCertificate = YES;
+        self.securityPolicy.allowInvalidCertificates = YES;
 #ifdef DEBUG
+        self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
 #else
-        self.defaultSSLPinningMode = AFSSLPinningModePublicKey;
+        self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
 #endif
     }
     return self;
 }
 
 - (void)cancelAllHTTPRequest {
-    [[self operationQueue] cancelAllOperations];
+    [self cancelTasksWithPath:nil];
+}
+
+- (void)cancelTasksWithPath:(NSString *)path {
+    [[self session] getTasksWithCompletionHandler:^(NSArray<NSURLSessionDataTask *> * _Nonnull dataTasks, NSArray<NSURLSessionUploadTask *> * _Nonnull uploadTasks, NSArray<NSURLSessionDownloadTask *> * _Nonnull downloadTasks) {
+        [self cancelTasksInArray:dataTasks withPath:path];
+        [self cancelTasksInArray:uploadTasks withPath:path];
+        [self cancelTasksInArray:downloadTasks withPath:path];
+    }];
+}
+
+- (void)cancelTasksInArray:(NSArray *)tasksArray withPath:(NSString *)path
+{
+    if (path == nil) {
+        path = @"";
+    }
+    for (NSURLSessionTask *task in tasksArray) {
+        NSRange range = [[[[task currentRequest]URL] absoluteString] rangeOfString:path];
+        if (range.location != NSNotFound) {
+            [task cancel];
+        }
+    }
 }
 
 #pragma mark - 车站代码表
 - (void)getStationNameAndTelecode:(void (^)(NSData *))success {
     NSString *path = @"resources/js/framework/station_name.js";
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (success) {
             success(nil);
         }
@@ -69,12 +85,14 @@
 #pragma mark - 登录部分
 - (void)getVerifyImage:(void (^)(NSData *))success {
     NSString *path = [NSString stringWithFormat:@"passcodeNew/getPassCodeNew?module=login&rand=sjrand"];
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
@@ -86,13 +104,16 @@
     [arguments setObject:password forKey:@"userDTO.password"];
     [arguments setObject:verifyCode forKey:@"randCode"];
     
-    [self postPath:path parameters:arguments success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:arguments progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             NSError *jsonErr = nil;
             NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
             success(jsonErr ? nil : result);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
@@ -115,12 +136,11 @@
     
     
     NSString *path = [NSString stringWithFormat:@"/otsweb/order/querySingleAction.do?%@&orderRequest.start_time_str=00%%3A00--24%%3A00", [arguments getFinalData]];
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success();
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
 }
 
@@ -135,13 +155,14 @@
     
     
     NSString *path = [NSString stringWithFormat:@"/otn/leftTicket/query?%@", [arguments getFinalData]];
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
-
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
@@ -155,7 +176,7 @@
     [argument setObject:departDate forKey:@"depart_date"];
     
     NSString *path = [NSString stringWithFormat:@"/otn/czxx/queryByTrainNo?%@", [argument getFinalData]];
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             NSError *jsonErr = nil;
             NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
@@ -166,7 +187,7 @@
             
             success(nil);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (success) {
             success(nil);
         }
@@ -177,23 +198,28 @@
 
 - (void)getRandpImage:(void (^)(NSData *))success {
     NSString *path = [NSString stringWithFormat:@"passcodeNew/getPassCodeNew?module=passenger&rand=randp"];
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
 - (void)getSubmutToken:(void (^)(NSData *))success {
     NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
     NSString *path = [NSString stringWithFormat:@"/otsweb/dynamicJsAction.do?jsversion=%@&method=queryJs", randCode];
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
@@ -203,11 +229,14 @@
     
     NSString *path = @"login/checkUser";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (finish) {
             finish(YES);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (finish) {
+            finish(NO);
+        }
     }];
 }
 - (void)submutOrderRequestWithTrainInfo:(TDBTrainInfo *)train date:(NSString *)date finish:(void (^)(NSDictionary *))finish {
@@ -225,13 +254,16 @@
     
     NSString *path = @"leftTicket/submitOrderRequest";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (finish) {
             NSError *jsonErr = nil;
             NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
             finish(jsonErr ? nil : result);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (finish) {
+            finish(nil);
+        }
     }];
 }
 - (void)initDc:(void (^)(NSData *))success {
@@ -240,34 +272,37 @@
     
     NSString *path = @"confirmPassenger/initDc";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
 - (void)checkOrderInfo:(NSString *)postBody finish:(void (^)(NSDictionary *))finish {
     NSString *path = @"confirmPassenger/checkOrderInfo";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         finish(jsonErr ? nil : dict);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        finish(nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+         finish(nil);
     }];
 }
 
 - (void)getQueueCount:(NSString *)postBody finish:(void (^)(NSDictionary *))finish {
     NSString *path = @"confirmPassenger/getQueueCount";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         finish(jsonErr ? nil : dict);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         finish(nil);
     }];
 }
@@ -275,11 +310,11 @@
 - (void)confirmSingleForQueue:(NSString *)postBody finish:(void (^)(NSDictionary *))finish {
     NSString *path = @"confirmPassenger/confirmSingleForQueue";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         finish(jsonErr ? nil : dict);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         finish(nil);
     }];
 }
@@ -300,7 +335,7 @@
     
     NSString *path = @"queryOrder/queryMyOrder";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         if (success) {
@@ -310,7 +345,7 @@
                 success(nil);
             }
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (success) {
             success(nil);
         }
@@ -324,7 +359,7 @@
     
     NSString *path = @"queryOrder/queryMyOrderNoComplete";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         if (success) {
@@ -334,7 +369,7 @@
                 success(nil);
             }
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (success) {
             success(nil);
         }
@@ -342,8 +377,8 @@
 }
 
 - (void)cancelQueryMyOrderHTTPRequest {
-    [self cancelAllHTTPOperationsWithMethod:nil path:@"queryOrder/queryMyOrder"];
-    [self cancelAllHTTPOperationsWithMethod:nil path:@"queryOrder/queryMyOrderNoComplete"];
+    [self cancelTasksWithPath:@"queryOrder/queryMyOrder"];
+    [self cancelTasksWithPath:@"queryOrder/queryMyOrderNoComplete"];
 }
 
 #pragma mark - 支付模块
@@ -356,7 +391,7 @@
     
     NSString *path = @"queryOrder/cancelNoCompleteMyOrder";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[arguments getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             NSLog(@"%@", [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding]);
             NSError *jsonErr = nil;
@@ -367,7 +402,8 @@
                 success([[[dict objectForKey:@"data"] objectForKey:@"existError"] isEqualToString:@"N"], [dict objectForKey:@"messages"]);
             }
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        success(NO, @[@"网络异常"]);
     }];
 }
 
@@ -379,11 +415,11 @@
     
     NSString *path = @"/otn/queryOrder/continuePayNoCompleteMyOrder";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         success(jsonErr ? nil : dict);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (success) {
             success(nil);
         }
@@ -395,11 +431,14 @@
     
     NSString *path = @"/otn/payOrder/init";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 - (void)paycheck:(void (^)(NSDictionary *))success {
@@ -408,13 +447,13 @@
     
     NSString *path = @"/otn/payOrder/paycheck";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             NSError *jsonErr = nil;
             NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
             success(jsonErr ? nil : dict);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (success) {
             success(nil);
         }
@@ -434,12 +473,14 @@
     
     NSString *path = [NSString stringWithFormat:@"/otsweb/order/myOrderAction.do?method=laterEpay&orderSequence_no=%@&con_pay_type=epay", orderSequenceNo];
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
@@ -449,7 +490,7 @@
     NSLog(@"getPassengers");
     
     NSString *path = @"confirmPassenger/getPassengerDTOs";
-    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         if (success) {
@@ -459,14 +500,17 @@
                 success(nil);
             }
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
     }];
 }
 
 - (void)addPassenger:(NSString *)postBody finish:(void (^)(BOOL))finish {
     NSString *path = @"passengers/add";
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [postBody dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         if (finish) {
@@ -476,7 +520,7 @@
                 finish(NO);
             }
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (finish) {
             finish(NO);
         }
@@ -492,7 +536,7 @@
     [argument setObject:@"N" forKey:@"isUserSelf"];
 
     NSDictionary *parameters = @{USER_DEFINED_POSTBODY: [[argument getFinalData] dataUsingEncoding:NSUTF8StringEncoding]};
-    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError *jsonErr = nil;
         NSDictionary *dict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
         if (success) {
@@ -502,37 +546,34 @@
                 success(NO);
             }
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(NO);
+        }
     }];
 }
 
 - (void)cancelGetPassengers {
-    [self cancelAllHTTPOperationsWithMethod:nil path:@"confirmPassenger/getPassengerDTOs"];
+    [self cancelTasksWithPath:@"confirmPassenger/getPassengerDTOs"];
 }
 
 #pragma mark - AFHTTPClient functions overwirte
 
 - (NSMutableURLRequest *)requestWithMethod:(NSString *)method path:(NSString *)path parameters:(NSDictionary *)parameters {
-    NSMutableURLRequest *request;
-    NSData *postBody = [parameters objectForKey:USER_DEFINED_POSTBODY];
-    
-    // 有的时候，我们需要自己构造数据提交
-    if (postBody != nil) {
-        request = [super requestWithMethod:method path:path parameters:nil];
-        request.HTTPMethod = @"POST";
-        request.HTTPBody = postBody;
-    } else {
-        request = [super requestWithMethod:method path:path parameters:parameters];
-    }
-    
-    return request;
-}
-
-- (void)enqueueHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
-    dispatch_queue_t callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    operation.successCallbackQueue = callbackQueue;
-    operation.failureCallbackQueue = callbackQueue;
-    [super enqueueHTTPRequestOperation:operation];
+    return nil;
+//    NSMutableURLRequest *request;
+//    NSData *postBody = [parameters objectForKey:USER_DEFINED_POSTBODY];
+//    
+//    // 有的时候，我们需要自己构造数据提交
+//    if (postBody != nil) {
+//        request = [super requestWithMethod:method path:path parameters:nil];
+//        request.HTTPMethod = @"POST";
+//        request.HTTPBody = postBody;
+//    } else {
+//        request = [super requestWithMethod:method path:path parameters:parameters];
+//    }
+//    
+//    return request;
 }
 
 @end
