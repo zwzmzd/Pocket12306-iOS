@@ -90,6 +90,9 @@
 
 - (void)initStationNameControllerUsingGCD
 {
+    if (self.stationNameController != nil) {
+        return;
+    }
     self.stationNameController = [[TDBStationName alloc] init];
     [self.stationNameController fetchStationNameRawTextFromNet];
 }

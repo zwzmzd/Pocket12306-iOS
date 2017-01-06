@@ -32,10 +32,16 @@
 
 - (id)init {
     NSURL *base = [NSURL URLWithString:SYSURL @"/otn/"];
+//    NSURL *base = [NSURL URLWithString:@"https://www.baidu.com"];
     if (self = [super initWithBaseURL:base]) {
-        self.securityPolicy.allowInvalidCertificates = YES;
+        [self.requestSerializer setValue:USER_AGENT_STR forHTTPHeaderField:@"User-Agent"];
+        [self.requestSerializer setValue:[self.baseURL absoluteString] forHTTPHeaderField:@"Referer"];
+        [self.requestSerializer setValue:[self.baseURL absoluteString] forHTTPHeaderField:@"Origin"];
+        self.responseSerializer = [AFHTTPResponseSerializer serializer];
 #ifdef DEBUG
         self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+        self.securityPolicy.validatesDomainName = NO;
+        self.securityPolicy.allowInvalidCertificates = YES;
 #else
         self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
 #endif
