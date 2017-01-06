@@ -3,6 +3,7 @@ platform :ios, '8.0'
 
 target '12306' do
   pod 'AFNetworking', '~> 3.0'
-  pod 'SAMKeychain'
+  pod 'SAMKeychain', '~> 1.5'
+  pod 'EGOCache', '~> 2.0'
 
 end
