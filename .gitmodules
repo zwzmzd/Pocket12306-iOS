@@ -10,9 +10,6 @@ url=git@github.com:zwzmzd/SVPullToRefresh.git
 [submodule "vendor/MBProgressHUD"]
 	path = vendor/MBProgressHUD
 	url = git@github.com:jdg/MBProgressHUD.git
-[submodule "vendor/SSKeychain"]
-	path = vendor/SSKeychain
-	url = git@github.com:soffes/sskeychain.git
 [submodule "vendor/WKVerticalScrollBar"]
 	path = vendor/WKVerticalScrollBar
 	url = git@github.com:litl/WKVerticalScrollBar.git

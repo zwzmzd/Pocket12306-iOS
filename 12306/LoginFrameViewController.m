@@ -11,10 +11,10 @@
 #import "GlobalDataStorage.h"
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
-#import "SSKeychain.h"
 #import "TDBHTTPClient.h"
 #import "OLImageView.h"
 #import "OLImage.h"
+#import "SAMKeychain.h"
 
 #define KEYCHAIN_SERVICE (@"12306_account")
 #define KEYCHAIN_USERNAME_KEY (@"12306_account_username")
@@ -66,8 +66,8 @@
     BOOL isOn = [ud boolForKey:REMEMEBR_PROFILE_STATE_STOREAGE_KEY];
     [self.rememberProfile setOn:isOn];
     if (isOn) {
-        self.username.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
-        self.password.text = [SSKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
+        self.username.text = [SAMKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
+        self.password.text = [SAMKeychain passwordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
     }
     
     WeakSelf(wself, self);
@@ -118,8 +118,8 @@
                     GlobalDataStorage.tdbss = self.tdbss;
                     
                     if (self.rememberProfile.isOn) {
-                        [SSKeychain setPassword:username forService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
-                        [SSKeychain setPassword:password forService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
+                        [SAMKeychain setPassword:username forService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
+                        [SAMKeychain setPassword:password forService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
                     }
                     
                     [self dismissViewControllerAnimated:YES completion:NULL];
@@ -158,8 +158,8 @@
 - (IBAction)switcherClicked:(id)sender {
     BOOL isOn = [sender isOn];
     if (isOn == NO) {
-        [SSKeychain deletePasswordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
-        [SSKeychain deletePasswordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
+        [SAMKeychain deletePasswordForService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
+        [SAMKeychain deletePasswordForService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
         [SVProgressHUD showSuccessWithStatus:@"保存的用户名密码已被清除"];
     }
     

@@ -78,8 +78,6 @@
 		FA73779B18C9C45B00B73ADF /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA73779818C9C45B00B73ADF /* libMobClickLibrary.a */; };
 		FA77E04117E8181F009308BF /* login_encode.js in Sources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FA77E04217E81C7C009308BF /* login_encode.js in Resources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
-		FA934C481C17B10400EC854F /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C461C17B10400EC854F /* SSKeychain.m */; };
-		FA934C491C17B10400EC854F /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C471C17B10400EC854F /* SSKeychainQuery.m */; };
 		FA934C501C17B55C00EC854F /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C4D1C17B55C00EC854F /* TFHpple.m */; };
 		FA934C511C17B55C00EC854F /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C4E1C17B55C00EC854F /* TFHppleElement.m */; };
 		FA934C521C17B55C00EC854F /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C4F1C17B55C00EC854F /* XPathQuery.m */; };
@@ -218,10 +216,6 @@
 		FA73779818C9C45B00B73ADF /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMobClickLibrary.a; path = vendor/UMAnalytics_Sdk_2.2.2.OpenUDID/libMobClickLibrary.a; sourceTree = SOURCE_ROOT; };
 		FA73779918C9C45B00B73ADF /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MobClick.h; path = vendor/UMAnalytics_Sdk_2.2.2.OpenUDID/MobClick.h; sourceTree = SOURCE_ROOT; };
 		FA77E04017E8181F009308BF /* login_encode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = login_encode.js; sourceTree = "<group>"; };
-		FA934C441C17B10400EC854F /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendor/SSKeychain/SSKeychain/SSKeychain.h; sourceTree = SOURCE_ROOT; };
-		FA934C451C17B10400EC854F /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.h; sourceTree = SOURCE_ROOT; };
-		FA934C461C17B10400EC854F /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendor/SSKeychain/SSKeychain/SSKeychain.m; sourceTree = SOURCE_ROOT; };
-		FA934C471C17B10400EC854F /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychainQuery.m; path = vendor/SSKeychain/SSKeychain/SSKeychainQuery.m; sourceTree = SOURCE_ROOT; };
 		FA934C4A1C17B55C00EC854F /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = vendor/Hpple/Pod/Classes/TFHpple.h; sourceTree = SOURCE_ROOT; };
 		FA934C4B1C17B55C00EC854F /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = vendor/Hpple/Pod/Classes/TFHppleElement.h; sourceTree = SOURCE_ROOT; };
 		FA934C4C1C17B55C00EC854F /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = vendor/Hpple/Pod/Classes/XPathQuery.h; sourceTree = SOURCE_ROOT; };
@@ -558,17 +552,6 @@
 			name = Hpple;
 			sourceTree = "<group>";
 		};
-		FA934C431C17B0DD00EC854F /* SSKeychain */ = {
-			isa = PBXGroup;
-			children = (
-				FA934C441C17B10400EC854F /* SSKeychain.h */,
-				FA934C451C17B10400EC854F /* SSKeychainQuery.h */,
-				FA934C461C17B10400EC854F /* SSKeychain.m */,
-				FA934C471C17B10400EC854F /* SSKeychainQuery.m */,
-			);
-			name = SSKeychain;
-			sourceTree = "<group>";
-		};
 		FAC510A617B87D9D00896AB3 /* WKVerticalScrollBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -729,7 +712,6 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				FA934C431C17B0DD00EC854F /* SSKeychain */,
 				FA2B681E18728C3A0039FC3D /* OLImageView */,
 				FA16305A18224138008E0B10 /* umeng */,
 				FA77E0E917EED78F009308BF /* Hpple */,
@@ -926,7 +908,6 @@
 				FA3BAC9C17A4BC9400D535BC /* TDBOrderListViewController.m in Sources */,
 				FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */,
 				FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */,
-				FA934C481C17B10400EC854F /* SSKeychain.m in Sources */,
 				FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */,
 				FA2B6835187290880039FC3D /* OLImage.m in Sources */,
 				FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */,
@@ -953,7 +934,6 @@
 				FAEB71A517CA2A0B00C047E4 /* FMDatabaseQueue.m in Sources */,
 				FAEB71A717CA2A0B00C047E4 /* FMResultSet.m in Sources */,
 				FAEB71AD17CA314000C047E4 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
-				FA934C491C17B10400EC854F /* SSKeychainQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
