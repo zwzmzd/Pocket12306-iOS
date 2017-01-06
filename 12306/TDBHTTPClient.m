@@ -10,10 +10,9 @@
 #import "DataSerializeUtility.h"
 #import "GlobalDataStorage.h"
 #import "TDBTrainInfo.h"
+#import "TDBHTTPRequestSerializer.h"
 #import "Macros.h"
 #import "Defines.h"
-
-#define USER_DEFINED_POSTBODY (@"UserPostBody")
 
 @interface TDBHTTPClient()
 
@@ -32,12 +31,13 @@
 
 - (id)init {
     NSURL *base = [NSURL URLWithString:SYSURL @"/otn/"];
-//    NSURL *base = [NSURL URLWithString:@"https://www.baidu.com"];
     if (self = [super initWithBaseURL:base]) {
+        self.requestSerializer = [[TDBHTTPRequestSerializer alloc] init];
+        self.responseSerializer = [AFHTTPResponseSerializer serializer];
         [self.requestSerializer setValue:USER_AGENT_STR forHTTPHeaderField:@"User-Agent"];
         [self.requestSerializer setValue:[self.baseURL absoluteString] forHTTPHeaderField:@"Referer"];
         [self.requestSerializer setValue:[self.baseURL absoluteString] forHTTPHeaderField:@"Origin"];
-        self.responseSerializer = [AFHTTPResponseSerializer serializer];
+        
 #ifdef DEBUG
         self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
         self.securityPolicy.validatesDomainName = NO;
@@ -561,25 +561,6 @@
 
 - (void)cancelGetPassengers {
     [self cancelTasksWithPath:@"confirmPassenger/getPassengerDTOs"];
-}
-
-#pragma mark - AFHTTPClient functions overwirte
-
-- (NSMutableURLRequest *)requestWithMethod:(NSString *)method path:(NSString *)path parameters:(NSDictionary *)parameters {
-    return nil;
-//    NSMutableURLRequest *request;
-//    NSData *postBody = [parameters objectForKey:USER_DEFINED_POSTBODY];
-//    
-//    // 有的时候，我们需要自己构造数据提交
-//    if (postBody != nil) {
-//        request = [super requestWithMethod:method path:path parameters:nil];
-//        request.HTTPMethod = @"POST";
-//        request.HTTPBody = postBody;
-//    } else {
-//        request = [super requestWithMethod:method path:path parameters:parameters];
-//    }
-//    
-//    return request;
 }
 
 @end
