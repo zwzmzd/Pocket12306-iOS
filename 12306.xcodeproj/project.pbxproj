@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A555C601E2002FE0067812B /* TDBHTTPRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A555C5F1E2002FE0067812B /* TDBHTTPRequestSerializer.m */; };
+		1A7C3FD51E215669006F2208 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7C3FD41E215669006F2208 /* Launch Screen.storyboard */; };
 		A6DBB8C4A0438AFBFEE99D68 /* libPods-12306.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79EA77FD63EB5FCE25DCE110 /* libPods-12306.a */; };
 		FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */; };
 		FA1091B817C53CF600FB24B3 /* header_bk.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B017C53CF600FB24B3 /* header_bk.png */; };
@@ -111,6 +112,7 @@
 /* Begin PBXFileReference section */
 		1A555C5E1E2002FE0067812B /* TDBHTTPRequestSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBHTTPRequestSerializer.h; sourceTree = "<group>"; };
 		1A555C5F1E2002FE0067812B /* TDBHTTPRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBHTTPRequestSerializer.m; sourceTree = "<group>"; };
+		1A7C3FD41E215669006F2208 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		79EA77FD63EB5FCE25DCE110 /* libPods-12306.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-12306.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		85704B0041FA102ECE48BB27 /* Pods-12306.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-12306.debug.xcconfig"; path = "Pods/Target Support Files/Pods-12306/Pods-12306.debug.xcconfig"; sourceTree = "<group>"; };
 		DF9F29F9A315360401A3329E /* Pods-12306.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-12306.release.xcconfig"; path = "Pods/Target Support Files/Pods-12306/Pods-12306.release.xcconfig"; sourceTree = "<group>"; };
@@ -411,6 +413,7 @@
 				FA320A3317966A0800F2E282 /* TDBAppDelegate.h */,
 				FA320A3417966A0800F2E282 /* TDBAppDelegate.m */,
 				FA320A3C17966A0800F2E282 /* MainStoryboard.storyboard */,
+				1A7C3FD41E215669006F2208 /* Launch Screen.storyboard */,
 				FAFC0A2817A964DB00CD273E /* Vendor */,
 				FA320A2B17966A0800F2E282 /* Supporting Files */,
 			);
@@ -784,6 +787,7 @@
 				FA6A9D111825690000FFCAC2 /* Icon-76@2x.png in Resources */,
 				FA6A9D151825690000FFCAC2 /* Icon-Small@2x.png in Resources */,
 				FAF902A517C6816A0080A5CC /* left_arrow@2x.png in Resources */,
+				1A7C3FD51E215669006F2208 /* Launch Screen.storyboard in Resources */,
 				FA6A9D141825690000FFCAC2 /* Icon-Small.png in Resources */,
 				FA6A9CCB1825666D00FFCAC2 /* Default.png in Resources */,
 				FAF902A617C6816A0080A5CC /* right_arrow.png in Resources */,
