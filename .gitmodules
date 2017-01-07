@@ -4,9 +4,6 @@ url=git@github.com:zwzmzd/SVPullToRefresh.git
 [submodule "vendor/MTStatusBarOverlay"]
 	path = vendor/MTStatusBarOverlay
 	url = git@github.com:myell0w/MTStatusBarOverlay.git
-[submodule "vendor/SVProgressHUD"]
-	path = vendor/SVProgressHUD
-	url = git@github.com:samvermette/SVProgressHUD.git
 [submodule "vendor/MBProgressHUD"]
 	path = vendor/MBProgressHUD
 	url = git@github.com:jdg/MBProgressHUD.git

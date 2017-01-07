@@ -43,10 +43,7 @@
 {     
     if (textField == self.username)
         [self.password becomeFirstResponder];
-    else if (textField == self.password) {
-        [self.verifyCode becomeFirstResponder];
-    }
-    else if (textField == self.verifyCode)
+    else if (textField == self.password)
         [textField resignFirstResponder];
     else
         NSAssert(NO, @"here");
@@ -100,16 +97,15 @@
 - (IBAction)iWantLogin:(id)sender {
     [self.username resignFirstResponder];
     [self.password resignFirstResponder];
-    [self.verifyCode resignFirstResponder];
     
-    if ([self.username.text length] && [self.password.text length] && [self.verifyCode.text length]) {
+    if ([self.username.text length] && [self.password.text length]) {
         UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [spinner startAnimating];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
         
         NSString *username = [self.username.text copy];
         NSString *password = [self.password.text copy];
-        NSString *verifyCode = [self.verifyCode.text copy];
+        NSString *verifyCode = @"";
         
         [[TDBHTTPClient sharedClient] loginWithName:username AndPassword:password andVerifyCode:verifyCode success:^(NSDictionary *result) {
             dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -180,7 +176,6 @@
                 StrongSelf(sself, wself);
                 if (sself) {
                     sself.imageView.image = image;
-                    sself.verifyCode.text = @"";
                     [sself.retriveVerifyActivityIndicator stopAnimating];
                 }
             });
