@@ -21,7 +21,6 @@
 		FA1091C617C5BDF200FB24B3 /* UIButton+TDBAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1091C517C5BDF200FB24B3 /* UIButton+TDBAddition.m */; };
 		FA1630661822428D008E0B10 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1630651822428D008E0B10 /* libz.dylib */; };
 		FA2364851A11E15A006F5AF4 /* srca.cer in Resources */ = {isa = PBXBuildFile; fileRef = FA2364841A11E15A006F5AF4 /* srca.cer */; };
-		FA26F40917B4C4B500DAB404 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26F40817B4C4B500DAB404 /* MBProgressHUD.m */; };
 		FA2B682E18728F540039FC3D /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2B682D18728F540039FC3D /* ImageIO.framework */; };
 		FA2B683018728FF80039FC3D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2B682F18728FF80039FC3D /* MobileCoreServices.framework */; };
 		FA2B6835187290880039FC3D /* OLImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2B6832187290880039FC3D /* OLImage.m */; };
@@ -129,8 +128,6 @@
 		FA1091C517C5BDF200FB24B3 /* UIButton+TDBAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+TDBAddition.m"; sourceTree = "<group>"; };
 		FA1630651822428D008E0B10 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FA2364841A11E15A006F5AF4 /* srca.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = srca.cer; sourceTree = "<group>"; };
-		FA26F40717B4C4B500DAB404 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = vendor/MBProgressHUD/MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
-		FA26F40817B4C4B500DAB404 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = vendor/MBProgressHUD/MBProgressHUD.m; sourceTree = SOURCE_ROOT; };
 		FA2B682D18728F540039FC3D /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		FA2B682F18728FF80039FC3D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		FA2B6831187290880039FC3D /* OLImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OLImage.h; path = vendor/OLImageView/OLImage.h; sourceTree = SOURCE_ROOT; };
@@ -353,15 +350,6 @@
 				FA73779918C9C45B00B73ADF /* MobClick.h */,
 			);
 			name = umeng;
-			sourceTree = "<group>";
-		};
-		FA26F40A17B4C4BC00DAB404 /* MBProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				FA26F40717B4C4B500DAB404 /* MBProgressHUD.h */,
-				FA26F40817B4C4B500DAB404 /* MBProgressHUD.m */,
-			);
-			name = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		FA2B681E18728C3A0039FC3D /* OLImageView */ = {
@@ -699,7 +687,6 @@
 				FAEB719617CA29ED00C047E4 /* fmdb */,
 				FAF9029B17C6814B0080A5CC /* CKCalendar */,
 				FAC510A617B87D9D00896AB3 /* WKVerticalScrollBar */,
-				FA26F40A17B4C4BC00DAB404 /* MBProgressHUD */,
 				FA0311A617B370530024FB55 /* MTStatusBarOverlay */,
 				FA683F1717AB7921003D32FB /* SVPullToRefresh */,
 				FA4C1CE617AA6264003AB59A /* ORDRefreshControl */,
@@ -896,7 +883,6 @@
 				FAE88A2917AE5FAF00D632F2 /* TDBOrderOperationViewController.m in Sources */,
 				FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */,
 				FACDCF881888411600C4FE7C /* TDBDateShower.m in Sources */,
-				FA26F40917B4C4B500DAB404 /* MBProgressHUD.m in Sources */,
 				FAE1272617B655DC00BAD9C4 /* TDBTrainTimetableViewController.m in Sources */,
 				FAE1272917B6560900BAD9C4 /* TDBTrainTimetableCell.m in Sources */,
 				FAC510A517B87D8100896AB3 /* WKVerticalScrollBar.m in Sources */,

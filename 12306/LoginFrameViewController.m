@@ -132,12 +132,12 @@
                     hud.mode = MBProgressHUDModeText;
                     hud.removeFromSuperViewOnHide = YES;
                     if (message != nil) {
-                        hud.labelText = @"登录失败";
-                        hud.detailsLabelText = message;
+                        hud.label.text = @"登录失败";
+                        hud.detailsLabel.text = message;
                     }
                     self.navigationItem.rightBarButtonItem = sender;
                     
-                    [hud hide:YES afterDelay:2];
+                    [hud hideAnimated:YES afterDelay:2];
                     [self iWantToRetriveVerifyCode:sender];
                 }
             });
@@ -145,9 +145,9 @@
     } else {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.labelText = @"请认真填写各个字段";
+        hud.label.text = @"请认真填写各个字段";
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:2];
+        [hud hideAnimated:YES afterDelay:2];
     }
 }
 

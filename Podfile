@@ -7,5 +7,6 @@ target '12306' do
   pod 'SAMKeychain', '~> 1.5'
   pod 'EGOCache', '~> 2.0'
   pod 'SVProgressHUD'
+  pod 'MBProgressHUD'
 
 end
