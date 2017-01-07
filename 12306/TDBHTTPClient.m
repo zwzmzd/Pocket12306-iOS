@@ -216,7 +216,7 @@
 }
 
 - (void)getSubmutToken:(void (^)(NSData *))success {
-    NSString *randCode = [NSString stringWithFormat:@"%04d", abs(arc4random()) % 8000 + 1000];
+    NSString *randCode = [NSString stringWithFormat:@"%04d", arc4random() % 8000 + 1000];
     NSString *path = [NSString stringWithFormat:@"/otsweb/dynamicJsAction.do?jsversion=%@&method=queryJs", randCode];
     [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
