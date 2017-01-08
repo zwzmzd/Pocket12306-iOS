@@ -39,10 +39,6 @@
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
-    
     self.title = [NSString stringWithFormat:@"%@次列车", self.train.getTrainNo];
     [self retriveEssentialDataUsingGCD];
 }
@@ -54,19 +50,9 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     MobClickEndLogPageView();
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [SVProgressHUD dismiss];
-}
-
-- (IBAction)_backPressed:(id)sender
-{
     [SVProgressHUD dismiss];
     [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
-    [self.navigationController popViewControllerAnimated:YES];
+    [super viewWillDisappear:animated];
 }
 
 - (void)retriveEssentialDataUsingGCD
