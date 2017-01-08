@@ -10,6 +10,7 @@
 		1A555C601E2002FE0067812B /* TDBHTTPRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A555C5F1E2002FE0067812B /* TDBHTTPRequestSerializer.m */; };
 		1A7C3FD51E215669006F2208 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7C3FD41E215669006F2208 /* Launch Screen.storyboard */; };
 		1AB249681E228434002427BE /* srca.cer in Resources */ = {isa = PBXBuildFile; fileRef = 1AB249661E228120002427BE /* srca.cer */; };
+		1AB2496B1E228992002427BE /* TDBVerifyCodePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB2496A1E228992002427BE /* TDBVerifyCodePickerView.m */; };
 		A6DBB8C4A0438AFBFEE99D68 /* libPods-12306.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79EA77FD63EB5FCE25DCE110 /* libPods-12306.a */; };
 		FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */; };
 		FA1091B817C53CF600FB24B3 /* header_bk.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B017C53CF600FB24B3 /* header_bk.png */; };
@@ -110,6 +111,8 @@
 		1A555C5F1E2002FE0067812B /* TDBHTTPRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBHTTPRequestSerializer.m; sourceTree = "<group>"; };
 		1A7C3FD41E215669006F2208 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		1AB249661E228120002427BE /* srca.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = srca.cer; sourceTree = "<group>"; };
+		1AB249691E228992002427BE /* TDBVerifyCodePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBVerifyCodePickerView.h; sourceTree = "<group>"; };
+		1AB2496A1E228992002427BE /* TDBVerifyCodePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBVerifyCodePickerView.m; sourceTree = "<group>"; };
 		79EA77FD63EB5FCE25DCE110 /* libPods-12306.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-12306.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		85704B0041FA102ECE48BB27 /* Pods-12306.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-12306.debug.xcconfig"; path = "Pods/Target Support Files/Pods-12306/Pods-12306.debug.xcconfig"; sourceTree = "<group>"; };
 		DF9F29F9A315360401A3329E /* Pods-12306.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-12306.release.xcconfig"; path = "Pods/Target Support Files/Pods-12306/Pods-12306.release.xcconfig"; sourceTree = "<group>"; };
@@ -621,6 +624,8 @@
 				FAF902A917C6848B0080A5CC /* TDBDatePickerView.m */,
 				FACDCF861888411600C4FE7C /* TDBDateShower.h */,
 				FACDCF871888411600C4FE7C /* TDBDateShower.m */,
+				1AB249691E228992002427BE /* TDBVerifyCodePickerView.h */,
+				1AB2496A1E228992002427BE /* TDBVerifyCodePickerView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -857,6 +862,7 @@
 				FAF902AA17C6848B0080A5CC /* TDBDatePickerView.m in Sources */,
 				FAEB719517C9B98200C047E4 /* TDBContactInfoViewController.m in Sources */,
 				FA50E16B181258A500992940 /* TDBHTTPClient.m in Sources */,
+				1AB2496B1E228992002427BE /* TDBVerifyCodePickerView.m in Sources */,
 				FAEB71A217CA2A0B00C047E4 /* FMDatabase.m in Sources */,
 				FA934C501C17B55C00EC854F /* TFHpple.m in Sources */,
 				FAEB71A317CA2A0B00C047E4 /* FMDatabaseAdditions.m in Sources */,

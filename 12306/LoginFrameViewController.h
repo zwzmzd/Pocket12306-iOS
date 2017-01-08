@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class OLImageView;
+@class TDBVerifyCodePickerView;
 
 @interface LoginFrameViewController : UITableViewController <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *username;
@@ -16,7 +16,7 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *retriveVerifyCodeButton;
-@property (weak, nonatomic) IBOutlet OLImageView *imageView;
+@property (weak, nonatomic) IBOutlet TDBVerifyCodePickerView *imageView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *retriveVerifyActivityIndicator;
 @property (weak, nonatomic) IBOutlet UISwitch *rememberProfile;
 

@@ -12,7 +12,7 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 #import "TDBHTTPClient.h"
-#import "OLImageView.h"
+#import "TDBVerifyCodePickerView.h"
 #import "OLImage.h"
 #import "SAMKeychain.h"
 
@@ -104,7 +104,7 @@
         
         NSString *username = [self.username.text copy];
         NSString *password = [self.password.text copy];
-        NSString *verifyCode = @"";
+        NSString *verifyCode = [self.imageView exportSelectedPoints];
         
         [[TDBHTTPClient sharedClient] loginWithName:username AndPassword:password andVerifyCode:verifyCode success:^(NSDictionary *result) {
             dispatch_async(dispatch_get_main_queue(), ^(void) {
