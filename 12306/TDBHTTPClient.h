@@ -25,6 +25,8 @@
 // 查询可用车票
 // 预操作
 - (void)qt:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)())success;
+// 查询前记录一下log
+- (void)leftTicketLogWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)(NSData *))success;
 // 输入购票时间，起点站，终点站，获取余票信息
 - (void)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)(NSData *))success;
 // 获取指定列车的停靠站列表

@@ -150,9 +150,7 @@
     }];
 }
 
-- (void)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)(NSData *))success {
-    NSLog(@"queryLeftTicketWithDate");
-    
+- (void)leftTicketLogWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)(NSData *))success {
     POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
     [arguments setObject:date forKey:@"leftTicketDTO.train_date"];
     [arguments setObject:from forKey:@"leftTicketDTO.from_station"];
@@ -160,7 +158,27 @@
     [arguments setObject:@"ADULT" forKey:@"purpose_codes"];
     
     
-    NSString *path = [NSString stringWithFormat:@"/otn/leftTicket/query?%@", [arguments getFinalData]];
+    NSString *path = [NSString stringWithFormat:@"/otn/leftTicket/log?%@", [arguments getFinalData]];
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
+    }];
+}
+
+- (void)queryLeftTickWithDate:(NSString *)date from:(NSString *)from to:(NSString *)to success:(void (^)(NSData *))success {
+    POSTDataConstructor *arguments = [[POSTDataConstructor alloc] init];
+    [arguments setObject:date forKey:@"leftTicketDTO.train_date"];
+    [arguments setObject:from forKey:@"leftTicketDTO.from_station"];
+    [arguments setObject:to forKey:@"leftTicketDTO.to_station"];
+    [arguments setObject:@"ADULT" forKey:@"purpose_codes"];
+    
+    
+    NSString *path = [NSString stringWithFormat:@"/otn/leftTicket/queryA?%@", [arguments getFinalData]];
     [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);

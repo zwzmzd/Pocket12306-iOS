@@ -59,10 +59,6 @@
     
     self.title = [NSString stringWithFormat:@"%@车票", self.dateInString];
     [self retriveTrainInfoListUsingGCD];
-    
-    UIButton *button = [UIButton arrowBackButtonWithSelector:@selector(_backPressed:) target:self];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    [self.navigationItem setLeftBarButtonItem:backButton animated:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -72,14 +68,9 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     MobClickEndLogPageView();
-    [super viewWillDisappear:animated];
-}
-
-- (IBAction)_backPressed:(id)sender
-{
     [SVProgressHUD dismiss];
-    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
-    [self.navigationController popViewControllerAnimated:YES];
+    [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -154,11 +145,15 @@
         }
     };
     
-    [[TDBHTTPClient sharedClient] queryLeftTickWithDate:wself.dateInString
-                                                   from:wself.departStationTelecode
-                                                     to:wself.arriveStationTelecode
-                                                success:progress];
-
+    [[TDBHTTPClient sharedClient] leftTicketLogWithDate:wself.dateInString from:wself.departStationTelecode to:wself.arriveStationTelecode success:^(NSData *ret) {
+        if (ret == nil)
+            return;
+        CHECK_INSTANCE_EXIST(wself);
+        [[TDBHTTPClient sharedClient] queryLeftTickWithDate:wself.dateInString
+                                                       from:wself.departStationTelecode
+                                                         to:wself.arriveStationTelecode
+                                                    success:progress];
+    }];
 }
 
 #pragma mark - Table view data source
