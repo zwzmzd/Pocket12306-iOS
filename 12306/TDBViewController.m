@@ -32,7 +32,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [MobClick event:@"MainViewControllerLoad"];
     
     self.dateShower.parentController = self;
     
@@ -52,7 +51,7 @@
     
     static UIBarButtonItem *buyTicket = nil;
     
-    if ([GlobalDataStorage tdbss]) {
+//    if ([GlobalDataStorage tdbss]) {
         self.navigationItem.leftBarButtonItem.title = @"更换账户";
         self.title = @"购票";
         
@@ -60,17 +59,17 @@
             self.navigationItem.rightBarButtonItem = buyTicket;
         
         [self.mask removeFromSuperview];
-    } else {
-        self.navigationItem.leftBarButtonItem.title = @"请登录";
-        if (self.navigationItem.rightBarButtonItem)
-            buyTicket = self.navigationItem.rightBarButtonItem;
-        self.navigationItem.rightBarButtonItem = nil;
-        
-        self.mask.frame = self.view.bounds;
-        UIView *wrapperView = self.view.superview;
-        [wrapperView addSubview:self.mask];
-        [wrapperView bringSubviewToFront:self.mask];
-    }
+//    } else {
+//        self.navigationItem.leftBarButtonItem.title = @"请登录";
+//        if (self.navigationItem.rightBarButtonItem)
+//            buyTicket = self.navigationItem.rightBarButtonItem;
+//        self.navigationItem.rightBarButtonItem = nil;
+//        
+//        self.mask.frame = self.view.bounds;
+//        UIView *wrapperView = self.view.superview;
+//        [wrapperView addSubview:self.mask];
+//        [wrapperView bringSubviewToFront:self.mask];
+//    }
     
     [self initStationNameControllerUsingGCD];
     

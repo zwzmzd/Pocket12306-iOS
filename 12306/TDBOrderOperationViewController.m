@@ -75,7 +75,6 @@ typedef enum {
         [self.receiver forceRefreshOrderList];
     });
     
-    [MobClick event:@"PaidCompleteAndRefresh"];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -114,7 +113,6 @@ typedef enum {
                     if (sself) {
                         UIAlertView *alert;
                         if (result) {
-                            [MobClick event:@"CancleUnfinishedOrderSuccess"];
                             alert = [[UIAlertView alloc] initWithTitle:@"取消成功" message:@"您已成功取消订单" delegate:sself cancelButtonTitle:@"确定" otherButtonTitles: nil];
                         } else {
                             alert = [[UIAlertView alloc] initWithTitle:@"取消失败" message:[messages firstObject] delegate:sself cancelButtonTitle:@"确定" otherButtonTitles: nil];

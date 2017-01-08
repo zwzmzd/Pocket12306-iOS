@@ -54,7 +54,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [MobClick event:@"LoginFrameViewControllerViewDidLoad"];
     
     [TDBSession resetSession];
     [GlobalDataStorage setTdbss:nil];

@@ -72,8 +72,6 @@
 		FA6A9D181825690000FFCAC2 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF81825690000FFCAC2 /* iTunesArtwork.png */; };
 		FA6A9D191825690000FFCAC2 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA6A9CF91825690000FFCAC2 /* iTunesArtwork@2x.png */; };
 		FA73777718C852AD00B73ADF /* TDBContactList.m in Sources */ = {isa = PBXBuildFile; fileRef = FA73777618C852AD00B73ADF /* TDBContactList.m */; };
-		FA73779A18C9C45B00B73ADF /* libMobClickLibrary_armv6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA73779718C9C45B00B73ADF /* libMobClickLibrary_armv6.a */; };
-		FA73779B18C9C45B00B73ADF /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA73779818C9C45B00B73ADF /* libMobClickLibrary.a */; };
 		FA77E04117E8181F009308BF /* login_encode.js in Sources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FA77E04217E81C7C009308BF /* login_encode.js in Resources */ = {isa = PBXBuildFile; fileRef = FA77E04017E8181F009308BF /* login_encode.js */; };
 		FA934C501C17B55C00EC854F /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = FA934C4D1C17B55C00EC854F /* TFHpple.m */; };
@@ -204,9 +202,6 @@
 		FA6A9CF91825690000FFCAC2 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
 		FA73777518C852AD00B73ADF /* TDBContactList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBContactList.h; sourceTree = "<group>"; };
 		FA73777618C852AD00B73ADF /* TDBContactList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBContactList.m; sourceTree = "<group>"; };
-		FA73779718C9C45B00B73ADF /* libMobClickLibrary_armv6.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMobClickLibrary_armv6.a; path = vendor/UMAnalytics_Sdk_2.2.2.OpenUDID/libMobClickLibrary_armv6.a; sourceTree = SOURCE_ROOT; };
-		FA73779818C9C45B00B73ADF /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMobClickLibrary.a; path = vendor/UMAnalytics_Sdk_2.2.2.OpenUDID/libMobClickLibrary.a; sourceTree = SOURCE_ROOT; };
-		FA73779918C9C45B00B73ADF /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MobClick.h; path = vendor/UMAnalytics_Sdk_2.2.2.OpenUDID/MobClick.h; sourceTree = SOURCE_ROOT; };
 		FA77E04017E8181F009308BF /* login_encode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = login_encode.js; sourceTree = "<group>"; };
 		FA934C4A1C17B55C00EC854F /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = vendor/Hpple/Pod/Classes/TFHpple.h; sourceTree = SOURCE_ROOT; };
 		FA934C4B1C17B55C00EC854F /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = vendor/Hpple/Pod/Classes/TFHppleElement.h; sourceTree = SOURCE_ROOT; };
@@ -272,9 +267,7 @@
 				FA2B683018728FF80039FC3D /* MobileCoreServices.framework in Frameworks */,
 				FA2B682E18728F540039FC3D /* ImageIO.framework in Frameworks */,
 				FA1630661822428D008E0B10 /* libz.dylib in Frameworks */,
-				FA73779B18C9C45B00B73ADF /* libMobClickLibrary.a in Frameworks */,
 				FAEB71A917CA2AE900C047E4 /* libsqlite3.dylib in Frameworks */,
-				FA73779A18C9C45B00B73ADF /* libMobClickLibrary_armv6.a in Frameworks */,
 				FA3BAC9917A4B7C200D535BC /* QuartzCore.framework in Frameworks */,
 				FAED1B43179A4977003DA90E /* libxml2.dylib in Frameworks */,
 				FA320A2517966A0800F2E282 /* UIKit.framework in Frameworks */,
@@ -336,16 +329,6 @@
 				FA1091C517C5BDF200FB24B3 /* UIButton+TDBAddition.m */,
 			);
 			name = Category;
-			sourceTree = "<group>";
-		};
-		FA16305A18224138008E0B10 /* umeng */ = {
-			isa = PBXGroup;
-			children = (
-				FA73779718C9C45B00B73ADF /* libMobClickLibrary_armv6.a */,
-				FA73779818C9C45B00B73ADF /* libMobClickLibrary.a */,
-				FA73779918C9C45B00B73ADF /* MobClick.h */,
-			);
-			name = umeng;
 			sourceTree = "<group>";
 		};
 		FA320A1817966A0800F2E282 = {
@@ -667,7 +650,6 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				FA16305A18224138008E0B10 /* umeng */,
 				FA77E0E917EED78F009308BF /* Hpple */,
 				FAEB719617CA29ED00C047E4 /* fmdb */,
 				FAF9029B17C6814B0080A5CC /* CKCalendar */,

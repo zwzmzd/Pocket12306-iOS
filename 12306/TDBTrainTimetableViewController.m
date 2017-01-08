@@ -35,7 +35,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [MobClick event:@"train timetable query"];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     

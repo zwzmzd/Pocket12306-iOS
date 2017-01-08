@@ -48,7 +48,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [MobClick event:@"PassengerInfo"];
      
     [self getInformationFromDatabaseUsingGCD];
     
@@ -132,7 +131,6 @@
             [db close];
             
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [MobClick event:@"PassengerInfoRefreshed"];
                 [sself getInformationFromDatabaseUsingGCD];
             });
         }

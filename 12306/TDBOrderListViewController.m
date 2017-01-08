@@ -211,7 +211,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [MobClick event:@"OrderList"];
     
     _refreshProcessEnable = YES;
     _isFirstScene = YES;

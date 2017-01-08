@@ -47,7 +47,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [MobClick event:@"ListViewControllerLoad"];
     
     // 为了App Store，由于外国人可能不会输入中文，所以如果发现值为空
     // 那么就加上一个默认的效果，并且需要把stationNameExactlyMatch关闭

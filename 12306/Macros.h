@@ -28,7 +28,7 @@
 
 #define CurrentPageName NSStringFromClass([self class])
 
-#define MobClickBeginLogPageView() [MobClick beginLogPageView:CurrentPageName]
-#define MobClickEndLogPageView() [MobClick endLogPageView:CurrentPageName]
+#define MobClickBeginLogPageView()
+#define MobClickEndLogPageView()
 
 #endif

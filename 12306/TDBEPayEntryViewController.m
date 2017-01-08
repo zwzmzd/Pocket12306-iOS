@@ -35,7 +35,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [MobClick event:@"EPayEntry"];
 	// Do any additional setup after loading the view.
     
 //    // 进入后，用户总览全局

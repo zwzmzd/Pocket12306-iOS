@@ -11,7 +11,6 @@
 #import "TDBTrainInfo.h"
 #import "PassengerInfo.h"
 #import "Macros.h"
-#import "MobClick.h"
 #import "Defines.h"
 
 #define ADD_UA() \
@@ -38,7 +37,6 @@
         [cookieMgr deleteCookie:cookie];
     }
     NSLog(@"session reseted");
-    [MobClick event:@"session restarted"];
 }
 
 - (id)init
