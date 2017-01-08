@@ -8,5 +8,6 @@ target '12306' do
   pod 'EGOCache', '~> 2.0'
   pod 'SVProgressHUD'
   pod 'MBProgressHUD'
+  pod 'OLImageView'
 
 end

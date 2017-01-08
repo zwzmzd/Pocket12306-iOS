@@ -24,8 +24,6 @@
 		FA2364851A11E15A006F5AF4 /* srca.cer in Resources */ = {isa = PBXBuildFile; fileRef = FA2364841A11E15A006F5AF4 /* srca.cer */; };
 		FA2B682E18728F540039FC3D /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2B682D18728F540039FC3D /* ImageIO.framework */; };
 		FA2B683018728FF80039FC3D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2B682F18728FF80039FC3D /* MobileCoreServices.framework */; };
-		FA2B6835187290880039FC3D /* OLImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2B6832187290880039FC3D /* OLImage.m */; };
-		FA2B6836187290880039FC3D /* OLImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2B6834187290880039FC3D /* OLImageView.m */; };
 		FA320A2517966A0800F2E282 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA320A2417966A0800F2E282 /* UIKit.framework */; };
 		FA320A2717966A0800F2E282 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA320A2617966A0800F2E282 /* Foundation.framework */; };
 		FA320A2917966A0800F2E282 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA320A2817966A0800F2E282 /* CoreGraphics.framework */; };
@@ -132,10 +130,6 @@
 		FA2364841A11E15A006F5AF4 /* srca.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = srca.cer; sourceTree = "<group>"; };
 		FA2B682D18728F540039FC3D /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		FA2B682F18728FF80039FC3D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		FA2B6831187290880039FC3D /* OLImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OLImage.h; path = vendor/OLImageView/OLImage.h; sourceTree = SOURCE_ROOT; };
-		FA2B6832187290880039FC3D /* OLImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OLImage.m; path = vendor/OLImageView/OLImage.m; sourceTree = SOURCE_ROOT; };
-		FA2B6833187290880039FC3D /* OLImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OLImageView.h; path = vendor/OLImageView/OLImageView.h; sourceTree = SOURCE_ROOT; };
-		FA2B6834187290880039FC3D /* OLImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OLImageView.m; path = vendor/OLImageView/OLImageView.m; sourceTree = SOURCE_ROOT; };
 		FA320A2117966A0800F2E282 /* 12306.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 12306.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA320A2417966A0800F2E282 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FA320A2617966A0800F2E282 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -352,17 +346,6 @@
 				FA73779918C9C45B00B73ADF /* MobClick.h */,
 			);
 			name = umeng;
-			sourceTree = "<group>";
-		};
-		FA2B681E18728C3A0039FC3D /* OLImageView */ = {
-			isa = PBXGroup;
-			children = (
-				FA2B6831187290880039FC3D /* OLImage.h */,
-				FA2B6832187290880039FC3D /* OLImage.m */,
-				FA2B6833187290880039FC3D /* OLImageView.h */,
-				FA2B6834187290880039FC3D /* OLImageView.m */,
-			);
-			name = OLImageView;
 			sourceTree = "<group>";
 		};
 		FA320A1817966A0800F2E282 = {
@@ -684,7 +667,6 @@
 		FAFC0A2817A964DB00CD273E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				FA2B681E18728C3A0039FC3D /* OLImageView */,
 				FA16305A18224138008E0B10 /* umeng */,
 				FA77E0E917EED78F009308BF /* Hpple */,
 				FAEB719617CA29ED00C047E4 /* fmdb */,
@@ -871,7 +853,6 @@
 				FAB56A24179C27D8006A05BF /* TDBStationName.m in Sources */,
 				FA73777718C852AD00B73ADF /* TDBContactList.m in Sources */,
 				FAF32E16179F6FE3006C2CC9 /* TDBStationAndDateSelector.m in Sources */,
-				FA2B6836187290880039FC3D /* OLImageView.m in Sources */,
 				1A555C601E2002FE0067812B /* TDBHTTPRequestSerializer.m in Sources */,
 				FAF32E1D179FA361006C2CC9 /* TDBKeybordNotificationManager.m in Sources */,
 				FA3BAC9617A3B72B00D535BC /* TDBLeftTicketForList.m in Sources */,
@@ -880,7 +861,6 @@
 				FA3BACA217A4F25700D535BC /* TDBOrder.m in Sources */,
 				FA3BACA517A5124400D535BC /* TDBOrderDetailViewController.m in Sources */,
 				FA3BACA817A54FEF00D535BC /* TDBEPayEntryViewController.m in Sources */,
-				FA2B6835187290880039FC3D /* OLImage.m in Sources */,
 				FA683F1D17AB7921003D32FB /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				FA934C521C17B55C00EC854F /* XPathQuery.m in Sources */,
 				FA683F1E17AB7921003D32FB /* UIScrollView+SVPullToRefresh.m in Sources */,
