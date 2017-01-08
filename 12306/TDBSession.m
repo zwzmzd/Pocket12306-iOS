@@ -10,8 +10,6 @@
 #import "DataSerializeUtility.h"
 #import "TDBTrainInfo.h"
 #import "PassengerInfo.h"
-#import "Macros.h"
-#import "Defines.h"
 
 #define ADD_UA() \
     [request setValue:USER_AGENT_STR forHTTPHeaderField:@"User-Agent"]

@@ -11,8 +11,6 @@
 #import "GlobalDataStorage.h"
 #import "TDBTrainInfo.h"
 #import "TDBHTTPRequestSerializer.h"
-#import "Macros.h"
-#import "Defines.h"
 
 @interface TDBHTTPClient()
 

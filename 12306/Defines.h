@@ -9,6 +9,8 @@
 #ifndef _2306_Defines_h
 #define _2306_Defines_h
 
+#define ALLOW_ARBITRARY_CA
+
 #define SYSURL @"https://kyfw.12306.cn"
 
 #define USER_DEFINED_POSTBODY (@"UserPostBody")

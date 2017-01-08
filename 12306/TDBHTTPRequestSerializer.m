@@ -7,8 +7,6 @@
 //
 
 #import "TDBHTTPRequestSerializer.h"
-#import "Macros.h"
-#import "Defines.h"
 
 @implementation TDBHTTPRequestSerializer
 
