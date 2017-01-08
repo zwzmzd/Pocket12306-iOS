@@ -9,6 +9,7 @@
 #import "TDBAppDelegate.h"
 #import "TDBKeybordNotificationManager.h"
 #import "MobClick.h"
+#import "AFNetworkActivityLogger.h"
 
 @implementation TDBAppDelegate
 
@@ -32,6 +33,10 @@
                                                          diskCapacity:4 * 1024 * 1024
                                                              diskPath:@"AppCacheDir2013"];
     [NSURLCache setSharedURLCache:URLCache];
+#ifdef DEBUG
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+#endif
+
     //NSLog(@"%@", NSHomeDirectory());
     
     [[TDBKeybordNotificationManager getSharedManager] registerSelfToNotificationCenter];
