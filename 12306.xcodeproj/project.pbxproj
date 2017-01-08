@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1A555C601E2002FE0067812B /* TDBHTTPRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A555C5F1E2002FE0067812B /* TDBHTTPRequestSerializer.m */; };
 		1A7C3FD51E215669006F2208 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7C3FD41E215669006F2208 /* Launch Screen.storyboard */; };
+		1AB249671E228120002427BE /* srca.cer in Resources */ = {isa = PBXBuildFile; fileRef = 1AB249661E228120002427BE /* srca.cer */; };
 		A6DBB8C4A0438AFBFEE99D68 /* libPods-12306.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79EA77FD63EB5FCE25DCE110 /* libPods-12306.a */; };
 		FA0311A517B3704C0024FB55 /* MTStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0311A417B3704C0024FB55 /* MTStatusBarOverlay.m */; };
 		FA1091B817C53CF600FB24B3 /* header_bk.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B017C53CF600FB24B3 /* header_bk.png */; };
@@ -21,7 +22,6 @@
 		FA1091BF17C53CF600FB24B3 /* login_leftbtn_press@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1091B717C53CF600FB24B3 /* login_leftbtn_press@2x.png */; };
 		FA1091C617C5BDF200FB24B3 /* UIButton+TDBAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1091C517C5BDF200FB24B3 /* UIButton+TDBAddition.m */; };
 		FA1630661822428D008E0B10 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1630651822428D008E0B10 /* libz.dylib */; };
-		FA2364851A11E15A006F5AF4 /* srca.cer in Resources */ = {isa = PBXBuildFile; fileRef = FA2364841A11E15A006F5AF4 /* srca.cer */; };
 		FA2B682E18728F540039FC3D /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2B682D18728F540039FC3D /* ImageIO.framework */; };
 		FA2B683018728FF80039FC3D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2B682F18728FF80039FC3D /* MobileCoreServices.framework */; };
 		FA320A2517966A0800F2E282 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA320A2417966A0800F2E282 /* UIKit.framework */; };
@@ -109,6 +109,7 @@
 		1A555C5E1E2002FE0067812B /* TDBHTTPRequestSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBHTTPRequestSerializer.h; sourceTree = "<group>"; };
 		1A555C5F1E2002FE0067812B /* TDBHTTPRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBHTTPRequestSerializer.m; sourceTree = "<group>"; };
 		1A7C3FD41E215669006F2208 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		1AB249661E228120002427BE /* srca.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = srca.cer; sourceTree = "<group>"; };
 		79EA77FD63EB5FCE25DCE110 /* libPods-12306.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-12306.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		85704B0041FA102ECE48BB27 /* Pods-12306.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-12306.debug.xcconfig"; path = "Pods/Target Support Files/Pods-12306/Pods-12306.debug.xcconfig"; sourceTree = "<group>"; };
 		DF9F29F9A315360401A3329E /* Pods-12306.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-12306.release.xcconfig"; path = "Pods/Target Support Files/Pods-12306/Pods-12306.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,7 +126,6 @@
 		FA1091C417C5BDF200FB24B3 /* UIButton+TDBAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+TDBAddition.h"; sourceTree = "<group>"; };
 		FA1091C517C5BDF200FB24B3 /* UIButton+TDBAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+TDBAddition.m"; sourceTree = "<group>"; };
 		FA1630651822428D008E0B10 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		FA2364841A11E15A006F5AF4 /* srca.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = srca.cer; sourceTree = "<group>"; };
 		FA2B682D18728F540039FC3D /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		FA2B682F18728FF80039FC3D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		FA320A2117966A0800F2E282 /* 12306.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 12306.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -420,7 +420,7 @@
 		FA4F7B5417D221D600DF19A0 /* web */ = {
 			isa = PBXGroup;
 			children = (
-				FA2364841A11E15A006F5AF4 /* srca.cer */,
+				1AB249661E228120002427BE /* srca.cer */,
 				FA77E04017E8181F009308BF /* login_encode.js */,
 				FA4F7B5517D2221300DF19A0 /* epay.html */,
 			);
@@ -749,6 +749,7 @@
 				FA6A9CCA1825666D00FFCAC2 /* Default-568h@2x.png in Resources */,
 				FA6A9D0C1825690000FFCAC2 /* Icon-60.png in Resources */,
 				FA6A9D111825690000FFCAC2 /* Icon-76@2x.png in Resources */,
+				1AB249671E228120002427BE /* srca.cer in Resources */,
 				FA6A9D151825690000FFCAC2 /* Icon-Small@2x.png in Resources */,
 				FAF902A517C6816A0080A5CC /* left_arrow@2x.png in Resources */,
 				1A7C3FD51E215669006F2208 /* Launch Screen.storyboard in Resources */,
@@ -757,7 +758,6 @@
 				FAF902A617C6816A0080A5CC /* right_arrow.png in Resources */,
 				FA6A9D0B1825690000FFCAC2 /* Icon-40@2x.png in Resources */,
 				FAF902A717C6816A0080A5CC /* right_arrow@2x.png in Resources */,
-				FA2364851A11E15A006F5AF4 /* srca.cer in Resources */,
 				FA6A9D101825690000FFCAC2 /* Icon-76.png in Resources */,
 				FA4F7B5617D2221300DF19A0 /* epay.html in Resources */,
 			);
