@@ -38,7 +38,7 @@
         [self.requestSerializer setValue:[self.baseURL absoluteString] forHTTPHeaderField:@"Referer"];
         [self.requestSerializer setValue:[self.baseURL absoluteString] forHTTPHeaderField:@"Origin"];
         
-#ifdef DEBUG
+#ifdef ALLOW_ARBITRARY_CA
         self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
         self.securityPolicy.validatesDomainName = NO;
         self.securityPolicy.allowInvalidCertificates = YES;
