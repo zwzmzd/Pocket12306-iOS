@@ -89,7 +89,7 @@
 
 - (IBAction)iWantCancle:(id)sender {
     [SVProgressHUD dismiss];
-    [[[TDBHTTPClient sharedClient] operationQueue] cancelAllOperations];
+    [[TDBHTTPClient sharedClient] cancelAllHTTPRequest];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
@@ -106,40 +106,48 @@
         NSString *password = [self.password.text copy];
         NSString *verifyCode = [self.imageView exportSelectedPoints];
         
-        [[TDBHTTPClient sharedClient] loginWithName:username AndPassword:password andVerifyCode:verifyCode success:^(NSDictionary *result) {
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                BOOL loginSucceed = result && [[[result objectForKey:@"data"] objectForKey:@"loginCheck"] isEqualToString:@"Y"];
-                if (loginSucceed) {
-                    GlobalDataStorage.tdbss = self.tdbss;
-                    
-                    if (self.rememberProfile.isOn) {
-                        [SAMKeychain setPassword:username forService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
-                        [SAMKeychain setPassword:password forService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
-                    }
-                    
-                    [self dismissViewControllerAnimated:YES completion:NULL];
-                } else {
-                    NSString *message = nil;
-                    if (result) {
-                        NSArray *list = [result objectForKey:@"messages"];
-                        if ([list count] > 0) {
-                            message = [list objectAtIndex:0];
+        [[TDBHTTPClient sharedClient] checkRankCodeAnsyn:verifyCode success:^(NSDictionary *ret) {
+            BOOL checkSucceed = ret && [[ret objectForKey:@"data"] objectForKey:@"msg"];
+            if (!checkSucceed) {
+                return;
+            }
+            
+            [[TDBHTTPClient sharedClient] loginWithName:username AndPassword:password andVerifyCode:verifyCode success:^(NSDictionary *result) {
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    BOOL loginSucceed = result && [[[result objectForKey:@"data"] objectForKey:@"loginCheck"] isEqualToString:@"Y"];
+                    if (loginSucceed) {
+                        GlobalDataStorage.tdbss = self.tdbss;
+                        
+                        if (self.rememberProfile.isOn) {
+                            [SAMKeychain setPassword:username forService:KEYCHAIN_SERVICE account:KEYCHAIN_USERNAME_KEY];
+                            [SAMKeychain setPassword:password forService:KEYCHAIN_SERVICE account:KEYCHAIN_PASSWORD_KEY];
                         }
+                        
+                        [self dismissViewControllerAnimated:YES completion:NULL];
+                    } else {
+                        NSString *message = nil;
+                        if (result) {
+                            NSArray *list = [result objectForKey:@"messages"];
+                            if ([list count] > 0) {
+                                message = [list objectAtIndex:0];
+                            }
+                        }
+                        
+                        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                        hud.mode = MBProgressHUDModeText;
+                        hud.removeFromSuperViewOnHide = YES;
+                        if (message != nil) {
+                            hud.label.text = @"登录失败";
+                            hud.detailsLabel.text = message;
+                        }
+                        self.navigationItem.rightBarButtonItem = sender;
+                        
+                        [hud hideAnimated:YES afterDelay:2];
+                        [self iWantToRetriveVerifyCode:sender];
                     }
-                    
-                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                    hud.mode = MBProgressHUDModeText;
-                    hud.removeFromSuperViewOnHide = YES;
-                    if (message != nil) {
-                        hud.label.text = @"登录失败";
-                        hud.detailsLabel.text = message;
-                    }
-                    self.navigationItem.rightBarButtonItem = sender;
-                    
-                    [hud hideAnimated:YES afterDelay:2];
-                    [self iWantToRetriveVerifyCode:sender];
-                }
-            });
+                });
+            }];
+
         }];
     } else {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -166,7 +174,7 @@
 {
     [self.retriveVerifyActivityIndicator startAnimating];
     WeakSelf(wself, self);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+    [[TDBHTTPClient sharedClient] getLoginInit:^(NSData *resp) {
         [[TDBHTTPClient sharedClient] getVerifyImage:^(NSData *imageRawData) {
             NSData *parsedData = imageRawData;
             
@@ -175,11 +183,12 @@
                 StrongSelf(sself, wself);
                 if (sself) {
                     sself.imageView.image = image;
+                    [sself.imageView clearSelectedPoints];
                     [sself.retriveVerifyActivityIndicator stopAnimating];
                 }
             });
         }];
-    });
+    }];
 }
 
 - (IBAction)iWantToRetriveVerifyCode:(id)sender {

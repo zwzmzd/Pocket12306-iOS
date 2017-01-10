@@ -10,6 +10,7 @@
 
 @interface TDBVerifyCodePickerView : OLImageView
 
+- (void)clearSelectedPoints;
 - (NSString *)exportSelectedPoints;
 
 @end

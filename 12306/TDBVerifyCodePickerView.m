@@ -74,9 +74,13 @@
     for (NSInteger i = 0; i < self.selectedImagePoints.count; i++) {
         NSValue *val = [self.selectedImagePoints objectAtIndex:i];
         CGPoint p = [val CGPointValue];
-        [data addObject:[NSString stringWithFormat:@"%.0f,%.0f", p.x, p.y]];
+        [data addObject:[NSString stringWithFormat:@"%.0f,%.0f", p.x, p.y - 30]];
     }
     return [data componentsJoinedByString:@","];
+}
+
+- (void)clearSelectedPoints {
+    [self.selectedImagePoints removeAllObjects];
 }
 
 @end

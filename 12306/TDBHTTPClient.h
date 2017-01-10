@@ -20,7 +20,9 @@
 - (void)getStationNameAndTelecode:(void (^)(NSData *))success;
 
 // 登录模块
+- (void)getLoginInit:(void (^)(NSData *))success;
 - (void)getVerifyImage:(void (^)(NSData *))success;
+- (void)checkRankCodeAnsyn:(NSString *)randCode success:(void (^)(NSDictionary *))success;
 - (void)loginWithName:(NSString *)name AndPassword:(NSString *)password andVerifyCode:(NSString *)verifyCode success:(void (^)(NSDictionary *))success;
 // 查询可用车票
 // 预操作

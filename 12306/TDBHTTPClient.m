@@ -89,11 +89,44 @@
 }
 
 #pragma mark - 登录部分
+- (void)getLoginInit:(void (^)(NSData *))success {
+    NSString *path = @"/otn/login/init";
+    [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
+    }];
+}
+
 - (void)getVerifyImage:(void (^)(NSData *))success {
     NSString *path = [NSString stringWithFormat:@"passcodeNew/getPassCodeNew?module=login&rand=sjrand"];
     [self GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (success) {
+            success(nil);
+        }
+    }];
+}
+
+- (void)checkRankCodeAnsyn:(NSString *)randCode success:(void (^)(NSDictionary *))success {
+    NSString *path = @"passcodeNew/checkRandCodeAnsyn";
+    
+    NSMutableDictionary *arguments = [NSMutableDictionary new];
+    [arguments setObject:randCode forKey:@"randCode"];
+    [arguments setObject:@"sjrand" forKey:@"rand"];
+    
+    [self POST:path parameters:arguments progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            NSError *jsonErr = nil;
+            NSDictionary *result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonErr];
+            success(jsonErr ? nil : result);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (success) {
